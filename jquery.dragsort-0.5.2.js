@@ -41,6 +41,7 @@
 					//listidx allows reference back to correct list variable instance
 					$(this.container).attr("data-listidx", i).mousedown(this.grabItem).bind("dragsort-uninit", this.uninit);
 					this.styleDragHandlers(true);
+					this.courseCondition();
 				},
 
 				uninit: function() {

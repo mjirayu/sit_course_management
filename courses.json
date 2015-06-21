@@ -1,0 +1,53 @@
+{ "courses":
+	[
+		{
+			"course_id": "CSC101",
+			"pre-req": [
+			],
+			"credit": {
+				"3"
+			},
+			"recommend-year": [
+				"1"
+			]
+		},
+		{
+			"course_id": "CSC102",
+			"pre-req": [
+				"CSC101",
+			],
+			"credit": {
+				"3"
+			},
+			"recommend-year": [
+				"1", 
+				"2"
+			]
+		},
+		{
+			"course_id": "CSC103",
+			"pre-req": [
+				"CSC101",
+				"CSC102"
+			],
+			"credit": {
+				"3"
+			},
+			"recommend-year": [
+				"2"
+			]
+		},
+		{
+			"course_id": "CSC104",
+			"pre-req": [
+				"CSC103",
+			],
+			"credit": {
+				"3"
+			},
+			"recommend-year": [
+				"3"
+			]
+		}
+	]
+}
