@@ -11,6 +11,12 @@ body {
 			background: #fff;
 			padding: 20px;
 		}
+		#course-plan{
+			width: 400px;
+		}
+		#course-plan h2{
+			text-align: center;
+		}
 		h1 { 
 			font-size:16pt;
 			text-align: center;
@@ -18,28 +24,35 @@ body {
 		h2 { 
 			font-size:13pt; 
 		}
-		ul { 
-			margin:0px; 
+		#main ul { 
+			margin:0px !important; 
 			padding:0px; 
+			margin-bottom: 20px !important;
+			
 			margin-left:20px; 
 		}
-		.y-placeHolder, #course-list { 
-			width:45%; 
+		.y-placeHolder { 
+			width:100%; 
 			list-style-type:none; 
 			margin:0px; 
 			
 			
 		}
+
+		#course-list{
+			width: 50%;
+			list-style: none;
+		}
 		.y-placeHolder li ,#course-list li {
-			float:left;
-			padding:5px;
-			width:100%;
+			
+			
 
 			
 		}
 		.y-placeHolder div, #course-list div { 
 			width:100%; 
 			padding: 10px 0px;
+
 			border:solid 
 			1px 
 			black; 
@@ -53,4 +66,6 @@ body {
 		.placeHolder div { 
 			background-color:white !important; 
 			border:dashed 1px gray !important; 
+			text-align: center;
+			width: 100% !important;
 		}

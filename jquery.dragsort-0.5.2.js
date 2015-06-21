@@ -41,7 +41,7 @@
 					//listidx allows reference back to correct list variable instance
 					$(this.container).attr("data-listidx", i).mousedown(this.grabItem).bind("dragsort-uninit", this.uninit);
 					this.styleDragHandlers(true);
-					this.courseCondition();
+				
 				},
 
 				uninit: function() {
@@ -124,7 +124,7 @@
 						list.placeHolderItem.children().each(function() { $(this).css({ borderWidth:0, width: $(this).width() + 1, height: $(this).height() + 1 }).html("&nbsp;"); });
 					} else {
 						list.draggedItem.after(opts.placeHolderTemplate);
-						list.placeHolderItem = list.draggedItem.next().css({ height: h, width: w }).attr("data-placeholder", true);
+						list.placeHolderItem = list.draggedItem.next().css({ height: h }).attr("data-placeholder", true);
 					}
 
 					if (opts.tagName == "td") {

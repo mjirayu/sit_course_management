@@ -24,26 +24,34 @@
 				
 			</ul>
 			
-			<ul id="years-1" class="y-placeHolder">
-				<li><div>10</div></li>
-				<li><div>11</div></li>
-				
-			</ul>
-			<ul id="years-2" class="y-placeHolder">
-				<li><div>10</div></li>
-				<li><div>11</div></li>
-				
-			</ul>
-			<ul id="years-3" class="y-placeHolder">
-				<li><div>10</div></li>
-				<li><div>11</div></li>
-				
-			</ul>
-			<ul id="years-4" class="y-placeHolder">
-				<li><div>10</div></li>
-				<li><div>11</div></li>
 			
-			</ul>
+			<div id="course-plan">
+				<h2>Years 1</h2>
+				<ul id="years-1" class="y-placeHolder">
+					<li><div>10</div></li>
+					<li><div>11</div></li>
+					
+				</ul>
+		
+				<h2>Years 2</h2>
+				<ul id="years-2" class="y-placeHolder">
+					<li><div>10</div></li>
+					<li><div>11</div></li>
+					
+				</ul>
+				<h2>Years 3</h2>
+				<ul id="years-3" class="y-placeHolder">
+					<li><div>10</div></li>
+					<li><div>11</div></li>
+					
+				</ul>
+				<h2>Years 4</h2>
+				<ul id="years-4" class="y-placeHolder">
+					<li><div>10</div></li>
+					<li><div>11</div></li>
+				
+				</ul>
+			</div>
 			
 		
 
@@ -55,7 +63,7 @@
 
 	<script type="text/javascript">
 		$(".y-placeHolder, #course-list").dragsort({ 
-			dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>asdasd</div></li>" 
+			dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop Here</div></li>" 
 		});
 
 		function saveOrder() {
