@@ -1,13 +1,19 @@
 body {
 			font-family:Arial;
 			font-size:12pt;
-			padding:20px;
-			width:820px;
-			margin:20px auto; 
-			border:solid 1px black; 
+			background: #F9F9F9;
+			
+		}
+		#main{
+			width: 900px;
+			margin: 0 auto;
+			overflow: hidden;
+			background: #fff;
+			padding: 20px;
 		}
 		h1 { 
 			font-size:16pt;
+			text-align: center;
 		}
 		h2 { 
 			font-size:13pt; 
@@ -17,28 +23,31 @@ body {
 			padding:0px; 
 			margin-left:20px; 
 		}
-		#list1, #list2 { 
-			width:350px; 
+		.y-placeHolder, #course-list { 
+			width:45%; 
 			list-style-type:none; 
 			margin:0px; 
+			
+			
 		}
-		#list1 li, #list2 li {
+		.y-placeHolder li ,#course-list li {
 			float:left;
 			padding:5px;
-			width:100px;
-			height:100px; 
+			width:100%;
+
+			
 		}
-		#list1 div, #list2 div { 
-			width:90px; 
-			height:50px; 
+		.y-placeHolder div, #course-list div { 
+			width:100%; 
+			padding: 10px 0px;
 			border:solid 
 			1px 
 			black; 
 			background-color:#E0E0E0; 
 			text-align:center; 
-			padding-top:40px; 
+			
 		}
-		#list2 { 
+		#course-list { 
 			float:right; 
 		}
 		.placeHolder div { 
