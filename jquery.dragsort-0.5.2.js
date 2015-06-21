@@ -124,7 +124,7 @@
 						list.placeHolderItem.children().each(function() { $(this).css({ borderWidth:0, width: $(this).width() + 1, height: $(this).height() + 1 }).html("&nbsp;"); });
 					} else {
 						list.draggedItem.after(opts.placeHolderTemplate);
-						list.placeHolderItem = list.draggedItem.next().css({ height: h }).attr("data-placeholder", true);
+						list.placeHolderItem = list.draggedItem.next().css({ height: h, width: w }).attr("data-placeholder", true);
 					}
 
 					if (opts.tagName == "td") {
@@ -241,7 +241,7 @@
 					if (list.draggedItem == null)
 						return;
 
-					//list.draggedItem.attr("style", "") doesn't work on IE8 and jQuery 1.5 or lower
+					//list.draggedItem.attr("style", "{'background:red'}") //doesn't work on IE8 and jQuery 1.5 or lower
 					//list.draggedItem.removeAttr("style") doesn't work on chrome and jQuery 1.6 (works jQuery 1.5 or lower)
 					var orig = list.draggedItem.attr("data-origstyle");
 					list.draggedItem.attr("style", orig);

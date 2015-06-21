@@ -17,7 +17,7 @@
 
 			<ul id="course-list">
 				
-				<li>
+				<li class="course">
 					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
 					<div class="detail">
 						The display property of the span is Inline
@@ -32,9 +32,8 @@
 					</div>
 					
 				</li>
-				
-					<li>
-					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+				<li class="course">
+					<div class="course-name">2.) Adisak Chaiyakul</div><span>detail</span>
 					<div class="detail">
 						The display property of the span is Inline
 
@@ -48,8 +47,8 @@
 					</div>
 					
 				</li>
-					<li>
-					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+				<li class="course">
+					<div class="course-name">3.) Adisak Chaiyakul</div><span>detail</span>
 					<div class="detail">
 						The display property of the span is Inline
 
@@ -63,8 +62,8 @@
 					</div>
 					
 				</li>
-					<li>
-					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+				<li class="course">
+					<div class="course-name">4.) Adisak Chaiyakul</div><span>detail</span>
 					<div class="detail">
 						The display property of the span is Inline
 
@@ -78,15 +77,73 @@
 					</div>
 					
 				</li>
-				
 			</ul>
 			
 			
 			<div id="course-plan">
 				<h2>Years 1</h2>
 				<ul id="years-1" class="y-placeHolder">
-					<li><div>10</div></li>
-					<li><div>11</div></li>
+					<li class="course">
+						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+						<div class="detail">
+							The display property of the span is Inline
+
+							– The inline elements line up horizontally as like
+
+							Inline Inline Inline
+
+							The display property of the div is block
+
+							– The Block elements stack one on top of the other  as like the blocks
+						</div>
+					
+					</li>
+					<li class="course">
+						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+						<div class="detail">
+							The display property of the span is Inline
+
+							– The inline elements line up horizontally as like
+
+							Inline Inline Inline
+
+							The display property of the div is block
+
+							– The Block elements stack one on top of the other  as like the blocks
+						</div>
+					
+					</li>
+					<li class="course">
+						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+						<div class="detail">
+							The display property of the span is Inline
+
+							– The inline elements line up horizontally as like
+
+							Inline Inline Inline
+
+							The display property of the div is block
+
+							– The Block elements stack one on top of the other  as like the blocks
+						</div>
+					
+					</li>
+					<li class="course">
+						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+						<div class="detail">
+							The display property of the span is Inline
+
+							– The inline elements line up horizontally as like
+
+							Inline Inline Inline
+
+							The display property of the div is block
+
+							– The Block elements stack one on top of the other  as like the blocks
+						</div>
+					
+					</li>
+
 					
 				</ul>
 		
@@ -95,7 +152,7 @@
 					<li><div>10</div></li>
 					<li><div>11</div></li>
 					
-				</ul>
+				</ul>	
 				<h2>Years 3</h2>
 				<ul id="years-3" class="y-placeHolder">
 					<li><div>10</div></li>
@@ -119,7 +176,7 @@
 	<input name="list1SortOrder" type="hidden" />
 
 	<script type="text/javascript">
-		$('#main #course-list li span').click(function(){
+		$('#main .course  span').click(function(){
 			$(this).parents('#course-list').find('div.detail').slideUp();
 			$(this).parent().find('div.detail').slideToggle();
 

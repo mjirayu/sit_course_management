@@ -50,7 +50,7 @@ body {
 			
 		}
 		.y-placeHolder div, #course-list div { 
-			width:100%; 
+			
 			padding: 10px 0px;
 
 			border:solid 
@@ -64,7 +64,7 @@ body {
 			float:right; 
 		}
 
-		#course-list span{
+		.course span{
 			float: right;
 			margin-right: 30px;
 			padding: 3px;
@@ -75,22 +75,22 @@ body {
 		#course-list li .detail{
 			
 		}
-		#course-list li span{
+		.course  span{
 			padding: 10px;
 			background: #04B404;
 			border:1px solid #000;
 			cursor: pointer;
 
 		}
-		#course-list li .course-name{
+		.course  .course-name{
 			width: 356px;
 			float: left;
 		}
-		#course-list li .detail{
+		.course .detail{
 			display: none;
 			float: left;
 		}
-		#course-list li span{
+		.course  span{
 			width: 50px;
 			float: right;
 			margin: 0px;
