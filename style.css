@@ -12,7 +12,7 @@ body {
 			padding: 20px;
 		}
 		#course-plan{
-			width: 400px;
+			width: 430px;
 		}
 		#course-plan h2{
 			text-align: center;
@@ -40,7 +40,7 @@ body {
 		}
 
 		#course-list{
-			width: 50%;
+			width: 430px;
 			list-style: none;
 		}
 		.y-placeHolder li ,#course-list li {
@@ -62,6 +62,38 @@ body {
 		}
 		#course-list { 
 			float:right; 
+		}
+
+		#course-list span{
+			float: right;
+			margin-right: 30px;
+			padding: 3px;
+			background: #fff;
+		}
+
+
+		#course-list li .detail{
+			
+		}
+		#course-list li span{
+			padding: 10px;
+			background: #04B404;
+			border:1px solid #000;
+			cursor: pointer;
+
+		}
+		#course-list li .course-name{
+			width: 356px;
+			float: left;
+		}
+		#course-list li .detail{
+			display: none;
+			float: left;
+		}
+		#course-list li span{
+			width: 50px;
+			float: right;
+			margin: 0px;
 		}
 		.placeHolder div { 
 			background-color:white !important; 

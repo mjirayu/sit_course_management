@@ -17,10 +17,67 @@
 
 			<ul id="course-list">
 				
-				<li><div>1</div></li>
-				<li><div>2</div></li>
-				<li><div>3</div></li>
-				<li><div>4</div></li>
+				<li>
+					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+					<div class="detail">
+						The display property of the span is Inline
+
+						– The inline elements line up horizontally as like
+
+						Inline Inline Inline
+
+						The display property of the div is block
+
+						– The Block elements stack one on top of the other  as like the blocks
+					</div>
+					
+				</li>
+				
+					<li>
+					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+					<div class="detail">
+						The display property of the span is Inline
+
+						– The inline elements line up horizontally as like
+
+						Inline Inline Inline
+
+						The display property of the div is block
+
+						– The Block elements stack one on top of the other  as like the blocks
+					</div>
+					
+				</li>
+					<li>
+					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+					<div class="detail">
+						The display property of the span is Inline
+
+						– The inline elements line up horizontally as like
+
+						Inline Inline Inline
+
+						The display property of the div is block
+
+						– The Block elements stack one on top of the other  as like the blocks
+					</div>
+					
+				</li>
+					<li>
+					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
+					<div class="detail">
+						The display property of the span is Inline
+
+						– The inline elements line up horizontally as like
+
+						Inline Inline Inline
+
+						The display property of the div is block
+
+						– The Block elements stack one on top of the other  as like the blocks
+					</div>
+					
+				</li>
 				
 			</ul>
 			
@@ -62,6 +119,13 @@
 	<input name="list1SortOrder" type="hidden" />
 
 	<script type="text/javascript">
+		$('#main #course-list li span').click(function(){
+			$(this).parents('#course-list').find('div.detail').slideUp();
+			$(this).parent().find('div.detail').slideToggle();
+
+
+		});
+
 		$(".y-placeHolder, #course-list").dragsort({ 
 			dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop Here</div></li>" 
 		});
