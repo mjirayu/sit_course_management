@@ -9,45 +9,50 @@ PBL Project
 7. มี Report ให้กับอาจารย์ต้องคุยอีกที
 8. วิชา Pre requirement อาจเกิดการ overwrite 
 9. มีระบบแจ้งให้ อาจารย์ ปลดล็อค
-10 .Resource ใช้ของคณะ
+10. Resource ใช้ของคณะ
 11. Support Mobile Version 
 
 
 Conditions
+
 1. Condition JSON ผ่าน Attribute HTML tag data-course-con
 2. จะขึ้นสีถ้าแดงถ้า Drag ขึ้นมาแล้ว Condition ไม่ผ่าน (ลงไม่ได้) ถ้าปกติก็เขียว
 3. ลงที่สีแดงได้ แต่จะมีเตือน => เด๋วอาจารย์ต้อง Confirm
 4. ทำ Submit ส่ง Request ไปสักหน้า (check condition 2 round)
 
 Plan 
+
 1. มีค่า Default แพลนให้ก่อน
 2. สามารถสร้าง Plan ใหม่ได้ จากอันเดิม
 
 
 Condition Task
+
 1. ทำ Function เช็ค Condition ผ่านตัว JSON Attribute 
 2. ทำ Interface ให้กับ Placeholder (เขียว, แดง) จากเช็ค Condition
 3. ทำ Yes No ตอนลงสีแดง
 4. ทำ Submit เพื่อส่ง JSON ไปเช็คกับ PHP และรับ Response
 
 Plan Task
+
 1. ทำ Function Render Plan จากข้อมูลของเรา
 2.ทำปุ่มสร้าง Plan ใหม่จาก Plan ที่มีไว้
 
 เงื่อนไข
+
 1. Pre-require
 2. หน่วยกิจไม่เกิน 24 แจ้งเตือน
 3. หน่วยกิจเกิน 18 แจ้งเตือน
 4. ปี 1 ปี 2 แจ้งลงวิชาเลือก
 
-'''
+```
 JSON
 {
    ‘pre-req’: JSON อีกก้อน Course ID
    ’หน่วยกิจ’: เท่าไหร่
    ‘recommend-year’:  
 }
-'''
+```
 
 Table Plan
 - plan_name
