@@ -58,8 +58,6 @@
 			dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>asdasd</div></li>" 
 		});
 
-		$('body').attr( "data-course", { myType: "test", count: 40 } );
-		
 		function saveOrder() {
 			var data = $("#list1 li").map(function() { 
 				return $(this).children().html(); 
