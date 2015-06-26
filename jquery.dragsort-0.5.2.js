@@ -12,9 +12,11 @@
 
 		var opts = $.extend({}, $.fn.dragsort.defaults, options);
 		var lists = [];
-		var list = null, lastPos = null;
+		var list = null, 
+		lastPos = null;
 
 		this.each(function(i, cont) {
+
 			//if list container is table, the browser automatically wraps rows in tbody if not specified so change list container to tbody so that children returns rows as user expected
 			if ($(cont).is("table") && $(cont).children().size() == 1 && $(cont).children().is("tbody"))
 				cont = $(cont).children().get(0);
@@ -22,6 +24,7 @@
 			var newList = {
 				draggedItem: null,
 				placeHolderItem: null,
+				dropParent:null,
 				pos: null,
 				offset: null,
 				offsetLimit: null,
@@ -41,7 +44,6 @@
 					//listidx allows reference back to correct list variable instance
 					$(this.container).attr("data-listidx", i).mousedown(this.grabItem).bind("dragsort-uninit", this.uninit);
 					this.styleDragHandlers(true);
-				
 				},
 
 				uninit: function() {
@@ -60,6 +62,7 @@
 
 				grabItem: function(e) {
 					var list = lists[$(this).attr("data-listidx")];
+					//console.log(list);
 					var item = $(e.target).closest("[data-listidx] > " + opts.tagName).get(0);
 					var insideMoveableItem = list.getItems().filter(function() { return this == item; }).size() > 0;
 
@@ -238,12 +241,30 @@
 				},
 
 				dropItem: function() {
+
+
+
 					if (list.draggedItem == null)
 						return;
 
-					//list.draggedItem.attr("style", "{'background:red'}") //doesn't work on IE8 and jQuery 1.5 or lower
+					//console.log(list.container);
+
+					//check condition
+
+					//console.log(list.draggedItem.closest("ul"));
+					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
+					//console.log(list.draggedItem.data('rec-y'));
+
+					console.log(opts.dragEnd.apply(list.draggedItem));
+
+						 
+						
+					
+
+					//list.draggedItem.attr("style", "") doesn't work on IE8 and jQuery 1.5 or lower
 					//list.draggedItem.removeAttr("style") doesn't work on chrome and jQuery 1.6 (works jQuery 1.5 or lower)
 					var orig = list.draggedItem.attr("data-origstyle");
+					//console.log(orig);
 					list.draggedItem.attr("style", orig);
 					if (orig == "")
 						list.draggedItem.removeAttr("style");
@@ -251,17 +272,23 @@
 
 					list.styleDragHandlers(true);
 
-					list.placeHolderItem.before(list.draggedItem);
-					list.placeHolderItem.remove();
 
+					// check condition
+					if(list.checkCon())
+						list.placeHolderItem.before(list.draggedItem);
+					list.placeHolderItem.remove();
+					//console.log($("[data-droptarget], .dragSortItem"));
 					$("[data-droptarget], .dragSortItem").remove();
 
 					window.clearInterval(list.scroll.scrollY);
 					window.clearInterval(list.scroll.scrollX);
-
+					list.placeHolderItem.hide();
+					//console.log(list.placeHolderItem.parent('ul'));
+					//console.log(list.placeHolderItem.closest("ul"));
 					//if position changed call dragEnd
 					if (list.draggedItem.attr("data-origpos") != $(lists).index(list) + "-" + $(list.container).children().index(list.draggedItem))
 						if (opts.dragEnd.apply(list.draggedItem) == false) { //if dragEnd returns false revert order
+							alert("position no chang");
 							var pos = list.draggedItem.attr("data-origpos").split('-');
 							var nextItem = $(lists[pos[0]].container).children().not(list.draggedItem).eq(pos[1]);
 							if (nextItem.size() > 0)
@@ -271,6 +298,8 @@
 							else //was the last item in list
 								$(lists[pos[0]].container).append(list.draggedItem);
 						}
+
+
 					list.draggedItem.removeAttr("data-origpos");
 
 					list.draggedItem = null;
@@ -282,6 +311,26 @@
 				},
 
 				//swap the draggedItem (represented visually by placeholder) with the list item the it has been dragged on top of
+				
+				checkCon: function(){
+					// Use this statement for get placeholderitem or container.
+					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
+					// Use this statement for get drag item.
+					//console.log(list.draggedItem.data('rec-y'));
+					var placeYears = list.placeHolderItem.closest("ul").data("year");
+					var rec_y = list.draggedItem.data('rec-y');
+					if(!(placeYears>=rec_y))
+						if (confirm("This cours is recommed on years"+rec_y+"  Are u sure to regis this cours") == true) {
+						        return true;
+						    } else {
+						    	
+						        return false;
+						    }
+					return true;
+
+
+
+				},
 				swapItems: function(e) {
 					if (list.draggedItem == null)
 						return false;
@@ -355,9 +404,6 @@
 							list.placeHolderItem.attr("data-placeholder", true);
 						}
 					});
-				},
-				courseCondition: function(){
-					alert("test");
 				}
 			};
 
@@ -376,7 +422,7 @@
 		dragBetween: false,
 		placeHolderTemplate: "",
 		scrollContainer: window,
-		scrollSpeed: 5,
+		scrollSpeed: 5
 	};
 
 })(jQuery);

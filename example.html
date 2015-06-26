@@ -3,198 +3,101 @@
 <head>
 	<title>DragSort Example</title>
 	<meta charset="utf-8" />
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<style type="text/css">
+
+		body { font-family:Arial; font-size:12pt; padding:20px; width:820px; margin:20px auto; border:solid 1px black; }
+		h1 { font-size:16pt; }
+		h2 { font-size:13pt; }
+		ul { margin:0px; padding:0px; }
+		.years,#list1,#listadisak, #list2 {  width: 400px;list-style-type:none; margin:0px; overflow: hidden;}
+		.years li,#list1 li, #list2 li ,#listadisak li{  padding:5px; line-height: 50px;  }
+		.years div,#list1 div, #list2 div,#listadisak div {   border:solid 1px black; background-color:#E0E0E0; text-align:center;  }
+		#list2 { float:right; }
+		.placeHolder div { background-color:white !important; border:dashed 1px gray !important; }
+		#cours-manage > div h2{ text-align: center;}
+		#cours-manage > div{width: 400px}
+		#cours-manage .cours{
+			float: right;
+		}
+		#list2 > div{width: inherit;float: right !important;}
+	</style>
 </head>
 <body>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="jquery.dragsort-0.5.2.js"></script>
 	
-			<h1>jQuery List DragSort Example</h1>
-		
-		
-		
-		<div id="main">
+	
 
-			<ul id="course-list">
-				
-				<li class="course">
-					<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
-					<div class="detail">
-						The display property of the span is Inline
 
-						– The inline elements line up horizontally as like
+	
+	
 
-						Inline Inline Inline
 
-						The display property of the div is block
+	
+	
 
-						– The Block elements stack one on top of the other  as like the blocks
-					</div>
+	<div id="cours-manage">
+			<div class="cours">
+				<h2>Cours list</h2>
+				<ul id="list2"  class="years">
+					<li data-rec-y="2"><div>cours 1</div></li>
+					<li data-rec-y="0"><div>cours 2</div></li>
 					
-				</li>
-				<li class="course">
-					<div class="course-name">2.) Adisak Chaiyakul</div><span>detail</span>
-					<div class="detail">
-						The display property of the span is Inline
-
-						– The inline elements line up horizontally as like
-
-						Inline Inline Inline
-
-						The display property of the div is block
-
-						– The Block elements stack one on top of the other  as like the blocks
-					</div>
-					
-				</li>
-				<li class="course">
-					<div class="course-name">3.) Adisak Chaiyakul</div><span>detail</span>
-					<div class="detail">
-						The display property of the span is Inline
-
-						– The inline elements line up horizontally as like
-
-						Inline Inline Inline
-
-						The display property of the div is block
-
-						– The Block elements stack one on top of the other  as like the blocks
-					</div>
-					
-				</li>
-				<li class="course">
-					<div class="course-name">4.) Adisak Chaiyakul</div><span>detail</span>
-					<div class="detail">
-						The display property of the span is Inline
-
-						– The inline elements line up horizontally as like
-
-						Inline Inline Inline
-
-						The display property of the div is block
-
-						– The Block elements stack one on top of the other  as like the blocks
-					</div>
-					
-				</li>
-			</ul>
-			
-			
-			<div id="course-plan">
-				<h2>Years 1</h2>
-				<ul id="years-1" class="y-placeHolder">
-					<li class="course">
-						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
-						<div class="detail">
-							The display property of the span is Inline
-
-							– The inline elements line up horizontally as like
-
-							Inline Inline Inline
-
-							The display property of the div is block
-
-							– The Block elements stack one on top of the other  as like the blocks
-						</div>
-					
-					</li>
-					<li class="course">
-						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
-						<div class="detail">
-							The display property of the span is Inline
-
-							– The inline elements line up horizontally as like
-
-							Inline Inline Inline
-
-							The display property of the div is block
-
-							– The Block elements stack one on top of the other  as like the blocks
-						</div>
-					
-					</li>
-					<li class="course">
-						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
-						<div class="detail">
-							The display property of the span is Inline
-
-							– The inline elements line up horizontally as like
-
-							Inline Inline Inline
-
-							The display property of the div is block
-
-							– The Block elements stack one on top of the other  as like the blocks
-						</div>
-					
-					</li>
-					<li class="course">
-						<div class="course-name">1.) Adisak Chaiyakul</div><span>detail</span>
-						<div class="detail">
-							The display property of the span is Inline
-
-							– The inline elements line up horizontally as like
-
-							Inline Inline Inline
-
-							The display property of the div is block
-
-							– The Block elements stack one on top of the other  as like the blocks
-						</div>
-					
-					</li>
-
-					
-				</ul>
-		
-				<h2>Years 2</h2>
-				<ul id="years-2" class="y-placeHolder">
-					<li><div>10</div></li>
-					<li><div>11</div></li>
-					
-				</ul>	
-				<h2>Years 3</h2>
-				<ul id="years-3" class="y-placeHolder">
-					<li><div>10</div></li>
-					<li><div>11</div></li>
-					
-				</ul>
-				<h2>Years 4</h2>
-				<ul id="years-4" class="y-placeHolder">
-					<li><div>10</div></li>
-					<li><div>11</div></li>
-				
 				</ul>
 			</div>
 			
+			<div>
+				<h2>Years 1</h2>
+				<ul id="year1" data-year="1" class="years">
+					<li><div>1</div></li>
+					<li><div>2</div></li>
+					<li><div>3</div></li>
+				
+				</ul>
+			</div>
+			<div>
+				<h2>Years 2</h2>
+				<ul id="year2" data-year="2" class="years">
+					<li><div>adisak</div></li>
+					<li><div>2</div></li>
+					<li><div>3</div></li>
+					<li><div>4</div></li>
+				
+				</ul>
+			</div>
+			<div>
+				<h2>Years 3</h2>
+				<ul id="year3" data-year="3" class="years">
+				
+					<li><div>7</div></li>
+					<li><div>8</div></li>
+					<li><div>9</div></li>
+				</ul>
+			</div>
+			<div>
+				<h2>Years 4</h2>
+				<ul id="year4" data-year="4" class="years">
+					<li><div>adisak</div></li>
+					<li><div>2</div></li>
+					
+				</ul>
+			</div>
+	</div>
 		
-
-			<div id="test"></div>
-		</div>
-	
 	<!-- save sort order here which can be retrieved on server on postback -->
 	<input name="list1SortOrder" type="hidden" />
 
 	<script type="text/javascript">
-		$('#main .course  span').click(function(){
-			$(this).parents('#course-list').find('div.detail').slideUp();
-			$(this).parent().find('div.detail').slideToggle();
-
-
-		});
-
-		$(".y-placeHolder, #course-list").dragsort({ 
-			dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop Here</div></li>" 
-		});
-
+		$(" #list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
+		
 		function saveOrder() {
-			var data = $("#list1 li").map(function() { 
-				return $(this).children().html(); 
-			}).get();
-
+			var data = $("#list1 li").map(function() { return $(this).children().html(); }).get();
 			$("input[name=list1SortOrder]").val(data.join("|"));
 		};
 	</script>
 
+	<div style="clear:both;"></div>
+
+	
 </body>
 </html>
