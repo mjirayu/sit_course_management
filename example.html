@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<title>DragSort Example</title>
+    <title>DragSort Example</title>
 	<meta charset="utf-8" />
 	<style type="text/css">
 
@@ -25,79 +25,55 @@
 <body>
 	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="jquery.dragsort-0.5.2.js"></script>
-	
-	
-
-
-	
-	
-
-
-	
-	
 
 	<div id="cours-manage">
 			<div class="cours">
 				<h2>Cours list</h2>
 				<ul id="list2"  class="years">
-					<li data-rec-y="2"><div>cours 1</div></li>
-					<li data-rec-y="0"><div>cours 2</div></li>
-					
+					<li data-rec-y="2"><div>course 1</div></li>
+					<li data-rec-y="0"><div>course 2</div></li>
 				</ul>
 			</div>
-			
+
 			<div>
 				<h2>Years 1</h2>
 				<ul id="year1" data-year="1" class="years">
-					<li><div>1</div></li>
-					<li><div>2</div></li>
-					<li><div>3</div></li>
-				
 				</ul>
 			</div>
 			<div>
 				<h2>Years 2</h2>
 				<ul id="year2" data-year="2" class="years">
-					<li><div>adisak</div></li>
-					<li><div>2</div></li>
-					<li><div>3</div></li>
-					<li><div>4</div></li>
-				
 				</ul>
 			</div>
 			<div>
 				<h2>Years 3</h2>
 				<ul id="year3" data-year="3" class="years">
-				
-					<li><div>7</div></li>
-					<li><div>8</div></li>
-					<li><div>9</div></li>
 				</ul>
 			</div>
 			<div>
 				<h2>Years 4</h2>
 				<ul id="year4" data-year="4" class="years">
-					<li><div>adisak</div></li>
-					<li><div>2</div></li>
-					
 				</ul>
 			</div>
 	</div>
-		
+
 	<!-- save sort order here which can be retrieved on server on postback -->
 	<input name="list1SortOrder" type="hidden" />
-
+  <script src="render_html.js" charset="utf-8"></script>
 	<script type="text/javascript">
 		$(" #list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
-		
+
 		function saveOrder() {
 			var data = $("#list1 li").map(function() { return $(this).children().html(); }).get();
 			$("input[name=list1SortOrder]").val(data.join("|"));
 		};
+
+    renderCourse('#year1');
+    renderCourse('#year2');
+    renderCourse('#year3');
+    renderCourse('#year4');
 	</script>
 
 	<div style="clear:both;"></div>
-
-	
 </body>
 </html>

@@ -12,7 +12,7 @@
 
 		var opts = $.extend({}, $.fn.dragsort.defaults, options);
 		var lists = [];
-		var list = null, 
+		var list = null,
 		lastPos = null;
 
 		this.each(function(i, cont) {
@@ -175,7 +175,7 @@
 				},
 
 				//set position of draggedItem
-				setPos: function(x, y) { 
+				setPos: function(x, y) {
 					//remove mouse offset so mouse cursor remains in same place on draggedItem instead of top left corner
 					var top = y - this.offset.top;
 					var left = x - this.offset.left;
@@ -205,7 +205,7 @@
 						y = Math.max(0, y - cont.height() - offset.top) + Math.min(0, y - offset.top);
 						x = Math.max(0, x - cont.width() - offset.left) + Math.min(0, x - offset.left);
 					}
-					
+
 					list.scroll.moveX = x == 0 ? 0 : x * opts.scrollSpeed / Math.abs(x);
 					list.scroll.moveY = y == 0 ? 0 : y * opts.scrollSpeed / Math.abs(y);
 
@@ -257,9 +257,9 @@
 
 					console.log(opts.dragEnd.apply(list.draggedItem));
 
-						 
-						
-					
+
+
+
 
 					//list.draggedItem.attr("style", "") doesn't work on IE8 and jQuery 1.5 or lower
 					//list.draggedItem.removeAttr("style") doesn't work on chrome and jQuery 1.6 (works jQuery 1.5 or lower)
@@ -311,7 +311,7 @@
 				},
 
 				//swap the draggedItem (represented visually by placeholder) with the list item the it has been dragged on top of
-				
+
 				checkCon: function(){
 					// Use this statement for get placeholderitem or container.
 					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
@@ -323,13 +323,10 @@
 						if (confirm("This cours is recommed on years"+rec_y+"  Are u sure to regis this cours") == true) {
 						        return true;
 						    } else {
-						    	
+
 						        return false;
 						    }
 					return true;
-
-
-
 				},
 				swapItems: function(e) {
 					if (list.draggedItem == null)
@@ -400,7 +397,7 @@
 							else
 								//list.placeHolderItem.clone().removeAttr("data-placeholder") crashes in IE7 and jquery 1.5.1 (doesn't in jquery 1.4.2 or IE8)
 								$(this.container).append(list.placeHolderItem.removeAttr("data-placeholder").clone().attr("data-droptarget", true));
-							
+
 							list.placeHolderItem.attr("data-placeholder", true);
 						}
 					});

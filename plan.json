@@ -1,14 +1,16 @@
 {
-	1:{
-		"course_list":["CSC101","CSC102","CSC103","CSC104"]
-		},
-	2:{
-		"course_list":["CSC101","CSC102","CSC103","CSC104"]
-		},
-	3:{
-		"course_list":["CSC101","CSC102","CSC103","CSC104"]
-		},
-	4:{
-		"course_list":["CSC101","CSC102","CSC103","CSC105"]
-		}
+	"course_plan": [
+			{
+				"course1": "CSC101",
+				"course2": "CSC102",
+				"course3": "CSC103",
+				"course4": "CSC104"
+			},
+			{
+				"course1": "CSC101",
+				"course2": "CSC102",
+				"course3": "CSC103",
+				"course4": "CSC104"
+			},
+	]
 }
