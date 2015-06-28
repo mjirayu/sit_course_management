@@ -274,9 +274,11 @@
 
 
 					// check condition
-					if(list.checkCon())
+					if(list.checkCon()){
 						list.placeHolderItem.before(list.draggedItem);
-					list.placeHolderItem.remove();
+						list.placeHolderItem.remove();
+					}
+
 					//console.log($("[data-droptarget], .dragSortItem"));
 					$("[data-droptarget], .dragSortItem").remove();
 
