@@ -20,7 +20,7 @@
 	       
 	function render_data(data){
 		var title = "<h2>"+data.name+"</h2>";
-		title = title+'<div id="years-lists">';
+		title = title+'<div id="years-lists" data-id ="'+data.id+'">';
 		var i = 0;
 		 for (var key in data.course) {
 		  if (data.course.hasOwnProperty(key)) {
