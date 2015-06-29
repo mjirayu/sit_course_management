@@ -4,14 +4,12 @@
 
 
 	var url='plan.json';
-	var year='year-1';
-	var json_data = null;
-	var cours_plan_name = "defaul";
-	var render_html = "";
+	
+	
 
 	var data_json = $.getJSON(url).done(function(data) {
     
-    json_data = data;
+  
     //console.log(data);
     $('#course-manage').append(render_data(data));
     
