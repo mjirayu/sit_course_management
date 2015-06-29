@@ -278,7 +278,7 @@
 						list.placeHolderItem.before(list.draggedItem);
 						list.placeHolderItem.remove();
 					}
-					
+
 					//console.log($("[data-droptarget], .dragSortItem"));
 					$("[data-droptarget], .dragSortItem").remove();
 

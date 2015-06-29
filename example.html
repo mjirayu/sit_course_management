@@ -25,9 +25,10 @@
 <body>
 	<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="jquery.dragsort-0.5.2.js"></script>
+  <script src="render_html.js" charset="utf-8"></script>
 
-	<div id="cours-manage">
-			<div class="cours">
+	<div id="course-manage">
+			<div class="course">
 				<h2>Cours list</h2>
 				<ul id="list2"  class="years">
 					<li data-rec-y="2"><div>course 1</div></li>
@@ -37,12 +38,12 @@
 
 			
 	</div>
-
+  <button type="button" name="button" >Test Add Years</button>
 	<!-- save sort order here which can be retrieved on server on postback -->
 	<input name="list1SortOrder" type="hidden" />
-  <script src="render_html.js" charset="utf-8"></script>
+
 	<script type="text/javascript">
-		$(" #list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
+   
 
 		function saveOrder() {
 			
@@ -50,7 +51,6 @@
 
 
 	</script>
-
 	<div style="clear:both;"></div>
 </body>
 </html>

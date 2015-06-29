@@ -1,4 +1,5 @@
 
+
     
 
 
@@ -6,13 +7,14 @@
 	var year='year-1';
 	var json_data = null;
 	var cours_plan_name = "defaul";
-
+	var render_html = "";
 
 	var data_json = $.getJSON(url).done(function(data) {
     
     json_data = data;
     //console.log(data);
-    $('#cours-manage').append(render_data(data));
+    $('#course-manage').append(render_data(data));
+    
     $(" #list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
   
   });
@@ -80,4 +82,24 @@
    
 
 
+
+
+
+
+function replaceAll(find, replace, str) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function addYears(){
+  HTMLTest = "<div><h2>Years %count%</h2><ul id='year%count%' data-year='%count%' class='years'></ul></div>";
+  count = $('.course').siblings().length + 1;
+  HTMLTest = replaceAll("%count%", count, HTMLTest);
+  $(HTMLTest).insertAfter($('.course').siblings(':last'));
+  $('#list2, .years').dragsort("destroy");
+  testDrag();
+}
+
+function testDrag() {
+  	$(" #list2, .years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
+}
 
