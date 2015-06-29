@@ -1,16 +1,24 @@
 {
-	"course_plan": [
-			{
-				"course1": "CSC101",
-				"course2": "CSC102",
-				"course3": "CSC103",
-				"course4": "CSC104"
-			},
-			{
-				"course1": "CSC101",
-				"course2": "CSC102",
-				"course3": "CSC103",
-				"course4": "CSC104"
-			}
-	]
+    "name": "defalse plan",
+    "id": 1234,
+    "description": "description of this course",
+    "course": {
+    	"year-1":{
+    		"semester-1":["CSC101","CSC102"],
+            "semester-2":["วิชา oatoat","CSC102"],
+    		"semester-3":["CSC103","CSC104"]
+    		},
+    	"year-2":{
+    		"semester-1":["CSC201","CSC202"],
+    		"semester-2":["CSC203","CSC204"]
+    		},
+    	"year-3":{
+    		"semester-1":["CSC301","CSC302"],
+    		"semester-2":["CSC303","CSC304"]
+    		},
+    	"year-4":{
+    		"semester-1":["CSC401","CSC402"],
+    		"semester-2":["CSC403","CSC404"]
+    	}
+    }
 }

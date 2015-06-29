@@ -35,26 +35,7 @@
 				</ul>
 			</div>
 
-			<div>
-				<h2>Years 1</h2>
-				<ul id="year1" data-year="1" class="years">
-				</ul>
-			</div>
-			<div>
-				<h2>Years 2</h2>
-				<ul id="year2" data-year="2" class="years">
-				</ul>
-			</div>
-			<div>
-				<h2>Years 3</h2>
-				<ul id="year3" data-year="3" class="years">
-				</ul>
-			</div>
-			<div>
-				<h2>Years 4</h2>
-				<ul id="year4" data-year="4" class="years">
-				</ul>
-			</div>
+			
 	</div>
 
 	<!-- save sort order here which can be retrieved on server on postback -->
@@ -64,14 +45,10 @@
 		$(" #list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
 
 		function saveOrder() {
-			var data = $("#list1 li").map(function() { return $(this).children().html(); }).get();
-			$("input[name=list1SortOrder]").val(data.join("|"));
+			
 		};
 
-    renderCourse('#year1');
-    renderCourse('#year2');
-    renderCourse('#year3');
-    renderCourse('#year4');
+
 	</script>
 
 	<div style="clear:both;"></div>
