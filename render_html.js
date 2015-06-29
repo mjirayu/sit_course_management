@@ -21,6 +21,7 @@
 	function render_data(data){
 		var title = "<h2>"+data.name+"</h2>";
 		title = title+'<div id="years-lists" data-id ="'+data.id+'">';
+		title = title+ '<div class="description"><strong>Description</strong> : '+data.description+'</div>';
 		var i = 0;
 		 for (var key in data.course) {
 		  if (data.course.hasOwnProperty(key)) {
