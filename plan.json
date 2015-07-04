@@ -5,8 +5,7 @@
     "course": {
     	"year-1":{
     		"semester-1":["CSC101","CSC102"],
-            "semester-2":["วิชา oatoat","CSC102"],
-    		"semester-3":["CSC103","CSC104"]
+    		"semester-2":["CSC103","CSC104"]
     		},
     	"year-2":{
     		"semester-1":["CSC201","CSC202"],
