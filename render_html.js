@@ -50,6 +50,15 @@ function replaceAll(find, replace, str) {
   return str.replace(new RegExp(find, 'g'), replace);
 }
 
+// function addYears(){
+//   HTMLTest = "<div><h2>Years %count%</h2><ul id='year%count%' data-year='%count%' class='years'></ul></div>";
+//   count = $('.course').siblings().length + 1;
+//   HTMLTest = replaceAll("%count%", count, HTMLTest);
+//   $(HTMLTest).insertAfter($('.course').siblings(':last'));
+//   $('#list2, .years').dragsort("destroy");
+//   testDrag();
+// }
+
 function testDrag() {
   $(" #list2, .years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
 }

@@ -321,13 +321,14 @@
 					//console.log(list.draggedItem.data('rec-y'));
 					var placeYears = list.placeHolderItem.closest("ul").data("year");
 					var rec_y = list.draggedItem.data('rec-y');
-					if(!(placeYears>=rec_y))
-						if (confirm("This cours is recommed on years"+rec_y+"  Are u sure to regis this cours") == true) {
-						        return true;
-						    } else {
+					if(rec_y)
+						if(!(placeYears>=rec_y))
+							if (confirm("This cours is recommed on years"+rec_y+"  Are u sure to regis this cours") == true) {
+							        return true;
+							    } else {
 
-						        return false;
-						    }
+							        return false;
+							    }
 					return true;
 				},
 				swapItems: function(e) {
