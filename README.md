@@ -56,78 +56,78 @@ JSON
 
 Login Page
 Task
-  Front End Login Page (OAT)
-  Model User
-    firstname
-    lastname
-    student_id
-    address
-    department
-    stuent_email
-    password
-    is_active
-    is_staff
-    entranced_year
-    last_update
-  ใช้ passport local authentication
-  Login success redirect to show course plans page
+- Front End Login Page (OAT)
+- Model User
+   -firstname
+   -lastname
+   -student_id
+   - address
+   - department
+   - stuent_email
+   - password
+   - is_active
+   - is_staff
+   - entranced_year
+   - last_update
+- ใช้ passport local authentication
+- Login success redirect to show course plans page
 
 Show Course Plans
 Task
-  Create Courses Plan Model
-    plan_name
-    plan_course
-    plan_description
-    student_id
-    message
-    status
-    department
-    type
-  Front End (OAT)
-  Use Express for query data from mongo
-  Then send to Angular for binding data
-  Add function add new courses plan
-  Duplicate course plan from default plan (Can choose default plan)
-  Delete custom course plans but cannot delete default course plan
+- Create Courses Plan Model
+   - plan_name
+   - plan_course
+   - plan_description
+   - student_id
+   - message
+   - status
+   - department
+   - type
+- Front End (OAT)
+- Use Express for query data from mongo
+- Then send to Angular for binding data
+- Add function add new courses plan
+- Duplicate course plan from default plan (Can choose default plan)
+- Delete custom course plans but cannot delete default course plan
 
 Edit Course List
 Task
-  Create Courses Model
-    course_name
-    course_id
-    credit
-    instructor
-    department
-    pre-requirement
-    recommend_year
-    description
-    pdf_file
-  Front End (OAT)
-  Drag and Drop
-  Add new Years
-  Send JSON when submit data
-  Use express get Data from submit form
-  Use express get all course list in this plan (IT, CS)
+- Create Courses Model
+   - course_name
+   - course_id
+   - credit
+   - instructor
+   - department
+   - pre-requirement
+   - recommend_year
+   - description
+   - pdf_file
+- Front End (OAT)
+- Drag and Drop
+- Add new Years
+- Send JSON when submit data
+- Use express get Data from submit form
+- Use express get all course list in this plan (IT, CS)
 
 Waiting for Approve Course Plan
 Task
-  Front End (OAT)
-  Use express route and query data from course plan
-  Update status function
-  pending
-  approve
-  reject
+- Front End (OAT)
+- Use express route and query data from course plan
+- Update status function
+  - pending
+  - approve
+  - reject
 
 View Default Course Plan
 Task
-  Use express route and query data from course plan type default
-  Front End (OAT)
+- Use express route and query data from course plan type default
+- Front End (OAT)
 
 Edit Default Course List ( เหมือน Edit Course List )
 
 Insert/Edit Course
 Task
-  Front End (OAT)
-  send request post to mongo
-  Use express to add data to mongo
-  Use express to update data to mongo
+- Front End (OAT)
+- send request post to mongo
+- Use express to add data to mongo
+- Use express to update data to mongo
