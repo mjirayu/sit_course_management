@@ -7,10 +7,10 @@ PBL Project
 5. อาจารย์สามารถเอาข้อมูลไปแพลนจากนักเรียนที่จัดมา
 6. เหลือกี่ตัวจบ ขาดอะไร แผนต้องลงอะไรบ้าง แพลนไปแลกเปลี่ยน
 7. มี Report ให้กับอาจารย์ต้องคุยอีกที
-8. วิชา Pre requirement อาจเกิดการ overwrite 
+8. วิชา Pre requirement อาจเกิดการ overwrite
 9. มีระบบแจ้งให้ อาจารย์ ปลดล็อค
 10. Resource ใช้ของคณะ
-11. Support Mobile Version 
+11. Support Mobile Version
 
 
 Conditions
@@ -20,7 +20,7 @@ Conditions
 3. ลงที่สีแดงได้ แต่จะมีเตือน => เด๋วอาจารย์ต้อง Confirm
 4. ทำ Submit ส่ง Request ไปสักหน้า (check condition 2 round)
 
-Plan 
+Plan
 
 1. มีค่า Default แพลนให้ก่อน
 2. สามารถสร้าง Plan ใหม่ได้ จากอันเดิม
@@ -28,7 +28,7 @@ Plan
 
 Condition Task
 
-1. ทำ Function เช็ค Condition ผ่านตัว JSON Attribute 
+1. ทำ Function เช็ค Condition ผ่านตัว JSON Attribute
 2. ทำ Interface ให้กับ Placeholder (เขียว, แดง) จากเช็ค Condition
 3. ทำ Yes No ตอนลงสีแดง
 4. ทำ Submit เพื่อส่ง JSON ไปเช็คกับ PHP และรับ Response
@@ -54,32 +54,80 @@ JSON
 }
 ```
 
-Table Plan
-- plan_name
-- plan_course
-- plan_description
-- student_id
-- message
-- status
+Login Page
+Task
+  Front End Login Page (OAT)
+  Model User
+    firstname
+    lastname
+    student_id
+    address
+    department
+    stuent_email
+    password
+    is_active
+    is_staff
+    entranced_year
+    last_update
+  ใช้ passport local authentication
+  Login success redirect to show course plans page
 
-Table Course
-- course_name
-- course_id
-- credit
-- instructor
-- pre-requirement
-- recommend_year
-- description
-- pdf_file
+Show Course Plans
+Task
+  Create Courses Plan Model
+    plan_name
+    plan_course
+    plan_description
+    student_id
+    message
+    status
+    department
+    type
+  Front End (OAT)
+  Use Express for query data from mongo
+  Then send to Angular for binding data
+  Add function add new courses plan
+  Duplicate course plan from default plan (Can choose default plan)
+  Delete custom course plans but cannot delete default course plan
 
-User
-- firstname
-- lastname
-- student_id
-- address
-- stuent_email
-- password
-- is_active
-- is_staff
-- last_update
+Edit Course List
+Task
+  Create Courses Model
+    course_name
+    course_id
+    credit
+    instructor
+    department
+    pre-requirement
+    recommend_year
+    description
+    pdf_file
+  Front End (OAT)
+  Drag and Drop
+  Add new Years
+  Send JSON when submit data
+  Use express get Data from submit form
+  Use express get all course list in this plan (IT, CS)
 
+Waiting for Approve Course Plan
+Task
+  Front End (OAT)
+  Use express route and query data from course plan
+  Update status function
+  pending
+  approve
+  reject
+
+View Default Course Plan
+Task
+  Use express route and query data from course plan type default
+  Front End (OAT)
+
+Edit Default Course List ( เหมือน Edit Course List )
+
+Insert/Edit Course
+Task
+  Front End (OAT)
+  send request post to mongo
+  Use express to add data to mongo
+  Use express to update data to mongo
