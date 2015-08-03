@@ -1,0 +1,14 @@
+{
+  "name": "multivision",
+  "version": "0.0.0",
+  "description": "\"Extreme Tech Training\"",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular": "~1.4.3",
+    "angular-resource": "~1.4.3",
+    "angular-route": "~1.4.3",
+    "toastr": "~2.1.1",
+    "bootstrap": "~3.3.5"
+  }
+}
