@@ -19,11 +19,14 @@ router.get('/:id', middleware, function(req, res, next){
 
 router.get('/plan/:id',function(req,res,next){
 	dataplan.findById(req.params.id, function(err,collection) {
+		router.get('/plan/:id',function(req,res,next){
+			dataplan.findOne({_id:req.params.id},function(err,collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});
-		res.json(collection);
+			res.json(collection);
 	});
 });
 
+<<<<<<< HEAD
 router.post('/plan/:id',function(req,res,next){
 	var data = JSON.parse(req.body.data);
 	dataplan.findOne({_id:req.params.id}, function(err,collection) {
@@ -34,7 +37,7 @@ router.post('/plan/:id',function(req,res,next){
 			if(err){ res.send("Error");}else{res.send("Success");}
 		});
 		//console.log(req.body.data);
-		
+
 	});
 	// var data = JSON.parse(req.body.data);
 	// dataplan.findByIdAndUpdate(
@@ -44,10 +47,12 @@ router.post('/plan/:id',function(req,res,next){
 	//     function(err, model) {
 	//         console.log(err);
  //    });
-	
-	
-	
+
+
+
 });
 
 
+=======
+>>>>>>> d91e69ba2cbb1166e2801d846cea2f33c060eb75
 module.exports = router;

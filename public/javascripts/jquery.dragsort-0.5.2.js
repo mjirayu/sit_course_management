@@ -247,22 +247,8 @@
 					if (list.draggedItem == null)
 						return;
 
-					//console.log(list.container);
+					console.log(opts.dragEnd.apply(list.draggedItem));
 
-					//check condition
-
-					//console.log(list.draggedItem.closest("ul"));
-					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
-					//console.log(list.draggedItem.data('rec-y'));
-
-					//	console.log(opts.dragEnd.apply(list.draggedItem));
-
-
-
-
-
-					//list.draggedItem.attr("style", "") doesn't work on IE8 and jQuery 1.5 or lower
-					//list.draggedItem.removeAttr("style") doesn't work on chrome and jQuery 1.6 (works jQuery 1.5 or lower)
 					var orig = list.draggedItem.attr("data-origstyle");
 					//console.log(orig);
 					list.draggedItem.attr("style", orig);

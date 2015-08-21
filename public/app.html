@@ -12,18 +12,19 @@
 		.years li,#list1 li, #list2 li ,#listadisak li{  padding:5px; line-height: 50px;  }
 		.years div,#list1 div, #list2 div,#listadisak div {   border:solid 1px black; background-color:#E0E0E0; text-align:center;  }
 		#list2 { float:right; }
-		
-		#cours-manage > div h2{ text-align: center;}
-		#cours-manage > div{width: 400px}
-		#cours-manage .cours{
-			float: right;
-		}
+		.placeHolder div { background-color:white !important; border:dashed 1px gray !important; }
+  		#cours-manage > div h2{ text-align: center;}
+  		#cours-manage > div{width: 400px}
+  		#cours-manage .cours{
+  			float: right;
+  		}
 		.canDrop .placeHolder{background: green;}
 		.cantCanDrop .placeHolder{background: red;}
 		#list2 > div{width: inherit;float: right !important;}
 	</style>
 </head>
 <body>
+<<<<<<< HEAD
 	<script type="text/javascript" src="http://localhost:3000/javascripts/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="http://localhost:3000/javascripts/jquery.dragsort-0.5.2.js"></script>
   <script src="http://localhost:3000/javascripts/render_html.js" charset="utf-8"></script>
@@ -34,10 +35,20 @@
 				<ul id="list2"  class="years" data-year="10">
 					<li class="course" data-rec-y="2"><div>course 1</div></li>
 					<li class="course" data-rec-y="0"><div>course 2</div></li>
+=======
+
+	<div id="course-manage">
+			<div class="course">
+				<h2>Course list</h2>
+				<ul id="list2"  class="years">
+					<li data-rec-y="2"><div>course 1</div></li>
+					<li data-rec-y="0"><div>course 2</div></li>
+>>>>>>> d91e69ba2cbb1166e2801d846cea2f33c060eb75
 				</ul>
 			</div>
 	</div>
 
+<<<<<<< HEAD
   <button type="button" name="button" onclick="post_Data()">Save</button>
 	<!-- save sort order here which can be retrieved on server on postback -->
 	<input name="list1SortOrder" type="hidden" />
@@ -47,11 +58,23 @@
 
 	      }
 
-      
- 
-		 
-		 
-		
+
+
+
+
+
+=======
+  <button type="button" name="button" onclick="addYears()">Test Add Years</button>
+	<!-- save sort order here which can be retrieved on server on postback -->
+	<script type="text/javascript" src="http://55.55.55.55:3000/javascripts/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="http://55.55.55.55:3000/javascripts/jquery.dragsort-0.5.2.js"></script>
+  <script src="http://55.55.55.55:3000/javascripts/render_html.js"></script>
+	<input name="list1SortOrder" type="hidden" />
+	<script type="text/javascript">
+      function saveOrder(){
+
+      }
+>>>>>>> d91e69ba2cbb1166e2801d846cea2f33c060eb75
 	</script>
 	<div style="clear:both;"></div>
 </body>
