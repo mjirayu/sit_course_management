@@ -30,9 +30,11 @@ router.post('/plan/:id',function(req,res,next){
 		//res.render('plan-list',{user:req.user,datas:collection});
 		console.log(data);
 		collection.plan_course = data.plan_course;
-		collection.save();
+		collection.save(function(err,data){
+			if(err){ res.send("Error");}else{res.send("Success");}
+		});
 		//console.log(req.body.data);
-		res.send(req.body.data);
+		
 	});
 	// var data = JSON.parse(req.body.data);
 	// dataplan.findByIdAndUpdate(

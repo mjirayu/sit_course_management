@@ -93,9 +93,6 @@
 				},
 
 				dragStart: function(e) {
-					$(".course").mousedown(function(){
-						$(".item").hide();
-					});
 					if (list != null && list.draggedItem != null)
 						list.dropItem();
 
@@ -258,7 +255,7 @@
 					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
 					//console.log(list.draggedItem.data('rec-y'));
 
-					console.log(opts.dragEnd.apply(list.draggedItem));
+					//	console.log(opts.dragEnd.apply(list.draggedItem));
 
 
 

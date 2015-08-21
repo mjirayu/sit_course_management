@@ -11,23 +11,39 @@ var api_path = getUrl.origin+"/api"+getUrl.pathname;
 
 
 var data_json = $.getJSON(api_path).done(function(data) {
-  console.log(data);
+  //console.log(data);
   $('#course-manage').append(render_data(data));
 
-  $(".course").mousedown(function(){
+ 
+    hideWhenDrop();
+
+
+
+
+  $("#list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop here</div></li>" });
+  var data =  JSON.stringify(getJson());
+  //console.log(data);
+  //console.log(JSON.parse(data));
+});
+/// New function for map to database in mongoDB
+
+
+function hideWhenDrop(){
+  $("#list2").mousedown(function(){
     $(".item").hide();
   }).mouseup(function(){
     $(".item").show();
   });
 
+  $(".course").mousedown(function(){
+    console.log($(this).data('rec-y'));
+    canDropZone($(this).data('rec-y'));
+  }).mouseup(function(){
+    $( ".year" ).removeClass( "canDrop" ).removeClass( "cantCanDrop" );
+    
+  });
 
-  $("#list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop here</div></li>" });
-  var data =  JSON.stringify(getJson());
-  console.log(data);
-  console.log(JSON.parse(data));
-});
-/// New function for map to database in mongoDB
-
+}
 function render_data(data){
   var dom_course = "<h2 class='plan_name'>"+data.plan_name+"</h2>";
   dom_course = dom_course+'<div id="years-lists" data-id ="'+data._id+'">';
@@ -183,11 +199,26 @@ function getJsonCouseList(data){
 
 function post_Data() {
   var data =  JSON.stringify(getJson());
-  console.log(data);
-  console.log(JSON.parse(data));
+  //console.log(data);
+  //console.log(JSON.parse(data));
   $.post( api_path,  {data:data}).done(function( data ) {
-    alert( "Data Loaded: " + data );
+    alert( "Save data : " + data );
     
   });
 }
 
+function canDropZone(year){
+  $(".year").each(function(){
+    if($(this).data('year')>=year){
+      $(this).addClass('canDrop');
+    }else{
+      $(this).addClass('cantCanDrop');
+    }
+  });
+}
+function canDropReset(){
+  $(".year").each(function(){
+    $(this).removeClass('candrop').removeClass('candrop');
+  });
+
+  }
