@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  h1 Create Course
+  form(name="create-course", method="post" action='/course/create')
+    div.form-group
+      label Course Name
+      input(type="text", name="course_name").form-control
+    div.form-group
+      label Course ID
+      input(type="text", name="course_id").form-control
+    div.form-group
+      label Credit
+      input(type="text", name="credit").form-control
+    div.form-group
+      label Department
+      input(type="text", name="department").form-control
+    div.form-group
+      label Prerequisite
+      input(type="text", name="prerequisite").form-control
+    div.form-group
+      label Recommended Year
+      input(type="text", name="recommended_year").form-control
+    div.form-group
+      label Description
+      textarea(name="description").form-control
+    div.form-group
+      button(type="submit").btn.btn-default submit
