@@ -13,7 +13,7 @@ var coursePlanSchema = mongoose.Schema({
 		}],
 		plan_description: String,
 		student_id: Number,
-		message: Object,
+		message: String,
 		status: String,
 		department:String,
 	});
