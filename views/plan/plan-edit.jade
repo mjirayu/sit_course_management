@@ -6,9 +6,18 @@ block content
     input(type="hidden" name="_method" value="put")
     div.form-group
       label Status
-      input(type="text", name="status" value="#{data.status}").form-control
+      select(name="status").form-control
+        option(value="pending") Pending
+        option(value="approve") Approve
+        option(value="reject") Reject
     div.form-group
       label Message
       textarea(name="message").form-control #{data.message}
     div.form-group
       button(type="submit").btn.btn-default submit
+  script.
+    $('select[name="status"] option').each(function(){
+      if ($(this).val() == '#{data.status}'){
+        $(this).attr('selected', 'selected');
+      } 
+    });
