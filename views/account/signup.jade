@@ -3,7 +3,7 @@ extends ../layout
 block content
   div.container.radius
     h1.page-title 
-      b SIT Login
+      b SIT SignUp
     if message_auth
       div.warning-message=message_auth
     form(name="signup-form", method="post" action='/users/signup')
@@ -18,7 +18,9 @@ block content
         input(type="email", name="email").form-control
       div.form-group
         label Department
-        input(type="text", name="department").form-control
+        select(name="department").form-control
+          option(value="Computer Science") Computer Science
+          option(value="Information Technology") Information Technology
       div.form-group
         label Username
         input(type="text", name="username").form-control
