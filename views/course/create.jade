@@ -19,7 +19,10 @@ block content
         option(value="Information Technology") Information Technology
     div.form-group
       label Prerequisite
-      input(type="text", name="prerequisite").form-control
+      select(name="prerequisite").form-control
+        option(value="None") None
+        each data in datas
+          option(value="#{data.course_id}") #{data.course_id}
     div.form-group
       label Recommended Year
       select(name="recommended_year").form-control

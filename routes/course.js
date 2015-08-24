@@ -13,7 +13,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/create', function(req, res) {
-  res.render('course/create');
+  dataCourse.find({}, function(err, collection) {
+    res.render('course/create', {datas: collection});
+  });
 });
 
 router.post('/create', function(req, res) {
@@ -38,7 +40,12 @@ router.get('/:id', function(req, res) {
 
 router.get('/edit/:id', function(req, res, next) {
   dataCourse.findById(req.params.id, function(err, collection) {
-    res.render('course/edit', {data: collection});
+    dataCourse.find({}, function(err, courses) {
+      res.render('course/edit', {
+        data: collection,
+        courses: courses
+      });
+    });
   });
 });
 

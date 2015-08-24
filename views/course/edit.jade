@@ -20,7 +20,11 @@ block content
         option(value="Information Technology") Information Technology
     div.form-group
       label Prerequisite
-      input(type="text", name="credit" value="#{data.prerequisite}").form-control
+      select(name="prerequisite").form-control
+        option(value="None") None
+        each course in courses
+          if(course.course_id != data.course_id)
+            option(value="#{course.course_id}") #{course.course_id}
     div.form-group
       label Recommended Year
       select(name="recommended_year").form-control
@@ -39,6 +43,12 @@ block content
           $(this).attr('selected', 'selected');
         } 
       });
+      
+      $('select[name="prerequisite"] option').each(function(){
+        if ($(this).val() == '#{data.prerequisite}'){
+          $(this).attr('selected', 'selected');
+        } 
+      })
       
       $('select[name="recommended_year"] option').each(function(){
         if ($(this).val() == '#{data.recommended_year}'){
