@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  h1 Edit #{data.plan_name} of #{data.student_id}
+  form(name="edit-plan", method="post" action='/plan/edit/#{data._id}')
+    input(type="hidden" name="_method" value="put")
+    div.form-group
+      label Status
+      input(type="text", name="status" value="#{data.status}").form-control
+    div.form-group
+      label Message
+      textarea(name="message").form-control #{data.message}
+    div.form-group
+      button(type="submit").btn.btn-default submit
