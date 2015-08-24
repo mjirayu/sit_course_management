@@ -1,19 +1,6 @@
-
 var url='/javascripts/plan.json';
 var getUrl = window.location;
 var api_path = getUrl.origin+"/api"+getUrl.pathname;
-
-
-
-
-
-
-         
-
-
-
-
-
 
 var data_json = $.getJSON(api_path).done(function(data) {
   console.log(data);
@@ -27,7 +14,7 @@ function render_data(data){
   var dom_course = "<h2 class='plan_name'>"+data.plan_name+"</h2>";
   dom_course = dom_course+'<div id="years-lists" data-id ="'+data._id+'">';
     for(var key in data.plan_course){
-        
+
         if(data.plan_course.hasOwnProperty(key)){
             dom_course = dom_course+" "+render_year(data.plan_course[key]);
         }
@@ -47,26 +34,19 @@ function render_year(data){
       }
 
     }
-    
-    
-
     years_item = years_item+"</div>";
     return years_item;
 }
 
 
-function render_semester (data){
-
+function render_semester(data){
   var semester_item = '<p class="semester"> semester '+data.semester+'</p>';
   semester_item = semester_item + '<ul id="semester" data-year="1" class="years">';
   $.each(data.course_list,function(index,value){
     semester_item = semester_item + "<li><div data-couse-id="+value.course_code+">"+value.course_code+"</div><li>";
-
   });
   return semester_item;
-
 }
-
 
 /////OLD FUNCTION //////// For Test Only
 function render_data_old(data){
@@ -189,5 +169,3 @@ function getJSONPage() {
   };
   return data;
 }
-
-

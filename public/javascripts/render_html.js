@@ -121,11 +121,13 @@ function replaceAll(find, replace, str) {
 // }
 
 function testDrag() {
-  $(" #list2, .years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>" });
+  $(" #list2, .years").dragsort({
+    dragSelector: "div",
+    dragBetween: true,
+    dragEnd: saveOrder,
+    placeHolderTemplate: "<li class='placeHolder'><div>testtest</div></li>"
+  });
 }
-
-
-
 
 function getCourseJson() {
   var data = {};
@@ -137,14 +139,11 @@ function getJson() {
   var data = {};
   data.plan_course = [];
   $('#years-lists .year').each(function() {
-
-
-   var data_year = {}
+   var data_year = {};
    data_year.years = $(this).data('year');
    data_year.years_course = getJsonYear($(this));
-    data.plan_course.push(data_year);
+   data.plan_course.push(data_year);
   });
-
 
   return data;
 }
@@ -172,9 +171,8 @@ function getJsonCouseList(data){
 
 function post_Data() {
   var data =  JSON.stringify(getJson());
-  $.post( api_path,  {data:data}).done(function( data ) {
+  $.post( api_path, {data: data}).done(function( data ) {
     alert( "Save data : " + data );
-
   });
 }
 
