@@ -1,12 +1,47 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var middleware = require('./../models/middleware');
 var crypto = require('crypto');
 var dataUser = mongoose.model('user');
 
 /* GET users listing. */
-router.get('/', function(req, res) {
-  res.send('respond with a resource');
+router.get('/', middleware, function(req, res, next) {
+  console.log(req.user.roles[0]);
+  if(req.user.roles[0] == 'admin'){
+    dataUser.find({}, function(err, collection) {
+      res.render('account/user', {datas: collection});
+    });
+  } else {
+    res.redirect('/');
+  }
+});
+
+router.get('/edit/:id', function(req, res) {
+	dataUser.findById(req.params.id, function(err, collection) {
+		res.render('account/user-edit', {data: collection});
+	});
+});
+
+router.post('/edit/:id', function(req, res) {
+	dataUser.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: {
+        'firstname': req.body.firstname,
+        'lastname': req.body.lastname,
+        'student_email': req.body.student_email,
+        'department': req.body.department,
+        'username': req.body.username
+      }
+    },
+    function(err, collection) {
+      if (err){
+        console.log(err);
+      }
+    }
+  );
+	res.redirect('/users');
 });
 
 router.get('/signup', function(req, res) {
@@ -45,7 +80,7 @@ function createSalt() {
   return crypto.randomBytes(128).toString('base64');
 }
 
-function hashPwd(salt, pwd) {
+function hashPwd(salt, password) {
   var hmac = crypto.createHmac('sha1', salt);
-  return hmac.update(pwd).digest('hex');
+  return hmac.update(password).digest('hex');
 }
