@@ -1,13 +1,14 @@
+var crypto = require('crypto');
 var passport = require('passport'),
 LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var datauser = mongoose.model('user');
+var dataUser = mongoose.model('user');
 var flash = require('connect-flash');
-// Passport configure
 
+// Passport configure
 passport.use(new LocalStrategy(
 	function(username, password, done){
-		datauser.findOne({username: username}, function(err, collection){
+		dataUser.findOne({username: username}, function(err, collection){
 			var authenticated = checkPWD(collection, password);
 			if(err) {
 				return done(err);
@@ -33,13 +34,17 @@ passport.deserializeUser(function(user, done){
 
 module.exports = passport;
 
+function hashPwd(salt, password) {
+	var hmac = crypto.createHmac('sha1', salt);
+	return hmac.update(password).digest('hex');
+}
+
 function checkPWD(data, pwd){
 	if(!data){
 		return false;
 	}
 	var salt = data.salt;
-	// var password = hashPwd(salt, pwd);
-	var password = data.password;
+	var password = hashPwd(salt, pwd);
 	if (!(password === data.password)) {
 		return false;
 	}
