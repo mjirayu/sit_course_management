@@ -3,16 +3,15 @@ var router = express.Router();
 var passport = require('./../models/auth');
 var middleware = require('./../models/middleware');
 var mongoose = require('mongoose');
-var datauser = mongoose.model('user');
-var dataplan = mongoose.model('plan');
+var dataPlan = mongoose.model('plan');
 
 /* GET home page. */
 router.get('/', middleware, function(req, res, next) {
 	console.log(req.user);
 	if (req.user.roles[0] == 'admin') {
-		res.redirect('/course');
+		res.render('admin/admin');
 	}
-	dataplan.find({}, function(err, collection){
+	dataPlan.find({'student_id': req.user.username}, function(err, collection){
 		res.render('plan-list', {user:req.user, datas:collection});
 	});
 });
@@ -30,10 +29,10 @@ router.get('/login',function(req, res){
 });
 
 router.post('/login', passport.authenticate('local', {
-	successRedirect: '/',
-	failureRedirect: '/login',
-	failureFlash: true,
-}
+		successRedirect: '/',
+		failureRedirect: '/login',
+		failureFlash: true,
+	}
 ));
 
 module.exports = router;
