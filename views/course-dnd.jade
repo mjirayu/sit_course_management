@@ -1,0 +1,16 @@
+extends app-layout
+block content
+    #course-manage
+      .course-list
+        h2 Course list
+        ul#list2.years(data-year='10')
+          li.course(data-rec-y='2')
+            div course 1
+          li.course(data-rec-y='0')
+            div course 2
+    button(type='button', name='button', onclick='post_Data()') Save
+    // save sort order here which can be retrieved on server on postback
+    input(name='list1SortOrder', type='hidden')
+    script(type='text/javascript').
+      function saveOrder(){}
+    div(style='clear:both;')

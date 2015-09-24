@@ -51,7 +51,8 @@ router.post('/edit/:id', middleware, function(req, res) {
 
 router.get('/:id', middleware, function(req, res) {
 	dataPlan.findById(req.params.id, function(err, collection) {
-		res.sendfile(path.resolve('public/app.html'));
+		res.render('course-dnd');
+		//res.sendfile(path.resolve('public/app.html'));
 	});
 });
 
