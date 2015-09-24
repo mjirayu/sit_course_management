@@ -241,30 +241,54 @@
 				},
 
 				dropItem: function() {
+
+
+
 					if (list.draggedItem == null)
 						return;
 
+					//console.log(list.container);
+
+					//check condition
+
+					//console.log(list.draggedItem.closest("ul"));
+					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
+					//console.log(list.draggedItem.data('rec-y'));
+
+					//	console.log(opts.dragEnd.apply(list.draggedItem));
+
+
+
+
+
+					//list.draggedItem.attr("style", "") doesn't work on IE8 and jQuery 1.5 or lower
+					//list.draggedItem.removeAttr("style") doesn't work on chrome and jQuery 1.6 (works jQuery 1.5 or lower)
 					var orig = list.draggedItem.attr("data-origstyle");
+					//console.log(orig);
 					list.draggedItem.attr("style", orig);
 					if (orig == "")
 						list.draggedItem.removeAttr("style");
-
 					list.draggedItem.removeAttr("data-origstyle");
 
 					list.styleDragHandlers(true);
+
 
 					// check condition
 					if(list.checkCon()){
 						list.placeHolderItem.before(list.draggedItem);
 						list.placeHolderItem.remove();
+					}else{
+						list.placeHolderItem.remove();
 					}
 
+					//console.log($("[data-droptarget], .dragSortItem"));
 					$("[data-droptarget], .dragSortItem").remove();
 
 					window.clearInterval(list.scroll.scrollY);
 					window.clearInterval(list.scroll.scrollX);
 					list.placeHolderItem.hide();
-
+					//console.log(list.placeHolderItem.parent('ul'));
+					//console.log(list.placeHolderItem.closest("ul"));
 					//if position changed call dragEnd
 					if (list.draggedItem.attr("data-origpos") != $(lists).index(list) + "-" + $(list.container).children().index(list.draggedItem))
 						if (opts.dragEnd.apply(list.draggedItem) == false) { //if dragEnd returns false revert order
@@ -305,7 +329,7 @@
 							        return true;
 							    } else {
 
-							        return false;
+							        return true;
 							    }
 					return true;
 				},
