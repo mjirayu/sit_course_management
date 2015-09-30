@@ -3,11 +3,11 @@ block content
     #course-manage
       .course-list
         h2 Course list
-        ul#list2.years(data-year='10')
-          li.course(data-rec-y='2')
-            div course 1
-          li.course(data-rec-y='0')
-            div course 2
+        ul#list2.years(data-year="10")
+          each item in plan
+            li.course(data-rec-y=item.recommended_year)(data-couse-id=item.course_id)
+              div(data-couse-id=item.course_id)=item.course_name+" ("+item.course_id+")"
+        
     button(type='button', name='button', onclick='post_Data()') Save
     // save sort order here which can be retrieved on server on postback
     input(name='list1SortOrder', type='hidden')

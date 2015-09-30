@@ -321,15 +321,28 @@
 					//console.log(list.placeHolderItem.closest("ul").data("candrop"));
 					// Use this statement for get drag item.
 					//console.log(list.draggedItem.data('rec-y'));
+					var placeholder = list.placeHolderItem;
 					var placeYears = list.placeHolderItem.closest("ul").data("year");
+					var placeMain = list.placeHolderItem.closest("ul").attr("id");
 					var rec_y = list.draggedItem.data('rec-y');
+
+					if(placeMain == "list2"){
+						return false;
+					}
+
+					console.log(placeholder);
+					// if(placeholder.prev('div').length != 0){
+					// 	alert("hihihihi");
+					// }
+
+
 					if(rec_y)
 						if(!(placeYears>=rec_y))
 							if (confirm("This cours is recommed on years"+rec_y+"  Are u sure to regis this cours") == true) {
 							        return true;
 							    } else {
 
-							        return true;
+							        return false;
 							    }
 					return true;
 				},
