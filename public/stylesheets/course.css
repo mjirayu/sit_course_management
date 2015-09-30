@@ -1,10 +1,8 @@
 body {
   font-family:Arial;
   font-size:12pt;
-  padding:20px;
-  width:820px;
-  margin:20px auto;
-  border:1px solid black;
+  background-color: #EEE !important;
+ 
 }
 
 h1 {
@@ -40,6 +38,13 @@ ul {
 
 .course-list{
   float: right;
+}
+#course-manage{
+  width: 900px;
+  margin: 0 auto;
+  background: #FFF;
+  padding: 20px;
+  margin-top: 30px;
 }
 #course-manage > div h2 {
   text-align: center;

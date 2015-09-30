@@ -3,6 +3,7 @@ var router = express.Router();
 var middleware = require('./../models/middleware');
 var mongoose = require('mongoose');
 var dataPlan = mongoose.model('plan');
+var dataCourse = mongoose.model('course');
 var path = require('path');
 
 router.get('/', middleware, function(req, res, next) {
@@ -50,8 +51,10 @@ router.post('/edit/:id', middleware, function(req, res) {
 });
 
 router.get('/:id', middleware, function(req, res) {
-	dataPlan.findById(req.params.id, function(err, collection) {
-		res.sendfile(path.resolve('public/app.html'));
+	dataCourse.find({}, function(err, collection) {
+		console.log(collection);
+		res.render('course-dnd',{plan:collection});
+		//res.sendfile(path.resolve('public/app.html'));
 	});
 });
 
