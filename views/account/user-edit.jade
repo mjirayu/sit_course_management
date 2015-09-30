@@ -1,34 +1,34 @@
-
-extends ../layout
+extends ../admin_layout
 
 block content
-  div.container.radius
-    h1.page-title 
-      b SIT SignUp
-    if message_auth
-      div.warning-message=message_auth
-    form(name="signup-form", method="post" action='/users/edit/'+ data.id)
-      input(type="hidden" name="_method" value="put")
-      div.form-group
-        label Firstname
-        input(type="text", name="firstname", value="#{data.firstname}").form-control
-      div.form-group
-        label Lastname
-        input(type="text", name="lastname", value="#{data.lastname}").form-control
-      div.form-group
-        label Email
-        input(type="email", name="student_email", value="#{data.student_email}").form-control
-      div.form-group
-        label Department
-        select(name="department").form-control
-          option(value="Computer Science") Computer Science
-          option(value="Information Technology") Information Technology
-      div.form-group
-        label Username
-        input(type="text", name="username", value="#{data.username}").form-control
-      div.form-group
-        button(type="submit").btn.btn-info Update
-        a(href="/users").btn.btn-primary Back
+  #page-wrapper
+    div.container.radius
+      h1.page-title 
+        b SIT SignUp
+      if message_auth
+        div.warning-message=message_auth
+      form(name="signup-form", method="post" action='/users/edit/'+ data.id)
+        input(type="hidden" name="_method" value="put")
+        div.form-group
+          label Firstname
+          input(type="text", name="firstname", value="#{data.firstname}").form-control
+        div.form-group
+          label Lastname
+          input(type="text", name="lastname", value="#{data.lastname}").form-control
+        div.form-group
+          label Email
+          input(type="email", name="student_email", value="#{data.student_email}").form-control
+        div.form-group
+          label Department
+          select(name="department").form-control
+            option(value="Computer Science") Computer Science
+            option(value="Information Technology") Information Technology
+        div.form-group
+          label Username
+          input(type="text", name="username", value="#{data.username}").form-control
+        div.form-group
+          button(type="submit").btn.btn-info Update
+          a(href="/users").btn.btn-primary Back
   script.
     $('select[name="department"] option').each(function(){
       if ($(this).val() == '#{data.department}'){

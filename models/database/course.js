@@ -7,7 +7,8 @@ var courseSchema = mongoose.Schema({
 		department: String,
 		prerequisite: String,
 		recommended_year: String,
-    description: String
+    description: String,
+		type: String,
 	});
 
 

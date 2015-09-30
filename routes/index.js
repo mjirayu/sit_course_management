@@ -7,13 +7,13 @@ var dataPlan = mongoose.model('plan');
 
 /* GET home page. */
 router.get('/', middleware, function(req, res, next) {
-	console.log(req.user);
 	if (req.user.roles[0] == 'admin') {
-		res.render('admin/admin');
+		res.render('admin/admin', {username: req.user.username});
+	} else {
+		dataPlan.find({'student_id': req.user.username}, function(err, collection){
+			res.render('plan-list', {user:req.user, datas:collection});
+		});
 	}
-	dataPlan.find({'student_id': req.user.username}, function(err, collection){
-		res.render('plan-list', {user:req.user, datas:collection});
-	});
 });
 
 router.get('/logout',function(req,res){

@@ -1,37 +1,43 @@
-extends ../layout
+extends ../admin_layout
 
 block content
-  h1 Create Course
-  form(name="create-course", method="post" action='/course/create')
-    div.form-group
-      label Course Name
-      input(type="text", name="course_name").form-control
-    div.form-group
-      label Course ID
-      input(type="text", name="course_id").form-control
-    div.form-group
-      label Credit
-      input(type="text", name="credit").form-control
-    div.form-group
-      label Department
-      select(name="department").form-control
-        option(value="Computer Science") Computer Science
-        option(value="Information Technology") Information Technology
-    div.form-group
-      label Prerequisite
-      select(name="prerequisite").form-control
-        option(value="None") None
-        each data in datas
-          option(value="#{data.course_id}") #{data.course_id}
-    div.form-group
-      label Recommended Year
-      select(name="recommended_year").form-control
-        option(value="1") 1
-        option(value="2") 2
-        option(value="3") 3
-        option(value="4") 4  
-    div.form-group
-      label Description
-      textarea(name="description").form-control
-    div.form-group
-      button(type="submit").btn.btn-default submit
+  #page-wrapper
+    h1 Create Course
+    form(name="create-course", method="post" action='/course/create')
+      div.form-group
+        label Course Name
+        input(type="text", name="course_name").form-control
+      div.form-group
+        label Course ID
+        input(type="text", name="course_id").form-control
+      div.form-group
+        label Credit
+        input(type="text", name="credit").form-control
+      div.form-group
+        label Department
+        select(name="department").form-control
+          option(value="Computer Science") Computer Science
+          option(value="Information Technology") Information Technology
+      div.form-group
+        label Prerequisite
+        select(name="prerequisite").form-control
+          option(value="None") None
+          each data in datas
+            option(value="#{data.course_id}") #{data.course_id}
+      div.form-group
+        label Recommended Year
+        select(name="recommended_year").form-control
+          option(value="1") 1
+          option(value="2") 2
+          option(value="3") 3
+          option(value="4") 4  
+      div.form-group
+        label Type
+        select(name="type").form-control
+          option(value="main") main
+          option(value="elective") elective
+      div.form-group
+        label Description
+        textarea(name="description").form-control
+      div.form-group
+        button(type="submit").btn.btn-default submit

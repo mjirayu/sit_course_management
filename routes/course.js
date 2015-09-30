@@ -27,7 +27,8 @@ router.post('/create', function(req, res) {
     department: req.body.department,
     prerequisite: req.body.prerequisite,
     recommended_year: req.body.recommended_year,
-    description: req.body.description
+    description: req.body.description,
+    type: req.body.type
   });
   res.redirect('/course');
 });
@@ -59,7 +60,8 @@ router.post('/edit/:id', function(req, res) {
       department: req.body.department,
       prerequisite: req.body.prerequisite,
       recommended_year: req.body.recommended_year,
-      description: req.body.description
+      description: req.body.description,
+      type: req.body.type
     }, function(err) {
       if(err) {
         throw err;
