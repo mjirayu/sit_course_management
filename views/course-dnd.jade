@@ -1,6 +1,19 @@
 extends app-layout
 block content
-    #course-manage
+    nav.mainnavigator
+      .btn-group.btn-group-justified(role='group', aria-label='test')
+            .btn-group(role='group')
+              a(href="/")
+                button.btn.btn-default(type='button') Home
+            .btn-group(role='group')
+              button.btn.btn-default(type='button') Middle
+            .btn-group(role='group')
+              a(href="/logout")
+                button.btn.btn-default.logout(type='button') Logout
+    #course-manage.radius10
+      div(style="width:100%;overflow:hidden")
+        button.btn.btn-success.pull-right(type='button', aria-label='Left Align',onclick="post_Data()") Save
+        
       .course-list
         h2 Course list
         ul#list2.years(data-year="10")

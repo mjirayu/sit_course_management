@@ -1,16 +1,24 @@
+html{background-image:url("../img/noise.png"), -webkit-radial-gradient(top center, #FFF, #DADADA 750px),url("../img/noise.png"), -webkit-gradient(radial, 50% 0%, 0, 50% 0%, 750, color-stop(0%, #FFF), color-stop(100%, #DADADA))}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  background-color: inherit !important;
 
+}
+html{
+  position: relative;
+  min-height: 100%;
+}
 a {
   color: #00B7FF;
 }
 
 .container{
 	width: 900px !important;
-	background: #e3e3e3;
+	background: #FFF;
 	padding: 20px;
+  border: 1px solid #ccc;
 }
 
 .radius{
@@ -18,7 +26,68 @@ a {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+.radius10{
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
 
 .page-title{
 	text-align: center;
+}
+.loginbutton{
+  margin: 0 auto;
+  display: block !important;
+  width: 100%;
+  font-size: 2em !important;
+  font-weight: bold !important;
+  color: #FFF !important;
+  background: #3a5795 !important;
+}
+
+.btn-default {
+    text-shadow: 0 1px 0 #fff;
+    background-image: -webkit-linear-gradient(top,#fff 0,#e0e0e0 100%);
+    background-image: -o-linear-gradient(top,#fff 0,#e0e0e0 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#fff),to(#e0e0e0));
+    background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+    background-repeat: repeat-x;
+    border-color: #dbdbdb;
+    border-color: #ccc;
+}
+.btn-danger, .btn-default, .btn-info, .btn-primary, .btn-success, .btn-warning {
+    text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+}
+
+.mainnavigator{
+  width: 900px;
+  margin: 0 auto;
+}
+.mainnavigator button{
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #666666;
+}
+
+.mainnavigator button.logout{
+  background: #E42A2A;
+  color: #FFF;
+}
+
+
+#course-manage h2{
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+#course-manage .year{
+  border: 2px solid #3a5795;
+  padding: 20px;
+  margin-bottom: 20px;
+
 }

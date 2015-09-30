@@ -3,15 +3,17 @@ extends layout
 block content
 	div.container.radius
 		h1.page-title 
-			b SIT Login
+			img(src="../img/sit-web-logo-big.png")
+		br
 		if message_auth
 			div.warning-message=message_auth
 		form(name="login-form", method="post")
 			div.form-group
-				label Username
-				input(type="text", name="username").form-control
+				
+				input(type="text", name="username",placeholder="ID or Email").form-control
 			div.form-group
-				label Password
-				input(type="password", name="password").form-control
+				
+				input(type="password", name="password",placeholder="Password").form-control
+			
 			div.form-group
-				button(type="submit").btn.btn-default submit
+				button(type="submit").btn.btn-default.loginbutton Login

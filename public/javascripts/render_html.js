@@ -8,7 +8,7 @@ var data_json = $.getJSON(api_path).done(function(data) {
   $('#course-manage').append(render_data(data));
   hideWhenDrop();
 
-  $("#list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'><div>Drop here</div></li>" });
+  $("#list2,.years").dragsort({ dragSelector: "div", dragBetween: true, dragEnd: saveOrder, placeHolderTemplate: "<li class='placeHolder'>Drop here</li>" });
   var data =  JSON.stringify(getJson());
 });
 
@@ -41,8 +41,8 @@ function render_data(data){
 }
 
 function render_year(data){
-    var years_item = "<div class='year' data-year='"+data.years+"' >";
-    years_item = years_item+"<div class='title'> Years "+data.years+"</div>";
+    var years_item = "<div class='year radius' data-year='"+data.years+"' >";
+    years_item = years_item+"<div class='title yearname radius'> Years "+data.years+"</div>";
 
     for(var key in data.years_course){
       if(data.years_course.hasOwnProperty(key)){
@@ -56,7 +56,7 @@ function render_year(data){
 
 function render_semester (data){
 
-  var semester_item = '<div class="semester" data-semester="'+data.semester+'"><p class="title"> semester '+data.semester+'</p>';
+  var semester_item = '<div class="semester" data-semester="'+data.semester+'"><p class="title"> Semester '+data.semester+'</p>';
   semester_item = semester_item + '<ul data-year="1" class="years semester-list">';
   $.each(data.course_list,function(index,value){
     semester_item = semester_item + "<li class='item' data-couse-id='"+value.course_code+"' data-id='"+value.course_id+"'><div data-couse-id="+value.course_code+">"+value.course_code+"</div></li>";
