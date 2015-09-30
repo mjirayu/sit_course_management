@@ -1,9 +1,10 @@
-extends ../layout
+extends ../admin_layout
 
 block content
-	div.container.radius
-		h1.page-title All User
-		ul
-			each data in datas
-				li
-					a(href="users/edit/"+data._id) #{data.username} 
+	#page-wrapper
+		div.container.radius
+			h1.page-title All User
+			ul
+				each data in datas
+					li
+						a(href="users/edit/"+data._id) #{data.username} 

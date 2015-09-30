@@ -1,6 +1,27 @@
-extends ../layout
+extends ../admin_layout
 
 block content
-  a(href="/users").btn User
-  a(href="/course").btn Course
-  a(href="/plan").btn Plan
+  #page-wrapper
+    .container-fluid
+      // Page Heading
+      .row
+        .col-lg-12
+          h1.page-header
+            | Dashboard 
+          ol.breadcrumb
+            li.active
+              i.fa.fa-dashboard
+              |  Dashboard
+      .row
+        .col-lg-4
+          .panel.panel-default
+            .panel-heading
+              h3.panel-title
+                i.fa.fa-long-arrow-right.fa-fw
+                |  Donut Chart
+            .panel-body
+              #morris-donut-chart
+              .text-right
+                a(href='#')
+                  | View Details 
+                  i.fa.fa-arrow-circle-right

@@ -1,14 +1,15 @@
-extends ../layout
+extends ../admin_layout
 
 block content
-  h1 Course
-  a(href='course/create').btn.btn-success Create
-  ul
-    each data in datas
-      a(href='course/'+data._id)
-        li
-          div=data.course_name
-          a(href='course/edit/' + data._id).btn.btn-info Edit  
-          form(name="delete-form", method="post" action='/course/delete/' + data._id)
-            input(type="hidden" name="_method" value="delete")
-            button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
+  #page-wrapper
+    h1 Course
+    a(href='course/create').btn.btn-success Create
+    ul
+      each data in datas
+        a(href='course/'+data._id)
+          li
+            div=data.course_name
+            a(href='course/edit/' + data._id).btn.btn-info Edit  
+            form(name="delete-form", method="post" action='/course/delete/' + data._id)
+              input(type="hidden" name="_method" value="delete")
+              button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

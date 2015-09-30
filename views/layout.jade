@@ -2,8 +2,12 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/bower_components/bootstrap/dist/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/bower_components/bootstrap/dist/css/bootstrap.min.css')  
+    link(rel='stylesheet', href='/stylesheets/font-awesome/css/font-awesome.min.css' type="text/css")
+    block css
   body
-    include scripts
     block content
+    include scripts  
+    script(type="text/javascript",src="/stylesheets/bower_components/bootstrap/dist/js/bootstrap.min.js")
+    
