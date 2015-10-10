@@ -2,9 +2,42 @@ extends ../admin_layout
 
 block content
 	#page-wrapper
-		div.container.radius
-			h1.page-title All User
-			ul
-				each data in datas
-					li
-						a(href="users/edit/"+data._id) #{data.username} 
+		.container-fluid
+			.row
+				.col-lg-12
+					h1.page-header
+						| All Users
+						a(href="/users/signup", style="float:right").btn.btn-success Sign Up
+					ol.breadcrumb
+						li.active
+							i.fa.fa-dashboard
+							|  User
+			.row
+				.col-lg-12
+					.panel.panel-default
+						.panel-body
+							table.table
+								thead
+									th Student ID
+									th Firstname
+									th Lastname
+									th Student Email
+									th Dapartment
+									th Entranced Year
+									th Last Update
+								tbody
+								each data in datas
+									tr
+										td=data.username
+										td=data.firstname
+										td=data.lastname
+										td=data.student_email
+										td=data.department
+										td=data.entranced_year
+										td=data.last_update
+										td
+											a(href='/users/edit/' + data._id).btn.btn-info Edit  
+										td
+											form(name="delete-form", method="post" action='/users/delete/' + data._id)
+												input(type="hidden" name="_method" value="delete")
+												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

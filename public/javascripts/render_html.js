@@ -1,7 +1,6 @@
-
 var url='/javascripts/plan.json';
 var getUrl = window.location;
-var api_path = getUrl.origin+"/api"+getUrl.pathname;
+var api_path = getUrl.origin + "/api" + getUrl.pathname;
 
 var data_json = $.getJSON(api_path).done(function(data) {
 

@@ -25,9 +25,9 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(methodOverride('_method'));
 app.use(session({
-  secret: 'anything' ,proxy: true,
+  secret: 'anything', proxy: true,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -52,11 +52,11 @@ app.use(function(req, res, next) {
 });
 
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
+  app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
     });
   });
 }
@@ -65,10 +65,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
   });
 });
-
 
 app.listen(3000, function() {
   console.log('Node runing on port 3000');

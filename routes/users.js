@@ -7,7 +7,6 @@ var dataUser = mongoose.model('user');
 
 /* GET users listing. */
 router.get('/', middleware, function(req, res, next) {
-  console.log(req.user.roles[0]);
   if(req.user.roles[0] == 'admin'){
     dataUser.find({}, function(err, collection) {
       res.render('account/user', {datas: collection});
@@ -18,13 +17,18 @@ router.get('/', middleware, function(req, res, next) {
 });
 
 router.get('/edit/:id', function(req, res) {
-	dataUser.findById(req.params.id, function(err, collection) {
-		res.render('account/user-edit', {data: collection});
-	});
+  dataUser.findById(req.params.id, function(err, collection) {
+    res.render('account/user-edit', {data: collection});
+  });
 });
 
 router.post('/edit/:id', function(req, res) {
-	dataUser.findByIdAndUpdate(
+  today = new Date();
+  date = today.getDate();
+  month = today.getMonth() + 1;
+  year = today.getFullYear();
+  today = month + '/' + date + '/' + year;
+  dataUser.findByIdAndUpdate(
     req.params.id,
     {
       $set: {
@@ -32,16 +36,18 @@ router.post('/edit/:id', function(req, res) {
         'lastname': req.body.lastname,
         'student_email': req.body.student_email,
         'department': req.body.department,
-        'username': req.body.username
-      }
+        'username': req.body.username,
+        'entranced_year': req.body.entranced_year,
+        'last_update': today,
+      },
     },
     function(err, collection) {
-      if (err){
+      if (err) {
         console.log(err);
       }
     }
   );
-	res.redirect('/users');
+  res.redirect('/users');
 });
 
 router.get('/signup', function(req, res) {
@@ -52,15 +58,15 @@ router.post('/signup', function(req, res) {
   salt = createSalt();
   today = new Date();
   date = today.getDate();
-  month = today.getMonth()+1;
+  month = today.getMonth() + 1;
   year = today.getFullYear();
-  today = month+'/'+date+'/'+year;
+  today = month + '/' + date + '/' + year;
   if (req.body.password == req.body.confirm_password) {
     dataUser.create({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       department: req.body.department,
-      student_email: req.body.email,
+      student_email: req.body.student_email,
       username: req.body.username,
       salt: salt,
       password: hashPwd(salt, req.body.password),
@@ -71,6 +77,7 @@ router.post('/signup', function(req, res) {
   } else {
     res.redirect('/users/signup');
   }
+
   res.redirect('/users');
 });
 

@@ -1,11 +1,37 @@
 extends ../admin_layout
 
 block content
-  #page-wrapper
-    div.container.radius
-      ul
-        each data in datas
-          li
-            a(href="plan/"+data._id) #{data.plan_name} 
-            span - #{data.status}
-            a(href="plan/edit/"+data.id).btn.btn-info Edit
+	#page-wrapper
+		.container-fluid
+			.row
+				.col-lg-12
+					h1.page-header
+						| Plan
+					ol.breadcrumb
+						li.active
+							i.fa.fa-dashboard
+							|  Plan
+			.row
+				.col-lg-12
+					.panel.panel-default
+						.panel-body
+							table.table
+								thead
+									th Plan Name
+									th Status
+									th Student ID
+									th Description
+									th 
+								tbody
+								each data in datas
+									tr
+										td=data.plan_name
+										td=data.status
+										td=data.student_id
+										td=data.plan_description
+										td
+											a(href='/plan/edit/' + data._id).btn.btn-info Edit  
+										td
+											form(name="delete-form", method="post" action='/users/delete/' + data._id)
+												input(type="hidden" name="_method" value="delete")
+												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

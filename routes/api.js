@@ -9,7 +9,7 @@ router.get('/', middleware, function(req, res, next) {
 	res.redirect('/');
 });
 
-router.get('/:id', middleware, function(req, res, next){
+router.get('/:id', middleware, function(req, res, next) {
 	datauser.findOne({_id:req.params.id}, function(err, collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});
 		res.json(collection);
@@ -17,13 +17,13 @@ router.get('/:id', middleware, function(req, res, next){
 });
 
 
-router.get('/plan/:id',function(req,res,next){
+router.get('/plan/:id', function(req, res, next) {
 	dataplan.findById(req.params.id, function(err,collection) {
 		res.json(collection);
 	});
 });
 
-router.post('/plan/:id',function(req,res,next){
+router.post('/plan/:id', function(req, res, next) {
 	var data = JSON.parse(req.body.data);
 	dataplan.findOne({_id:req.params.id}, function(err,collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});

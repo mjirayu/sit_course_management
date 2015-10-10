@@ -1,11 +1,9 @@
 function isAuthenticated(req, res, next) {
+  if (req.user) {
+    return next();
+  }
 
-	
-    if (req.user) {
-      return next();
-    }
-    res.redirect('/login');
-
+  res.redirect('/login');
 }
 
 module.exports = isAuthenticated;

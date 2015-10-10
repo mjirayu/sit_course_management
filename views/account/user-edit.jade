@@ -2,36 +2,51 @@ extends ../admin_layout
 
 block content
   #page-wrapper
-    div.container.radius
-      h1.page-title 
-        b SIT SignUp
-      if message_auth
-        div.warning-message=message_auth
-      form(name="signup-form", method="post" action='/users/edit/'+ data.id)
-        input(type="hidden" name="_method" value="put")
-        div.form-group
-          label Firstname
-          input(type="text", name="firstname", value="#{data.firstname}").form-control
-        div.form-group
-          label Lastname
-          input(type="text", name="lastname", value="#{data.lastname}").form-control
-        div.form-group
-          label Email
-          input(type="email", name="student_email", value="#{data.student_email}").form-control
-        div.form-group
-          label Department
-          select(name="department").form-control
-            option(value="Computer Science") Computer Science
-            option(value="Information Technology") Information Technology
-        div.form-group
-          label Username
-          input(type="text", name="username", value="#{data.username}").form-control
-        div.form-group
-          button(type="submit").btn.btn-info Update
-          a(href="/users").btn.btn-primary Back
-  script.
-    $('select[name="department"] option').each(function(){
-      if ($(this).val() == '#{data.department}'){
-        $(this).attr('selected', 'selected');
-      } 
-    });
+    .container-fluid
+      .row
+        .col-lg-12
+          h1.page-header
+            | Edit User
+          ol.breadcrumb
+            li.active
+              i.fa.fa-dashboard
+              |  User / Edit
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              if message_auth
+                div.warning-message=message_auth
+              form(name="signup-form", method="post" action='/users/edit/'+ data.id)
+                input(type="hidden" name="_method" value="put")
+                div.form-group
+                  label Firstname
+                  input(type="text", name="firstname", value="#{data.firstname}").form-control
+                div.form-group
+                  label Lastname
+                  input(type="text", name="lastname", value="#{data.lastname}").form-control
+                div.form-group
+                  label Email
+                  input(type="email", name="student_email", value="#{data.student_email}").form-control
+                div.form-group
+                  label Department
+                  select(name="department").form-control
+                    option(value="Computer Science") Computer Science
+                    option(value="Information Technology") Information Technology
+                div.form-group
+                  label Username
+                  input(type="text", name="username", value="#{data.username}").form-control
+                  input(type="hidden", name='entranced_year' id="entranced_year")
+                div.form-group  
+                  button(type="submit").btn.btn-info Update
+                  a(href="/users").btn.btn-primary Back
+                  
+      script(type='text/javascript').
+        $('select[name="department"] option').each(function(){
+          if ($(this).val() == '#{data.department}'){
+            $(this).attr('selected', 'selected');
+          } 
+        }); 
+        today = new Date();
+        year = today.getFullYear();   
+        $('#entranced_year').val(year);
