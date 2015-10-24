@@ -1,31 +1,30 @@
 var express = require('express');
 var router = express.Router();
-var middleware = require('./../models/middleware');
-var mongoose = require('mongoose');
-var dataplan = mongoose.model('plan');
-var datauser = mongoose.model('user');
 
-router.get('/', middleware, function(req, res, next) {
+var auth = require('./../middlewares/auth');
+var dataPlan = require('./../models/plan');
+var dataUser = require('./../models/user_profile');
+
+router.get('/', auth, function(req, res, next) {
 	res.redirect('/');
 });
 
-router.get('/:id', middleware, function(req, res, next) {
-	datauser.findOne({_id:req.params.id}, function(err, collection) {
+router.get('/:id', auth, function(req, res, next) {
+	dataUser.findOne({_id:req.params.id}, function(err, collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});
 		res.json(collection);
 	});
 });
 
-
 router.get('/plan/:id', function(req, res, next) {
-	dataplan.findById(req.params.id, function(err,collection) {
+	dataPlan.findById(req.params.id, function(err,collection) {
 		res.json(collection);
 	});
 });
 
 router.post('/plan/:id', function(req, res, next) {
 	var data = JSON.parse(req.body.data);
-	dataplan.findOne({_id:req.params.id}, function(err,collection) {
+	dataPlan.findOne({_id:req.params.id}, function(err,collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});
 		console.log(data);
 		collection.plan_course = data.plan_course;
@@ -34,6 +33,5 @@ router.post('/plan/:id', function(req, res, next) {
 		});
 	});
 });
-
 
 module.exports = router;

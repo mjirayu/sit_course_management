@@ -1,4 +1,4 @@
-extends ../admin_layout
+extends ../layout/admin_layout
 
 block content
   #page-wrapper
@@ -9,7 +9,7 @@ block content
             | Edit User
           ol.breadcrumb
             li.active
-              i.fa.fa-dashboard
+              i.fa.fa-user
               |  User / Edit
       .row
         .col-lg-12
@@ -26,17 +26,10 @@ block content
                   label Lastname
                   input(type="text", name="lastname", value="#{data.lastname}").form-control
                 div.form-group
-                  label Email
-                  input(type="email", name="student_email", value="#{data.student_email}").form-control
-                div.form-group
                   label Department
                   select(name="department").form-control
                     option(value="Computer Science") Computer Science
                     option(value="Information Technology") Information Technology
-                div.form-group
-                  label Username
-                  input(type="text", name="username", value="#{data.username}").form-control
-                  input(type="hidden", name='entranced_year' id="entranced_year")
                 div.form-group  
                   button(type="submit").btn.btn-info Update
                   a(href="/users").btn.btn-primary Back

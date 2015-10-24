@@ -5,7 +5,7 @@ gulp.task('default',['node']);
 
 gulp.task('node',function(){
 	nodemon({
-    script: 'app.js',
+    script: 'bin/www',
   	ext: 'js html',
   	env: { 'NODE_ENV': 'development' }
   });

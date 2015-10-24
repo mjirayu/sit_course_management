@@ -1,13 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var passport = require('./../models/auth');
-var middleware = require('./../models/middleware');
-var mongoose = require('mongoose');
-var dataPlan = mongoose.model('plan');
 
-/* GET home page. */
-router.get('/', middleware, function(req, res, next) {
-	if (req.user.roles[0] == 'admin') {
+var auth = require('./../middlewares/auth');
+var passport = require('./../middlewares/passport');
+var dataPlan = require('./../models/plan');
+var dataUser = require('./../models/user_profile');
+
+router.get('/', auth, function(req, res, next) {
+	console.log(req.user);
+	if (req.user.is_admin == 1) {
 		res.render('admin/admin', {username: req.user.username});
 	} else {
 		dataPlan.find({'student_id': req.user.username}, function(err, collection){
@@ -34,5 +35,18 @@ router.post('/login', passport.authenticate('local', {
 		failureFlash: true,
 	}
 ));
+
+router.get('/csv', function(req, res) {
+	res.render('csv');
+});
+
+router.get('/test', function(req, res) {
+	dataUser
+		.findOne({})
+		.populate('auth')
+		.exec(function(err, data) {
+			res.json(data);
+		});
+});
 
 module.exports = router;

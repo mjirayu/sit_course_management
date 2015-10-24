@@ -1,0 +1,14 @@
+extends ../layout/layout
+
+block content
+    .container
+      .col-md-6.login-admin
+        h2 Admin Login
+        form(method="post")
+          .form-group
+            label(for='username') Username
+            input#username.form-control(type='username', placeholder='Username')
+          .form-group
+            label(for='password') Password
+            input#password.form-control(type='password', placeholder='Password')
+          button.btn.btn-primary(type='submit') Submit

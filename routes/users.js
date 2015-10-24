@@ -1,84 +1,139 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-var middleware = require('./../models/middleware');
 var crypto = require('crypto');
-var dataUser = mongoose.model('user');
+var multer  = require('multer');
+var fs = require('fs');
+var readline = require('readline');
 
-/* GET users listing. */
-router.get('/', middleware, function(req, res, next) {
-  if(req.user.roles[0] == 'admin'){
-    dataUser.find({}, function(err, collection) {
-      res.render('account/user', {datas: collection});
-    });
-  } else {
-    res.redirect('/');
-  }
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/');
+  },
+
+  filename: function (req, file, cb) {
+    if (file.mimetype == 'image/jpeg') {
+      filetype = '.jpg';
+    } else if (file.mimetype == 'image/png') {
+      filetype = '.png';
+    }
+
+    cb(null, file.fieldname + '-' + Date.now() + filetype);
+  },
 });
 
-router.get('/edit/:id', function(req, res) {
-  dataUser.findById(req.params.id, function(err, collection) {
-    res.render('account/user-edit', {data: collection});
+var upload = multer({ storage: storage });
+
+var auth = require('./../middlewares/auth');
+var dataAuthUser = require('./../models/auth_user');
+var dataUser = require('./../models/user_profile');
+
+router.get('/', function(req, res, next) {
+  dataUser.find({}, function(err, collection) {
+    res.render('account/user', {datas: collection});
   });
 });
 
+router.get('/api', function(req, res, next) {
+  dataUser.find({}).populate('auth').exec(function(err, collection) {
+    res.json(collection);
+  });
+});
+
+router.get('/edit/:id', function(req, res) {
+  dataUser.findById(req.params.id)
+    .populate('auth')
+    .exec(function(err, collection) {
+      res.render('account/user-edit', {data: collection});
+    });
+});
+
 router.post('/edit/:id', function(req, res) {
-  today = new Date();
-  date = today.getDate();
-  month = today.getMonth() + 1;
-  year = today.getFullYear();
-  today = month + '/' + date + '/' + year;
+  today = getTodayInString();
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
       $set: {
         'firstname': req.body.firstname,
         'lastname': req.body.lastname,
-        'student_email': req.body.student_email,
         'department': req.body.department,
-        'username': req.body.username,
-        'entranced_year': req.body.entranced_year,
         'last_update': today,
       },
     },
     function(err, collection) {
       if (err) {
-        console.log(err);
+        res.send(err);
       }
     }
   );
   res.redirect('/users');
 });
 
+router.post('/delete/:id', function(req, res) {
+  dataUser.findById(req.params.id, function(err, data) {
+      dataAuthUser.findById(data.auth, function(err, authUser) {
+        authUser.remove(function(err) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.send('success');
+          }
+        });
+      });
+
+      data.remove();
+    });
+});
+
 router.get('/signup', function(req, res) {
-  res.render('account/signup');
+  res.render('account/user-signup');
 });
 
 router.post('/signup', function(req, res) {
-  salt = createSalt();
-  today = new Date();
-  date = today.getDate();
-  month = today.getMonth() + 1;
-  year = today.getFullYear();
-  today = month + '/' + date + '/' + year;
+  today = getTodayInString();
+
   if (req.body.password == req.body.confirm_password) {
     dataUser.create({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
       department: req.body.department,
       student_email: req.body.student_email,
-      username: req.body.username,
+      student_id: req.body.username,
       salt: salt,
       password: hashPwd(salt, req.body.password),
-      roles: [],
       entranced_year: req.body.entranced_year,
-      last_update: today
+      last_update: today,
     });
   } else {
     res.redirect('/users/signup');
   }
 
   res.redirect('/users');
+});
+
+router.get('/csv', function(req, res, next) {
+  var read = readline.createInterface({
+      input: fs.createReadStream('public/uploads/test.csv'),
+      output: process.stdout,
+      terminal: false
+  });
+
+  read.on('line', function(line) {
+    var data = line.split(',');
+    // dataUser.create({
+    //   firstname: data[0],
+    //   lastname: data[1],
+    //   student_id: data[2],
+    // }, function(err) {
+    //   if (err) {
+    //     res.send(err);
+    //   } else {
+    //     res.send('succuss');
+    //   }
+    // });
+  });
+});
+
+router.post('/csv', upload.single('csv'), function(req, res, next) {
 });
 
 module.exports = router;
@@ -90,4 +145,13 @@ function createSalt() {
 function hashPwd(salt, password) {
   var hmac = crypto.createHmac('sha1', salt);
   return hmac.update(password).digest('hex');
+}
+
+function getTodayInString() {
+  today = new Date();
+  date = today.getDate();
+  month = today.getMonth() + 1;
+  year = today.getFullYear();
+  today = month + '/' + date + '/' + year;
+  return today;
 }

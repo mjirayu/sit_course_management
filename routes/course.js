@@ -1,20 +1,31 @@
 var express = require('express');
 var router = express.Router();
-var middleware = require('./../models/middleware');
 var mongoose = require('mongoose');
-var dataCourse = mongoose.model('course');
+
+var auth = require('./../middlewares/auth');
+var dataCourse = require('./../models/course');
+var dataUserProfile = require('./../models/user_profile');
 
 router.get('/', function(req, res, next) {
-  dataCourse.find({}, function(err, collection) {
-    res.render('course/index', {
-      datas: collection,
+  dataCourse.find({})
+    .populate('instructor')
+    .exec(function(err, collection) {
+      res.render('course/index', {
+        datas: collection,
+      });
     });
-  });
 });
 
 router.get('/create', function(req, res) {
   dataCourse.find({}, function(err, collection) {
-    res.render('course/create', {datas: collection});
+    dataUserProfile.find({})
+      .populate('auth')
+      .exec(function(err, users) {
+        res.render('course/create', {
+          datas: collection,
+          users: users,
+        });
+      });
   });
 });
 
@@ -28,7 +39,7 @@ router.post('/create', function(req, res) {
     prerequisite: req.body.prerequisite,
     recommended_year: req.body.recommended_year,
     description: req.body.description,
-    type: req.body.type
+    type: req.body.type,
   });
   res.redirect('/course');
 });
@@ -42,15 +53,21 @@ router.get('/:id', function(req, res) {
 router.get('/edit/:id', function(req, res, next) {
   dataCourse.findById(req.params.id, function(err, collection) {
     dataCourse.find({}, function(err, courses) {
-      res.render('course/edit', {
-        data: collection,
-        courses: courses
-      });
+      dataUserProfile.find({})
+        .populate('auth')
+        .exec(function(err, users) {
+          res.render('course/edit', {
+            data: collection,
+            courses: courses,
+            users: users,
+          });
+        });
     });
   });
 });
 
 router.post('/edit/:id', function(req, res) {
+  console.log(req.body);
   dataCourse.findById(req.params.id, function(err, collection) {
     collection.update({
       course_name: req.body.course_name,
@@ -63,8 +80,8 @@ router.post('/edit/:id', function(req, res) {
       description: req.body.description,
       type: req.body.type
     }, function(err) {
-      if(err) {
-        throw err;
+      if (err) {
+        res.send(err);
       } else {
         res.redirect('/course');
       }
@@ -73,9 +90,9 @@ router.post('/edit/:id', function(req, res) {
 });
 
 router.post('/delete/:id', function(req, res, next) {
-  dataCourse.findById(req.params.id, function(err, collection) {
-    collection.remove(function(err) {
-      if(err) {
+  dataCourse.findById(req.params.id, function(err, data) {
+    data.remove(function(err) {
+      if (err) {
         throw err;
       } else {
         res.redirect('/course');

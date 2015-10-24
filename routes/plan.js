@@ -1,12 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var middleware = require('./../models/middleware');
-var mongoose = require('mongoose');
-var dataPlan = mongoose.model('plan');
-var dataCourse = mongoose.model('course');
 var path = require('path');
 
-router.get('/', middleware, function(req, res, next) {
+var auth = require('./../middlewares/auth');
+var dataPlan = require('./../models/plan');
+var dataCourse = require('./../models/course');
+
+
+router.get('/', auth, function(req, res, next) {
 	if (req.user.roles[0] == 'admin') {
 		dataPlan.find({'status': 'pending'}, function(err, collection) {
 			res.render('plan/plan-admin', {
@@ -18,7 +19,7 @@ router.get('/', middleware, function(req, res, next) {
 	}
 });
 
-router.get('/edit/:id', middleware, function(req, res) {
+router.get('/edit/:id', auth, function(req, res) {
 	if (req.user.roles[0] == 'admin') {
 		dataPlan.findById(req.params.id, function(err, collection) {
 			res.render('plan/plan-edit', {
@@ -30,7 +31,7 @@ router.get('/edit/:id', middleware, function(req, res) {
 	}
 });
 
-router.post('/edit/:id', middleware, function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
 	if (req.user.roles[0] == 'admin') {
 		dataPlan.findByIdAndUpdate(
 			req.params.id,
@@ -50,7 +51,7 @@ router.post('/edit/:id', middleware, function(req, res) {
 	res.redirect('/plan');
 });
 
-router.get('/:id', middleware, function(req, res) {
+router.get('/:id', auth, function(req, res) {
 	dataCourse.find({}, function(err, collection) {
 		console.log(collection);
 		res.render('course-dnd',{plan:collection});

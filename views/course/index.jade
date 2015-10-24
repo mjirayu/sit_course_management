@@ -1,4 +1,4 @@
-extends ../admin_layout
+extends ../layout/admin_layout
 
 block content
   #page-wrapper
@@ -10,7 +10,7 @@ block content
             a(href='course/create', style="float:right").btn.btn-success Create
           ol.breadcrumb
             li.active
-              i.fa.fa-dashboard
+              i.fa.fa-file
               |  Course
       .row
         .col-lg-12
@@ -21,7 +21,7 @@ block content
                   th Name
                   th Course ID
                   th Credit
-                  th Description
+                  th Instructor
                   th Department
                   th 
                   th 
@@ -31,11 +31,11 @@ block content
                     td=data.course_name
                     td=data.course_id 
                     td=data.credit
-                    td=data.description
+                    td #{data.instructor.firstname} #{data.instructor.lastname}
                     td=data.department
-                    td  
+                    td.course-edit  
                       a(href='course/edit/' + data._id).btn.btn-info Edit  
-                    td
+                    td.course-delete
                       form(name="delete-form", method="post" action='/course/delete/' + data._id)
                         input(type="hidden" name="_method" value="delete")
                         button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

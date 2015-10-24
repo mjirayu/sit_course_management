@@ -1,4 +1,4 @@
-extends ../admin_layout
+extends ../layout/admin_layout
 
 block content
   #page-wrapper
@@ -9,7 +9,7 @@ block content
             | Edit Course 
           ol.breadcrumb
             li.active
-              i.fa.fa-dashboard
+              i.fa.fa-file
               |  Course / Edit
       .row
         .col-lg-12
@@ -26,6 +26,12 @@ block content
                 div.form-group
                   label Credit
                   input(type="text", name="credit" value="#{data.credit}").form-control
+                div.form-group
+                  label Instructor
+                  select(name="instructor").form-control
+                    each user in users
+                      if user.auth.is_instructor == 1
+                        option(value="#{user._id}") #{user.firstname} #{user.lastname}
                 div.form-group
                   label Department
                   select(name="department").form-control
@@ -54,7 +60,7 @@ block content
                   label Description
                   textarea(name="description").form-control #{data.description}
                 div.form-group
-                  button(type="submit").btn.btn-default submit
+                  button(type="submit").btn.btn-primary submit
       script.
         $('select[name="department"] option').each(function(){
           if ($(this).val() == '#{data.department}'){
@@ -76,6 +82,12 @@ block content
         
         $('select[name="type"] option').each(function(){
           if ($(this).val() == '#{data.type}'){
+            $(this).attr('selected', 'selected');
+          } 
+        });
+        
+        $('select[name="instructor"] option').each(function(){
+          if ($(this).val() == '#{data.instructor}'){
             $(this).attr('selected', 'selected');
           } 
         });
