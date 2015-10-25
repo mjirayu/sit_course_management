@@ -15,6 +15,8 @@ var storage = multer.diskStorage({
       filetype = '.jpg';
     } else if (file.mimetype == 'image/png') {
       filetype = '.png';
+    } else {
+      filetype = '.csv';
     }
 
     cb(null, file.fieldname + '-' + Date.now() + filetype);
@@ -75,7 +77,7 @@ router.post('/delete/:id', function(req, res) {
           if (err) {
             res.send(err);
           } else {
-            res.send('success');
+            res.redirect('/users');
           }
         });
       });
@@ -110,30 +112,36 @@ router.post('/signup', function(req, res) {
   res.redirect('/users');
 });
 
-router.get('/csv', function(req, res, next) {
+router.post('/csv', upload.single('csv'), function(req, res, next) {
   var read = readline.createInterface({
-      input: fs.createReadStream('public/uploads/test.csv'),
+      input: fs.createReadStream(req.file.path),
       output: process.stdout,
       terminal: false
   });
 
   read.on('line', function(line) {
     var data = line.split(',');
-    // dataUser.create({
-    //   firstname: data[0],
-    //   lastname: data[1],
-    //   student_id: data[2],
-    // }, function(err) {
-    //   if (err) {
-    //     res.send(err);
-    //   } else {
-    //     res.send('succuss');
-    //   }
-    // });
+    dataAuthUser.create({
+      username: 'test',
+    }, function(err, authUser) {
+      if (err) {
+        res.send(err);
+      } else {
+        dataUser.create({
+          firstname: data[0],
+          lastname: data[1],
+          student_id: data[2],
+          auth: authUser._id,
+        }, function(err) {
+          if (err) {
+            res.send(err);
+          } else {
+            res.redirect('/users');
+          }
+        });
+      }
+    });
   });
-});
-
-router.post('/csv', upload.single('csv'), function(req, res, next) {
 });
 
 module.exports = router;
