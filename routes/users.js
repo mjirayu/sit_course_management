@@ -27,6 +27,7 @@ var upload = multer({ storage: storage });
 var auth = require('./../middlewares/auth');
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
+var dataPlan = require('./../models/plan');
 
 router.get('/', function(req, res, next) {
   dataUser.find({}, function(err, collection) {
@@ -126,22 +127,31 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
         if (err) {
           res.send(err);
         } else {
-          dataUser.create({
-            firstname: data[0],
-            lastname: data[1],
-            department: data[2],
-            student_email: data[3],
-            student_id: data[4],
-            entranced_year: data[5],
-            plan: data[6],
-            auth: authUser._id,
-            last_update: date
-          }, function(err) {
-            if (err) {
-              res.send(err);
-            } else {
-              res.redirect('/users');
-            }
+          console.log(data[6]);
+          dataPlan.findOne({plan_name: data[6]}, function(err , plan) {
+            console.log(plan);
+            dataUser.create({
+              firstname: data[0],
+              lastname: data[1],
+              department: data[2],
+              student_email: data[3],
+              student_id: data[4],
+              entranced_year: data[5],
+              plan: {
+                plan_name: plan.plan_name,
+                status: plan.status,
+                department: plan.department,
+                course_list: plan.course_list
+              },
+              auth: authUser._id,
+              last_update: date
+            }, function(err) {
+              if (err) {
+                res.send(err);
+              } else {
+                res.redirect('/users');
+              }
+            });
           });
         }
       });
