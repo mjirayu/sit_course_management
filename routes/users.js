@@ -127,9 +127,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
         if (err) {
           res.send(err);
         } else {
-          console.log(data[6]);
           dataPlan.findOne({plan_name: data[6]}, function(err , plan) {
-            console.log(plan);
             dataUser.create({
               firstname: data[0],
               lastname: data[1],
