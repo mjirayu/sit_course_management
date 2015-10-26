@@ -18,17 +18,13 @@ block content
 							table.table
 								thead
 									th Plan Name
-									th Status
-									th Student ID
-									th Description
+									th Department
 									th 
 								tbody
 								each data in datas
 									tr
 										td=data.plan_name
-										td=data.status
-										td=data.student_id
-										td=data.plan_description
+										td=data.department
 										td
 											a(href='/plan/edit/' + data._id).btn.btn-info Edit  
 										td
