@@ -7,7 +7,8 @@ block content
 				.col-lg-12
 					h1.page-header
 						| All Users
-						a(href="/users/signup", style="float:right").btn.btn-success Sign Up
+						a(href="/users/signup").btn.btn-success.pull-right Sign Up
+						button(type"button" data-toggle="modal", data-target="#myModal").btn.btn-success.pull-right.import-btn Import CSV
 					ol.breadcrumb
 						li.active
 							i.fa.fa-user
@@ -27,12 +28,12 @@ block content
 								tbody
 								each data in datas
 									tr
-										td=data.student_id
-										td=data.firstname
-										td=data.lastname
-										td=data.department
-										td=data.entranced_year
-										td=data.last_update
+										td.list-data=data.student_id
+										td.list-data=data.firstname
+										td.list-data=data.lastname
+										td.list-data=data.department
+										td.list-data=data.entranced_year
+										td.list-data=data.last_update
 										td
 											a(href='/users/edit/' + data._id).btn.btn-info Edit  
 										td

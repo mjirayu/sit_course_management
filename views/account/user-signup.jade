@@ -7,10 +7,6 @@ block content
         .col-lg-12
           h1.page-header
             | Sign Up
-            form(action="/users/csv", method="post", style="float: right; position: relative; bottom: 1em;", enctype="multipart/form-data")
-              label(for="csv") Import CSV
-              input(type="file", name="csv", style="font-size: 15px")
-              button(type="submit", style="font-size: 15px; position: relative; bottom: 25px;") Submit
           ol.breadcrumb
             li.active
               i.fa.fa-user
@@ -37,8 +33,16 @@ block content
                     option(value="Computer Science") Computer Science
                     option(value="Information Technology") Information Technology
                 div.form-group
+                  label Plan
+                  select(name="plan_id").form-control
+                    option(value="CS Plan 56") CS Plan 56
+                    option(value="CS Plan 55") CS Plan 55
+                div.form-group
                   label Student_ID
                   input(type="text", name="student_id").form-control
+                div.form-group
+                  label Username
+                  input(type="text", name="username").form-control
                 div.form-group
                   label Password
                   input(type="password", name="password").form-control

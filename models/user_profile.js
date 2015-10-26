@@ -16,10 +16,7 @@ var userProfileSchema = new Schema({
     unique: true
   },
   entranced_year: String,
-  plan: {
-    type: Schema.ObjectId,
-    ref: 'Plan'
-  },
+  plan: Object,
   auth: {
     type: Schema.ObjectId,
     ref: 'Auth_User'

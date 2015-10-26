@@ -35,7 +35,8 @@ body
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='/admin') Admin
+        a.navbar-brand(href='/admin')
+          | Admin
       // Top Menu Items
       ul.nav.navbar-right.top-nav
         li.dropdown
@@ -69,7 +70,19 @@ body
               |  Plan
               
     block content
+    #myModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            button.close(type="button", data-dismiss="modal", aria-label="Close")
+              span(aria-hidden="true") &#215;
+            h4#myModalLabel.modal-title Import CSV
+          .modal-body
+            form(action="/users/csv", method="post", enctype="multipart/form-data")
+              input(type="file" name="csv")
+              .modal-footer
+                button.btn.btn-default(type="button", data-dismiss="modal") Close
+                button.btn.btn-primary(type="submit") Submit
     
     // Include all compiled plugins (below), or include individual files as needed
-    script(src='/js/vendor/video.js')
-    script(src='/js/flat-ui.min.js')
+    // script(src='/js/flat-ui.min.js')

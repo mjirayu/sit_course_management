@@ -6,23 +6,22 @@ var fs = require('fs');
 var readline = require('readline');
 
 var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function(req, file, cb) {
     cb(null, 'public/uploads/');
   },
 
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     if (file.mimetype == 'image/jpeg') {
       filetype = '.jpg';
     } else if (file.mimetype == 'image/png') {
       filetype = '.png';
-    } else {
+    } else if (file.mimetype == 'text/csv') {
       filetype = '.csv';
     }
 
     cb(null, file.fieldname + '-' + Date.now() + filetype);
   },
 });
-
 var upload = multer({ storage: storage });
 
 var auth = require('./../middlewares/auth');
@@ -32,12 +31,6 @@ var dataUser = require('./../models/user_profile');
 router.get('/', function(req, res, next) {
   dataUser.find({}, function(err, collection) {
     res.render('account/user', {datas: collection});
-  });
-});
-
-router.get('/api', function(req, res, next) {
-  dataUser.find({}).populate('auth').exec(function(err, collection) {
-    res.json(collection);
   });
 });
 
@@ -92,6 +85,7 @@ router.get('/signup', function(req, res) {
 
 router.post('/signup', function(req, res) {
   today = getTodayInString();
+  salt = createSalt();
 
   if (req.body.password == req.body.confirm_password) {
     dataUser.create({
@@ -99,10 +93,11 @@ router.post('/signup', function(req, res) {
       lastname: req.body.lastname,
       department: req.body.department,
       student_email: req.body.student_email,
-      student_id: req.body.username,
+      student_id: req.body.student_id,
       salt: salt,
       password: hashPwd(salt, req.body.password),
       entranced_year: req.body.entranced_year,
+      plan: req.body.plan_id,
       last_update: today,
     });
   } else {
@@ -113,35 +108,49 @@ router.post('/signup', function(req, res) {
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
+  date = getTodayInString();
+  var isColumn = true;
   var read = readline.createInterface({
-      input: fs.createReadStream(req.file.path),
-      output: process.stdout,
-      terminal: false
+    input: fs.createReadStream(req.file.path),
+    output: process.stdout,
+    terminal: false,
   });
 
   read.on('line', function(line) {
-    var data = line.split(',');
-    dataAuthUser.create({
-      username: 'test',
-    }, function(err, authUser) {
-      if (err) {
-        res.send(err);
-      } else {
-        dataUser.create({
-          firstname: data[0],
-          lastname: data[1],
-          student_id: data[2],
-          auth: authUser._id,
-        }, function(err) {
-          if (err) {
-            res.send(err);
-          } else {
-            res.redirect('/users');
-          }
-        });
-      }
-    });
+    if (!isColumn) {
+      var data = line.split(',');
+      dataAuthUser.create({
+        username: data[7],
+        password: '1234',
+      }, function(err, authUser) {
+        if (err) {
+          res.send(err);
+        } else {
+          dataUser.create({
+            firstname: data[0],
+            lastname: data[1],
+            department: data[2],
+            student_email: data[3],
+            student_id: data[4],
+            entranced_year: data[5],
+            plan: data[6],
+            auth: authUser._id,
+            last_update: date
+          }, function(err) {
+            if (err) {
+              res.send(err);
+            } else {
+              res.redirect('/users');
+            }
+          });
+        }
+      });
+    }
+
+    isColumn = false;
   });
+
+  fs.unlink(req.file.path);
 });
 
 module.exports = router;

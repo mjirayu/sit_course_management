@@ -11,6 +11,21 @@
 }
 
 table.table tr td {
-  padding-top: 1em;
   padding-bottom: 0.3em;
+}
+
+td.list-data {
+  padding-top: 1em !important;
+}
+
+.btn {
+  font-size: 14px !important;
+}
+
+.navbar-brand {
+  font-size: 1.5em !important;
+}
+
+.import-btn {
+  margin-right: 0.5em;
 }
