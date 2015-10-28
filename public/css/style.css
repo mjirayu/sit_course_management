@@ -1,0 +1,203 @@
+@media (min-width:1100px){
+	.container {
+		width: 1066px;
+		margin: 0 auto;
+	}
+}
+html,body{
+	background: #f2f2f2 !important;
+}
+img{
+	width: 100%;
+}
+#content{
+	margin-top: 30px;
+}
+footer{
+	margin-top: 40px;
+}
+h3{
+  margin-top: 0px;
+}
+
+h2.title span,h3.title span{
+	border-bottom: 4px solid;
+}
+#homepage .navbar,#homepage nav{
+	margin-bottom: 0px;
+}
+
+#top-section{
+	background: no-repeat;
+	background-image: url('../img/food.jpg');
+	min-height: 450px;
+}
+
+
+.navbar{
+	background: #FFF;
+}
+
+
+
+.logo{
+	margin: 0 auto;
+
+}
+.logo img{
+	width: 100%;
+}
+.addpage-leftblock .logo img{
+	width: 100%;
+
+
+}
+
+.width150{
+	width: 150px;
+}
+.width200{
+	width: 200px;
+}
+.width300{
+	width: 300px;
+}
+.width450{
+	width: 450px;
+}
+
+
+.block {
+	background: #FFF;
+	padding: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.radius{
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#homepage .sample-food img{
+	height: 200px;
+}
+
+
+
+#homepage .thumbnail{
+	border:1px solid #D4D4D4;
+}
+
+#homepage .statetext{
+	margin-top: 80px;
+	color: #FFF;
+}
+
+#homepage .statetext span,#homepage .statetext h1,#homepage .statetext h2,#homepage .statetext h3{
+
+	display: inline;
+
+}
+#homepage .statetext span{
+	font-size: 40px;
+	margin-left: 20px;
+}
+#homepage .statetext h1{
+	font-size: 100px;
+}
+#homepage .statetext h2{
+	font-size: 80px;
+}
+#homepage .statetext h3{
+	font-size: 60px;
+}
+
+
+#random-section h4{
+	display: inline-block;
+	margin: 20px 20px;
+}
+
+#random-section .choose-answer span{
+	width: 70px;
+	height: 70px;
+	background: red;
+	display: inline-block;
+	font-size: 30px;
+	line-height: 70px;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	border-radius: 50%;
+}
+
+
+
+
+/* Dnd section */
+#dnd .disable{
+	color:#999;
+}
+.dndDragove{
+	background: red;
+}
+#dnd .coursebox:not(.disable) li:hover{
+	background: #666;
+	color: #FFF;
+	border:solid 1px #525252;
+	border-bottom: solid 3px #525252;
+}
+#dnd .disable li{
+	cursor:not-allowed;
+}
+#dnd li{
+	text-align: center;
+	list-style: none;
+	background: #f2f2f2;
+	margin: 10px;
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	border:solid 1px #E2E2E2;
+	border-bottom: solid 3px #E2E2E2;
+}
+#dnd  div{
+	overflow: hidden;
+}
+#dnd .elective li:nth-child(1){
+	width: 78%;
+	float: left;
+	margin: 1%;
+}
+#dnd .elective li:nth-child(2){
+	width: 18%;
+	float: right;
+	margin: 1%;
+}
+
+
+#dnd .title{
+	text-align: center;
+	font-weight: bold;
+}
+
+.dndPlaceholder {
+	height: 40px;
+	background: #999 !important;
+	border-bottom: 3px solid #525252 !important;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+.dndDraggingSource  {
+	display: none;
+}
+.dnd-row{
+	min-height: 50px;
+}
+.underline{
+	    border-bottom: 4px solid;
+}

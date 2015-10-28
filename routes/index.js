@@ -17,6 +17,10 @@ router.get('/', auth, function(req, res, next) {
 	}
 });
 
+router.get('/dnd',function(req,res){
+	res.render('./dnd/dnd');
+});
+
 router.get('/logout',function(req,res){
 	req.logout();
 	res.redirect('/');
@@ -25,8 +29,10 @@ router.get('/logout',function(req,res){
 router.get('/login',function(req, res){
 	if(req.user){
 		res.redirect('/');
+	}else{
+		res.render('login');
 	}
-	res.render('login');
+
 });
 
 router.post('/login', passport.authenticate('local', {

@@ -12,6 +12,7 @@ var yearSemesterSchema = new Schema({
     type: String,
     default: 'Inactive',
   },
+  courselist: Array
 });
 
 module.exports = mongoose.model('Year_Semester', yearSemesterSchema);

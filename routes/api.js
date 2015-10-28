@@ -4,12 +4,13 @@ var router = express.Router();
 var auth = require('./../middlewares/auth');
 var dataPlan = require('./../models/plan');
 var dataUser = require('./../models/user_profile');
+var dataCourse = require('./../models/course');
 
 router.get('/', auth, function(req, res, next) {
 	res.redirect('/');
 });
 
-router.get('/:id', auth, function(req, res, next) {
+router.get('/user/:id', auth, function(req, res, next) {
 	dataUser.findOne({_id:req.params.id}, function(err, collection) {
 		//res.render('plan-list',{user:req.user,datas:collection});
 		res.json(collection);
@@ -21,6 +22,12 @@ router.get('/plan/:id', function(req, res, next) {
 		res.json(collection);
 	});
 });
+router.get('/course', function(req, res) {
+	dataCourse.find({}, function(err,collection) {
+		res.json(collection);
+	});
+});
+
 
 router.post('/plan/:id', function(req, res, next) {
 	var data = JSON.parse(req.body.data);

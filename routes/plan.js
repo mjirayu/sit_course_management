@@ -18,7 +18,7 @@ router.post('/edit/:id', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-
+	res.render('./dnd/dnd');
 });
 
 module.exports = router;
