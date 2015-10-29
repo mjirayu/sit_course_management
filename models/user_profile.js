@@ -4,8 +4,10 @@ var Auth_User = require('./auth_user');
 var Plan  = require('./plan');
 
 var userProfileSchema = new Schema({
-  firstname: String,
-  lastname: String,
+  fullname: {
+    type: String,
+    unique: true,
+  },
   department: String,
   student_email: {
     type: String,

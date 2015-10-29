@@ -49,8 +49,7 @@ router.post('/edit/:id', function(req, res) {
     req.params.id,
     {
       $set: {
-        'firstname': req.body.firstname,
-        'lastname': req.body.lastname,
+        'fullname': req.body.firstname,
         'department': req.body.department,
         'last_update': today,
       },
@@ -90,8 +89,7 @@ router.post('/signup', function(req, res) {
 
   if (req.body.password == req.body.confirm_password) {
     dataUser.create({
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
+      fullname: req.body.fullname,
       department: req.body.department,
       student_email: req.body.student_email,
       student_id: req.body.student_id,
@@ -121,20 +119,19 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
     if (!isColumn) {
       var data = line.split(',');
       dataAuthUser.create({
-        username: data[7],
+        username: data[6],
         password: '1234',
       }, function(err, authUser) {
         if (err) {
           res.send(err);
         } else {
-          dataPlan.findOne({plan_name: data[6]}, function(err , plan) {
+          dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
             dataUser.create({
-              firstname: data[0],
-              lastname: data[1],
-              department: data[2],
-              student_email: data[3],
-              student_id: data[4],
-              entranced_year: data[5],
+              fullname: data[0],
+              department: data[1],
+              student_email: data[2],
+              student_id: data[3],
+              entranced_year: data[4],
               plan: {
                 plan_name: plan.plan_name,
                 status: plan.status,
