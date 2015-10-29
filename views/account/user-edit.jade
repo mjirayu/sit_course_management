@@ -20,11 +20,8 @@ block content
               form(name="signup-form", method="post" action='/users/edit/'+ data.id)
                 input(type="hidden" name="_method" value="put")
                 div.form-group
-                  label Firstname
-                  input(type="text", name="firstname", value="#{data.firstname}").form-control
-                div.form-group
-                  label Lastname
-                  input(type="text", name="lastname", value="#{data.lastname}").form-control
+                  label Fullname
+                  input(type="text", name="firstname", value="#{data.fullname}").form-control
                 div.form-group
                   label Department
                   select(name="department").form-control

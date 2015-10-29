@@ -19,11 +19,8 @@ block content
                 div.warning-message=message_auth
               form(name="signup-form", method="post" action='/users/signup')
                 div.form-group
-                  label Firstname
-                  input(type="text", name="firstname").form-control
-                div.form-group
-                  label Lastname                    
-                  input(type="text", name="lastname").form-control
+                  label Fullname
+                  input(type="text", name="fullname").form-control
                 div.form-group
                   label Email
                   input(type="email", name="student_email").form-control

@@ -6,7 +6,7 @@ block content
 			.row
 				.col-lg-12
 					h1.page-header
-						| All Users
+						| Students
 						a(href="/users/signup").btn.btn-success.pull-right Sign Up
 						button(type"button" data-toggle="modal", data-target="#myModal").btn.btn-success.pull-right.import-btn Import CSV
 					ol.breadcrumb
@@ -20,8 +20,7 @@ block content
 							table.table
 								thead
 									th Student ID
-									th Firstname
-									th Lastname
+									th Fullname
 									th Dapartment
 									th Plan
 									th Entranced Year
@@ -30,8 +29,7 @@ block content
 								each data in datas
 									tr
 										td.list-data=data.student_id
-										td.list-data=data.firstname
-										td.list-data=data.lastname
+										td.list-data=data.fullname
 										td.list-data=data.department
 										td.list-data=data.plan.plan_name
 										td.list-data=data.entranced_year
