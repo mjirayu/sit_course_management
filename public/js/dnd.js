@@ -7,7 +7,7 @@ var data = {
   plan_description:'Message',
   email:'adisakchaiyakul@gmail.com',
   roles:['student'],
-  student_id:55130500235,
+  identity:55130500235,
   message:"message",
   status:"pending",
   department:'CS',
