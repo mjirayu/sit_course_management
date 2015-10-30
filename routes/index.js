@@ -11,7 +11,7 @@ router.get('/', auth, function(req, res, next) {
 	if (req.user.is_admin == 1) {
 		res.render('admin/admin', {username: req.user.username});
 	} else {
-		dataPlan.find({'student_id': req.user.username}, function(err, collection){
+		dataPlan.find({'identity': req.user.username}, function(err, collection){
 			res.render('plan-list', {user:req.user, datas:collection});
 		});
 	}

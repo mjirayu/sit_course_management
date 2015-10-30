@@ -9,11 +9,11 @@ var userProfileSchema = new Schema({
     unique: true,
   },
   department: String,
-  student_email: {
+  email: {
     type: String,
     unique: true,
   },
-  student_id: {
+  identity: {
     type: String,
     unique: true
   },

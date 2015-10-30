@@ -30,9 +30,19 @@ var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
 
 router.get('/', function(req, res, next) {
-  dataUser.find({}, function(err, collection) {
-    res.render('account/student', {datas: collection});
-  });
+  dataUser.find({})
+    .populate('auth', null, {is_student: 1})
+    .exec(function(err, collection) {
+      if (err) res.send(err);
+      datas = collection.filter(function(item) {
+        if (item.auth == null) return false;
+        return true;
+        })
+        .map(function(item) {
+            return item;
+        });
+      res.render('account/student', {datas: datas});
+    });
 });
 
 router.get('/edit/:id', function(req, res) {
@@ -91,8 +101,8 @@ router.post('/signup', function(req, res) {
     dataUser.create({
       fullname: req.body.fullname,
       department: req.body.department,
-      student_email: req.body.student_email,
-      student_id: req.body.student_id,
+      email: req.body.email,
+      identity: req.body.identity,
       salt: salt,
       password: hashPwd(salt, req.body.password),
       entranced_year: req.body.entranced_year,
@@ -129,8 +139,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
             dataUser.create({
               fullname: data[0],
               department: data[1],
-              student_email: data[2],
-              student_id: data[3],
+              email: data[2],
+              identity: data[3],
               entranced_year: data[4],
               plan: {
                 plan_name: plan.plan_name,

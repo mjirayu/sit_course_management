@@ -30,16 +30,26 @@ var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
 
 router.get('/', function(req, res, next) {
-  dataUser.find({}, function(err, collection) {
-    res.render('account/user', {datas: collection});
-  });
+  dataUser.find({})
+    .populate('auth', null, {is_instructor: 1})
+    .exec(function(err, collection) {
+      if (err) res.send(err);
+      datas = collection.filter(function(item) {
+        if (item.auth == null) return false;
+        return true;
+        })
+        .map(function(item) {
+            return item;
+        });
+      res.render('account/instructor', {datas: datas});
+    });
 });
 
 router.get('/edit/:id', function(req, res) {
   dataUser.findById(req.params.id)
     .populate('auth')
     .exec(function(err, collection) {
-      res.render('account/user-edit', {data: collection});
+      res.render('account/instructor-edit', {data: collection});
     });
 });
 
@@ -60,7 +70,7 @@ router.post('/edit/:id', function(req, res) {
       }
     }
   );
-  res.redirect('/users');
+  res.redirect('/instructors');
 });
 
 router.post('/delete/:id', function(req, res) {
@@ -70,7 +80,7 @@ router.post('/delete/:id', function(req, res) {
           if (err) {
             res.send(err);
           } else {
-            res.redirect('/users');
+            res.redirect('/instructors');
           }
         });
       });
@@ -80,7 +90,7 @@ router.post('/delete/:id', function(req, res) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('account/user-signup');
+  res.render('account/instructor-signup');
 });
 
 router.post('/signup', function(req, res) {
@@ -90,20 +100,17 @@ router.post('/signup', function(req, res) {
   if (req.body.password == req.body.confirm_password) {
     dataUser.create({
       fullname: req.body.fullname,
-      department: req.body.department,
-      student_email: req.body.student_email,
-      student_id: req.body.student_id,
+      email: req.body.email,
+      identity: req.body.identity,
       salt: salt,
       password: hashPwd(salt, req.body.password),
-      entranced_year: req.body.entranced_year,
-      plan: req.body.plan_id,
       last_update: today,
     });
   } else {
-    res.redirect('/users/signup');
+    res.redirect('/instructors/signup');
   }
 
-  res.redirect('/users');
+  res.redirect('/instructors');
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
@@ -129,8 +136,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
             dataUser.create({
               fullname: data[0],
               department: data[1],
-              student_email: data[2],
-              student_id: data[3],
+              email: data[2],
+              identity: data[3],
               entranced_year: data[4],
               plan: {
                 plan_name: plan.plan_name,
@@ -144,7 +151,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
               if (err) {
                 res.send(err);
               } else {
-                res.redirect('/users');
+                res.redirect('/instructors');
               }
             });
           });

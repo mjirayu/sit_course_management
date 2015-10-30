@@ -76,15 +76,28 @@ body
               |  Plan
               
     block content
-    #myModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="myModalLabel")
+    #studentModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="studentLabel")
       .modal-dialog(role="document")
         .modal-content
           .modal-header
             button.close(type="button", data-dismiss="modal", aria-label="Close")
               span(aria-hidden="true") &#215;
-            h4#myModalLabel.modal-title Import CSV
+            h4#studentLabel.modal-title Import CSV
           .modal-body
-            form(action="/users/csv", method="post", enctype="multipart/form-data")
+            form(action="/students/csv", method="post", enctype="multipart/form-data")
+              input(type="file" name="csv")
+              .modal-footer
+                button.btn.btn-default(type="button", data-dismiss="modal") Close
+                button.btn.btn-primary(type="submit") Submit
+    #instructorModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="instructorLabel")
+      .modal-dialog(role="document")
+        .modal-content
+          .modal-header
+            button.close(type="button", data-dismiss="modal", aria-label="Close")
+              span(aria-hidden="true") &#215;
+            h4#instructorLabel.modal-title Import CSV
+          .modal-body
+            form(action="/instructors/csv", method="post", enctype="multipart/form-data")
               input(type="file" name="csv")
               .modal-footer
                 button.btn.btn-default(type="button", data-dismiss="modal") Close

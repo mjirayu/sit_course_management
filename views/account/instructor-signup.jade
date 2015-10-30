@@ -10,14 +10,14 @@ block content
           ol.breadcrumb
             li.active
               i.fa.fa-user
-              |  Students / Sign Up
+              |  Instructors / Sign Up
       .row
         .col-lg-12
           .panel.panel-default
             .panel-body
               if message_auth
                 div.warning-message=message_auth
-              form(name="signup-form", method="post" action='/students/signup')
+              form(name="signup-form", method="post" action='/instructors/signup')
                 div.form-group
                   label Full Name
                   input(type="text", name="fullname").form-control
@@ -25,17 +25,7 @@ block content
                   label Email
                   input(type="email", name="email").form-control
                 div.form-group
-                  label Department
-                  select(name="department").form-control
-                    option(value="Computer Science") Computer Science
-                    option(value="Information Technology") Information Technology
-                div.form-group
-                  label Plan
-                  select(name="plan_id").form-control
-                    option(value="CS Plan 56") CS Plan 56
-                    option(value="CS Plan 55") CS Plan 55
-                div.form-group
-                  label Student ID
+                  label Instructor ID
                   input(type="text", name="identity").form-control
                 div.form-group
                   label Username

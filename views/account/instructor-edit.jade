@@ -6,18 +6,18 @@ block content
       .row
         .col-lg-12
           h1.page-header
-            | Edit Students
+            | Edit Instructor
           ol.breadcrumb
             li.active
               i.fa.fa-user
-              |  Students / Edit
+              |  Instructors / Edit
       .row
         .col-lg-12
           .panel.panel-default
             .panel-body
               if message_auth
                 div.warning-message=message_auth
-              form(name="signup-form", method="post" action='/students/edit/'+ data.id)
+              form(name="signup-form", method="post" action='/instructors/edit/'+ data.id)
                 input(type="hidden" name="_method" value="put")
                 div.form-group
                   label Fullname
@@ -29,7 +29,7 @@ block content
                     option(value="Information Technology") Information Technology
                 div.form-group  
                   button(type="submit").btn.btn-info Update
-                  a(href="/students").btn.btn-primary Back
+                  a(href="/instructors").btn.btn-primary Back
                   
       script(type='text/javascript').
         $('select[name="department"] option').each(function(){
