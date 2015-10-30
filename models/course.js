@@ -4,7 +4,10 @@ var User_Profile = require('./user_profile');
 
 var courseSchema = new Schema({
   course_name: String,
-  course_id: String,
+  course_id: {
+    type: String,
+    unique: true,
+  },
   credit: String,
   instructor: {
     type: Schema.ObjectId,
