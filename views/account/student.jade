@@ -7,7 +7,7 @@ block content
 				.col-lg-12
 					h1.page-header
 						| Students
-						a(href="/users/signup").btn.btn-success.pull-right Sign Up
+						a(href="/students/signup").btn.btn-success.pull-right Sign Up
 						button(type"button" data-toggle="modal", data-target="#myModal").btn.btn-success.pull-right.import-btn Import CSV
 					ol.breadcrumb
 						li.active
@@ -35,8 +35,8 @@ block content
 										td.list-data=data.entranced_year
 										td.list-data=data.last_update
 										td
-											a(href='/users/edit/' + data._id).btn.btn-info Edit  
+											a(href='/students/edit/' + data._id).btn.btn-info Edit  
 										td
-											form(name="delete-form", method="post" action='/users/delete/' + data._id)
+											form(name="delete-form", method="post" action='/students/delete/' + data._id)
 												input(type="hidden" name="_method" value="delete")
 												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

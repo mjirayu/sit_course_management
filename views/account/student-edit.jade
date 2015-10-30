@@ -17,7 +17,7 @@ block content
             .panel-body
               if message_auth
                 div.warning-message=message_auth
-              form(name="signup-form", method="post" action='/users/edit/'+ data.id)
+              form(name="signup-form", method="post" action='/students/edit/'+ data.id)
                 input(type="hidden" name="_method" value="put")
                 div.form-group
                   label Fullname
@@ -29,7 +29,7 @@ block content
                     option(value="Information Technology") Information Technology
                 div.form-group  
                   button(type="submit").btn.btn-info Update
-                  a(href="/users").btn.btn-primary Back
+                  a(href="/students").btn.btn-primary Back
                   
       script(type='text/javascript').
         $('select[name="department"] option').each(function(){

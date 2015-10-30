@@ -11,7 +11,8 @@ var flash = require('connect-flash');
 
 var routes = require('./routes/index');
 var admin = require('./routes/admin');
-var users = require('./routes/users');
+var students = require('./routes/students');
+var instructors = require('./routes/instructors');
 var course = require('./routes/course');
 var plan = require('./routes/plan');
 var api = require('./routes/api');
@@ -22,7 +23,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/sit');
+mongoose.connect('mongodb://localhost/sit_modify');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,7 +54,8 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/students', students);
+app.use('/instructors', instructors);
 app.use('/admin', admin);
 app.use('/course', course);
 app.use('/api', api);

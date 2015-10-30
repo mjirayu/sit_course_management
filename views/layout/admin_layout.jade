@@ -57,9 +57,15 @@ body
               i.fa.fa-fw.fa-dashboard
               |  Dashboard
           li
-            a(href='/users')
+            a(href='javascript:;', data-toggle='collapse', data-target='#user')
               i.fa.fa-fw.fa-user
-              |  User
+              | User
+              i.fa.fa-fw.fa-caret-down
+            ul#user.collapse
+              li
+                a(href='/students') Student
+              li
+                a(href='/instructors') Instructor
           li
             a(href='/course')
               i.fa.fa-fw.fa-file
