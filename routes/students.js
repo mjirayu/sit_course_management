@@ -1,10 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var crypto = require('crypto');
 var multer  = require('multer');
 var fs = require('fs');
 var readline = require('readline');
-
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     cb(null, 'public/uploads/');
@@ -24,10 +22,17 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
+// Middlewares
 var auth = require('./../middlewares/auth');
+
+// Models
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
+
+// Helpers
+var dateFunction = require('./../helpers/date');
+var authtentication = require('./../helpers/auth');
 
 router.get('/', function(req, res, next) {
   dataUser.find({})
@@ -54,7 +59,7 @@ router.get('/edit/:id', function(req, res) {
 });
 
 router.post('/edit/:id', function(req, res) {
-  today = getTodayInString();
+  var today = dateFunction.getDate();
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
@@ -94,30 +99,44 @@ router.get('/signup', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
-  today = getTodayInString();
-  salt = createSalt();
+  var today = dateFunction.getDate();
+  var salt = authtentication.createSalt();
 
   if (req.body.password == req.body.confirm_password) {
-    dataUser.create({
-      fullname: req.body.fullname,
-      department: req.body.department,
-      email: req.body.email,
-      identity: req.body.identity,
-      salt: salt,
-      password: hashPwd(salt, req.body.password),
-      entranced_year: req.body.entranced_year,
-      plan: req.body.plan_id,
-      last_update: today,
+    dataAuthUser.create({
+        username: req.body.username,
+        salt: salt,
+        password: authtentication.hashPwd(salt, req.body.password),
+      }, function(err, data) {
+        if (err) {
+          res.send(err);
+        }
+
+        dataUser.create({
+          fullname: req.body.fullname,
+          department: req.body.department,
+          email: req.body.email,
+          identity: req.body.identity,
+          entranced_year: req.body.entranced_year,
+          plan: req.body.plan_id,
+          auth: data._id,
+          last_update: today,
+        }, function(err) {
+          if (err) {
+            res.send(err);
+          }
+
+          res.redirect('/students/signup');
+        });
     });
-  } else {
-    res.redirect('/students/signup');
   }
 
   res.redirect('/students');
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
-  date = getTodayInString();
+  var today = dateFunction.getDate();
+  var salt = authtentication.createSalt();
   var isColumn = true;
   var read = readline.createInterface({
     input: fs.createReadStream(req.file.path),
@@ -130,7 +149,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
       var data = line.split(',');
       dataAuthUser.create({
         username: data[6],
-        password: '1234',
+        salt: salt,
+        password: authtentication.hashPwd(salt, '1234'),
       }, function(err, authUser) {
         if (err) {
           res.send(err);
@@ -149,7 +169,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                 course_list: plan.course_list
               },
               auth: authUser._id,
-              last_update: date
+              last_update: today
             }, function(err) {
               if (err) {
                 res.send(err);
@@ -169,21 +189,3 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 });
 
 module.exports = router;
-
-function createSalt() {
-  return crypto.randomBytes(128).toString('base64');
-}
-
-function hashPwd(salt, password) {
-  var hmac = crypto.createHmac('sha1', salt);
-  return hmac.update(password).digest('hex');
-}
-
-function getTodayInString() {
-  today = new Date();
-  date = today.getDate();
-  month = today.getMonth() + 1;
-  year = today.getFullYear();
-  today = month + '/' + date + '/' + year;
-  return today;
-}

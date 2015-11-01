@@ -24,10 +24,17 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
+// Middlewares
 var auth = require('./../middlewares/auth');
+
+// Models
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
+
+// Helpers
+var dateFunction = require('./../helpers/date');
+var authtentication = require('./../helpers/auth');
 
 router.get('/', function(req, res, next) {
   dataUser.find({})
@@ -37,10 +44,11 @@ router.get('/', function(req, res, next) {
       datas = collection.filter(function(item) {
         if (item.auth == null) return false;
         return true;
-        })
-        .map(function(item) {
-            return item;
-        });
+      })
+      .map(function(item) {
+        return item;
+      });
+
       res.render('account/instructor', {datas: datas});
     });
 });
@@ -54,14 +62,14 @@ router.get('/edit/:id', function(req, res) {
 });
 
 router.post('/edit/:id', function(req, res) {
-  today = getTodayInString();
+  var today = dateFunction.getDate();
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
       $set: {
-        'fullname': req.body.firstname,
-        'department': req.body.department,
-        'last_update': today,
+        "fullname": req.body.firstname,
+        "department": req.body.department,
+        "last_update": today,
       },
     },
     function(err, collection) {
@@ -94,27 +102,42 @@ router.get('/signup', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
-  today = getTodayInString();
-  salt = createSalt();
+  var today = dateFunction.getDate();
+  var salt = authtentication.createSalt();
 
   if (req.body.password == req.body.confirm_password) {
-    dataUser.create({
-      fullname: req.body.fullname,
-      email: req.body.email,
-      identity: req.body.identity,
-      salt: salt,
-      password: hashPwd(salt, req.body.password),
-      last_update: today,
-    });
-  } else {
-    res.redirect('/instructors/signup');
+    dataAuthUser.create({
+        username: req.body.username,
+        salt: salt,
+        password: authtentication.hashPwd(salt, req.body.password),
+        is_instructor: 1,
+        is_student: 0,
+      }, function(err, data) {
+        if (err) {
+          res.send(err);
+        }
+
+        dataUser.create({
+          fullname: req.body.fullname,
+          email: req.body.email,
+          identity: req.body.identity,
+          auth: data._id,
+          last_update: today,
+        }, function(err) {
+          if (err) {
+            res.send(err);
+          }
+
+          res.redirect('/instructors/signup');
+        });
+      });
   }
 
   res.redirect('/instructors');
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
-  date = getTodayInString();
+  var today = dateFunction.getDate();
   var isColumn = true;
   var read = readline.createInterface({
     input: fs.createReadStream(req.file.path),
@@ -146,7 +169,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                 course_list: plan.course_list
               },
               auth: authUser._id,
-              last_update: date
+              last_update: today,
             }, function(err) {
               if (err) {
                 res.send(err);
@@ -166,21 +189,3 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 });
 
 module.exports = router;
-
-function createSalt() {
-  return crypto.randomBytes(128).toString('base64');
-}
-
-function hashPwd(salt, password) {
-  var hmac = crypto.createHmac('sha1', salt);
-  return hmac.update(password).digest('hex');
-}
-
-function getTodayInString() {
-  today = new Date();
-  date = today.getDate();
-  month = today.getMonth() + 1;
-  year = today.getFullYear();
-  today = month + '/' + date + '/' + year;
-  return today;
-}
