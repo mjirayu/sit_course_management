@@ -1,20 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
+// Middlewares
 var auth = require('./../middlewares/auth');
 var passport = require('./../middlewares/passport');
+
+// Models
 var dataPlan = require('./../models/plan');
 var dataUser = require('./../models/user_profile');
 
 router.get('/', auth, function(req, res, next) {
 	console.log(req.user);
-	if (req.user.is_admin == 1) {
-		res.render('admin/admin', {username: req.user.username});
-	} else {
-		dataPlan.find({'identity': req.user.username}, function(err, collection){
-			res.render('plan-list', {user:req.user, datas:collection});
-		});
-	}
+	// if (req.user.is_admin == 1) {
+	// 	res.render('admin/admin', {username: req.user.username});
+	// } else {
+	// 	dataPlan.find({'identity': req.user.username}, function(err, collection){
+	// 		res.render('plan-list', {user:req.user, datas:collection});
+	// 	});
+	// }
 });
 
 router.get('/dnd',function(req,res){

@@ -31,7 +31,7 @@ block content
                     td.list-data=data.course_name
                     td.list-data=data.course_id 
                     td.list-data=data.credit
-                    td.list-data #{data.instructor.firstname} #{data.instructor.lastname}
+                    td.list-data #{data.instructor.fullname}
                     td.list-data=data.department
                     td.course-edit  
                       a(href='course/edit/' + data._id).btn.btn-info Edit  
