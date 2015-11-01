@@ -18,6 +18,7 @@ var courseSchema = new Schema({
   description: String,
   recommended_year: Number,
   type: String,
+  last_update: String,
 });
 
 module.exports = mongoose.model('Course', courseSchema);

@@ -5,7 +5,8 @@ var planSchema = new Schema({
   plan_name: String,
   department: String,
   status: String,
-  course_list: Array
+  course_list: Array,
+  last_update: String,
 });
 
 module.exports = mongoose.model('Plan', planSchema);
