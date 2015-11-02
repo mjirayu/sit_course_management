@@ -21,6 +21,7 @@
     "method-override": "^2.3.5",
     "mocha": "^2.3.3",
     "mongoose": "^4.1.12",
+    "mongoose-unique-validator": "^0.6.0",
     "morgan": "~1.6.1",
     "multer": "^1.1.0",
     "passport": "^0.3.0",
