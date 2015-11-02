@@ -11,9 +11,9 @@ block content
             li.active
               i.fa.fa-user
               |  Instructors / Sign Up
-      .row
-        .col-lg-12
-          if errorMessage != ''
+      if errorMessage != ''
+        .row
+          .col-lg-12
             .alert.alert-danger
               ul 
               each message in errorMessage

@@ -13,10 +13,19 @@ block content
 						li.active
 							i.fa.fa-user
 							|  Instructors
-			.row
-				.col-lg-12
-					if successMessage != ''
+			if successMessage != ''
+				.row
+					.col-lg-12
 						.alert.alert-success=successMessage
+						
+			if errorMessage != ''
+				.row
+					.col-lg-12
+						.alert.alert-danger
+							ul
+							each message in errorMessage
+								li= message
+								
 			.row
 				.col-lg-12
 					.panel.panel-default

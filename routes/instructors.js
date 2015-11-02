@@ -11,17 +11,16 @@ var storage = multer.diskStorage({
   },
 
   filename: function(req, file, cb) {
-    if (file.mimetype == 'image/jpeg') {
-      filetype = '.jpg';
-    } else if (file.mimetype == 'image/png') {
-      filetype = '.png';
-    } else if (file.mimetype == 'text/csv') {
+    if (file.mimetype == 'text/csv') {
       filetype = '.csv';
+    } else {
+      filetype = '';
     }
 
     cb(null, file.fieldname + '-' + Date.now() + filetype);
   },
 });
+
 var upload = multer({ storage: storage });
 
 // Middlewares
@@ -57,6 +56,7 @@ router.get('/', function(req, res, next) {
       res.render('account/instructor', {
         datas: datas,
         successMessage: req.flash('successMessage'),
+        errorMessage: req.flash('errorMessage'),
       });
 
     });
@@ -154,46 +154,58 @@ router.post('/signup', function(req, res) {
 router.post('/csv', upload.single('csv'), function(req, res, next) {
   var today = dateFunction.getDate();
   var isColumn = true;
-  var read = readline.createInterface({
-    input: fs.createReadStream(req.file.path),
-    output: process.stdout,
-    terminal: false,
-  });
 
-  read.on('line', function(line) {
-    if (!isColumn) {
-      var data = line.split(',');
-      dataAuthUser.create({
-        username: data[3],
-        password: '1234',
-        is_instructor: 1,
-        is_student: 0,
-      }, function(err, authUser) {
-        if (err) {
-          message = validate.getMessage(err);
-          res.send(message);
-        } else {
-          dataUser.create({
-            fullname: data[0],
-            email: data[1],
-            identity: data[2],
-            auth: authUser._id,
-            last_update: today,
-          }, function(err) {
-            if (err) {
-              message = validate.getMessage(err);
-              res.send(message);
-            } else {
-              req.flash('successMessage', 'Import CSV Successfully');
-              res.redirect('/instructors');
-            }
-          });
-        }
-      });
-    }
+  if (req.file == undefined) {
+    req.flash('errorMessage', ['Choose CSV file']);
+    res.redirect('/instructors');
+  } else if (req.file.mimetype != 'text/csv') {
+    req.flash('errorMessage', ['Please use CSV file']);
+    res.redirect('/instructors');
+  } else {
+    var read = readline.createInterface({
+      input: fs.createReadStream(req.file.path),
+      output: process.stdout,
+      terminal: false,
+    });
+    
+    read.on('line', function(line) {
+      if (!isColumn) {
+        var data = line.split(',');
+        dataAuthUser.create({
+          username: data[3],
+          password: '1234',
+          is_instructor: 1,
+          is_student: 0,
+        }, function(err, authUser) {
+          if (err) {
+            message = validate.getMessage(err);
+            req.flash('errorMessage', message);
+            res.redirect('/instructors');
+          } else {
+            dataUser.create({
+              fullname: data[0],
+              email: data[1],
+              identity: data[2],
+              auth: authUser._id,
+              last_update: today,
+            }, function(err) {
+              if (err) {
+                authUser.remove();
+                message = validate.getMessage(err);
+                req.flash('errorMessage', message);
+                res.redirect('/instructors');
+              } else {
+                req.flash('successMessage', 'Import CSV Successfully');
+                res.redirect('/instructors');
+              }
+            });
+          }
+        });
+      }
 
-    isColumn = false;
-  });
+      isColumn = false;
+    });
+  }
 
   fs.unlink(req.file.path);
 });
