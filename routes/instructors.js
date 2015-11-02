@@ -35,12 +35,17 @@ var dataPlan = require('./../models/plan');
 // Helpers
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
+var validate = require('./../helpers/validate');
 
 router.get('/', function(req, res, next) {
   dataUser.find({})
     .populate('auth', null, {is_instructor: 1})
     .exec(function(err, collection) {
-      if (err) res.send(err);
+      if (err) {
+        message = validate.getMessage(err);
+        res.send(message);
+      }
+
       datas = collection.filter(function(item) {
         if (item.auth == null) return false;
         return true;
@@ -49,7 +54,11 @@ router.get('/', function(req, res, next) {
         return item;
       });
 
-      res.render('account/instructor', {datas: datas});
+      res.render('account/instructor', {
+        datas: datas,
+        successMessage: req.flash('successMessage'),
+      });
+
     });
 });
 
@@ -67,14 +76,15 @@ router.post('/edit/:id', function(req, res) {
     req.params.id,
     {
       $set: {
-        "fullname": req.body.firstname,
+        "fullname": req.body.fullname,
         "department": req.body.department,
         "last_update": today,
       },
     },
     function(err, collection) {
       if (err) {
-        res.send(err);
+        message = validate.getMessage(err);
+        res.send(message);
       }
     }
   );
@@ -86,7 +96,8 @@ router.post('/delete/:id', function(req, res) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
         authUser.remove(function(err) {
           if (err) {
-            res.send(err);
+            message = validate.getMessage(err);
+            res.send(message);
           } else {
             res.redirect('/instructors');
           }
@@ -98,7 +109,7 @@ router.post('/delete/:id', function(req, res) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('account/instructor-signup');
+  res.render('account/instructor-signup', {errorMessage: req.flash('errorMessage')});
 });
 
 router.post('/signup', function(req, res) {
@@ -114,7 +125,9 @@ router.post('/signup', function(req, res) {
         is_student: 0,
       }, function(err, data) {
         if (err) {
-          res.send(err);
+          message = validate.getMessage(err);
+          req.flash('errorMessage', message);
+          res.redirect('/instructors/signup');
         }
 
         dataUser.create({
@@ -125,15 +138,17 @@ router.post('/signup', function(req, res) {
           last_update: today,
         }, function(err) {
           if (err) {
-            res.send(err);
+            data.remove();
+            message = validate.getMessage(err);
+            req.flash('errorMessage', message);
+            res.redirect('/instructors/signup');
           }
 
-          res.redirect('/instructors/signup');
+          req.flash('successMessage', 'Sign Up Successfully');
+          res.redirect('/instructors');
         });
       });
   }
-
-  res.redirect('/instructors');
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
@@ -149,34 +164,29 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
     if (!isColumn) {
       var data = line.split(',');
       dataAuthUser.create({
-        username: data[6],
+        username: data[3],
         password: '1234',
+        is_instructor: 1,
+        is_student: 0,
       }, function(err, authUser) {
         if (err) {
-          res.send(err);
+          message = validate.getMessage(err);
+          res.send(message);
         } else {
-          dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
-            dataUser.create({
-              fullname: data[0],
-              department: data[1],
-              email: data[2],
-              identity: data[3],
-              entranced_year: data[4],
-              plan: {
-                plan_name: plan.plan_name,
-                status: plan.status,
-                department: plan.department,
-                course_list: plan.course_list
-              },
-              auth: authUser._id,
-              last_update: today,
-            }, function(err) {
-              if (err) {
-                res.send(err);
-              } else {
-                res.redirect('/instructors');
-              }
-            });
+          dataUser.create({
+            fullname: data[0],
+            email: data[1],
+            identity: data[2],
+            auth: authUser._id,
+            last_update: today,
+          }, function(err) {
+            if (err) {
+              message = validate.getMessage(err);
+              res.send(message);
+            } else {
+              req.flash('successMessage', 'Import CSV Successfully');
+              res.redirect('/instructors');
+            }
           });
         }
       });

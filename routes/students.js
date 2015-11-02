@@ -33,20 +33,30 @@ var dataPlan = require('./../models/plan');
 // Helpers
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
+var validate = require('./../helpers/validate');
 
 router.get('/', function(req, res, next) {
   dataUser.find({})
     .populate('auth', null, {is_student: 1})
     .exec(function(err, collection) {
-      if (err) res.send(err);
+      if (err) {
+        message = validate.getMessage(err);
+        res.send(message);
+      }
+
       datas = collection.filter(function(item) {
         if (item.auth == null) return false;
         return true;
-        })
-        .map(function(item) {
-            return item;
-        });
-      res.render('account/student', {datas: datas});
+      })
+      .map(function(item) {
+        return item;
+      });
+
+      res.render('account/student', {
+        datas: datas,
+        successMessage: req.flash('successMessage'),
+      });
+        
     });
 });
 
@@ -64,14 +74,15 @@ router.post('/edit/:id', function(req, res) {
     req.params.id,
     {
       $set: {
-        'fullname': req.body.firstname,
+        'fullname': req.body.fullname,
         'department': req.body.department,
         'last_update': today,
       },
     },
     function(err, collection) {
       if (err) {
-        res.send(err);
+        message = validate.getMessage(err);
+        res.send(message);
       }
     }
   );
@@ -83,7 +94,8 @@ router.post('/delete/:id', function(req, res) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
         authUser.remove(function(err) {
           if (err) {
-            res.send(err);
+            message = validate.getMessage(err);
+            res.send(message);
           } else {
             res.redirect('/students');
           }
@@ -95,7 +107,7 @@ router.post('/delete/:id', function(req, res) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('account/student-signup');
+  res.render('account/student-signup', {errorMessage: req.flash('errorMessage')});
 });
 
 router.post('/signup', function(req, res) {
@@ -109,7 +121,9 @@ router.post('/signup', function(req, res) {
         password: authtentication.hashPwd(salt, req.body.password),
       }, function(err, data) {
         if (err) {
-          res.send(err);
+          message = validate.getMessage(err);
+          req.flash('errorMessage', message);
+          res.redirect('/students/signup');
         }
 
         dataUser.create({
@@ -123,15 +137,17 @@ router.post('/signup', function(req, res) {
           last_update: today,
         }, function(err) {
           if (err) {
-            res.send(err);
+            data.remove();
+            message = validate.getMessage(err);
+            req.flash('errorMessage', message);
+            res.redirect('/students/signup');
           }
 
-          res.redirect('/students/signup');
+          req.flash('successMessage', 'Sign Up Successfully');
+          res.redirect('/students');
         });
-    });
+      });
   }
-
-  res.redirect('/students');
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
@@ -153,7 +169,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
         password: authtentication.hashPwd(salt, '1234'),
       }, function(err, authUser) {
         if (err) {
-          res.send(err);
+          message = validate.getMessage(err);
+          res.send(message);
         } else {
           dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
             dataUser.create({
@@ -172,8 +189,10 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
               last_update: today
             }, function(err) {
               if (err) {
-                res.send(err);
+                message = validate.getMessage(err);
+                res.send(message);
               } else {
+                req.flash('successMessage', 'Import CSV Successfully');
                 res.redirect('/students');
               }
             });

@@ -13,10 +13,15 @@ block content
               |  Instructors / Sign Up
       .row
         .col-lg-12
+          if errorMessage != ''
+            .alert.alert-danger
+              ul 
+              each message in errorMessage
+                li= message
+      .row
+        .col-lg-12
           .panel.panel-default
             .panel-body
-              if message_auth
-                div.warning-message=message_auth
               form(name="signup-form", method="post" action='/instructors/signup')
                 div.form-group
                   label Full Name
