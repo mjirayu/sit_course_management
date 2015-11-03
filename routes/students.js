@@ -54,6 +54,7 @@ router.get('/', function(req, res, next) {
       res.render('account/student', {
         datas: datas,
         successMessage: req.flash('successMessage'),
+        errorMessage: req.flash('errorMessage'),
       });
 
     });
