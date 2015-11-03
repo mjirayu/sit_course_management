@@ -12,7 +12,7 @@ var storage = multer.diskStorage({
     if (file.mimetype == 'text/csv') {
       filetype = '.csv';
     } else {
-      filetpye = '';
+      filetype = '';
     }
 
     cb(null, file.fieldname + '-' + Date.now() + filetype);
@@ -54,6 +54,7 @@ router.get('/', function(req, res, next) {
       res.render('account/student', {
         datas: datas,
         successMessage: req.flash('successMessage'),
+        errorMessage: req.flash('errorMessage'),
       });
 
     });
@@ -153,7 +154,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
   var isColumn = true;
-  
+
   if (req.file == undefined) {
     req.flash('errorMessage', ['Choose CSV file']);
     res.redirect('/students');
