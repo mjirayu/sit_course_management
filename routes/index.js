@@ -9,19 +9,11 @@ var passport = require('./../middlewares/passport');
 var dataPlan = require('./../models/plan');
 var dataUser = require('./../models/user_profile');
 
-router.get('/', auth, function(req, res, next) {
-	console.log(req.user);
-	// if (req.user.is_admin == 1) {
-	// 	res.render('admin/admin', {username: req.user.username});
-	// } else {
-	// 	dataPlan.find({'identity': req.user.username}, function(err, collection){
-	// 		res.render('plan-list', {user:req.user, datas:collection});
-	// 	});
-	// }
-});
 
-router.get('/dnd',function(req,res){
-	res.render('./dnd/dnd');
+
+router.get('/', auth, function(req,res){
+	console.log(req.user);
+	res.render('./dnd/dnd',req.user);
 });
 
 router.get('/logout',function(req,res){

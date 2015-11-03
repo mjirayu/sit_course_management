@@ -10,6 +10,7 @@ router.get('/', function(req, res, next) {
   dataCourse.find({})
     .populate('instructor')
     .exec(function(err, collection) {
+      console.log(collection);
       res.render('course/index', {
         datas: collection,
       });

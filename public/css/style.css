@@ -201,3 +201,12 @@ h2.title span,h3.title span{
 .underline{
 	    border-bottom: 4px solid;
 }
+
+.alert-message{
+	text-align: center;
+	background: #FF9B9B;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #FFF;
+}

@@ -19,27 +19,29 @@ block content
     // /navbar
     // Main contain
   .container(ng-controller="dndController")
-    ul(ng-repeat='item in courselist')
-      li test{{item}}
+    
+    #userinfo
+      input(type="text" name="id" value="#{_id}")
+      
     .row
       .col-md-12
         h2.text-center.title
           span
-            | {{models.name}}{{testname}}
+            | {{plandata.fullname}}
     .row
       .col-md-8
         #dnd.block.radius
-          .row(ng-repeat='row in models.course_list')
+          .row(ng-repeat='row in plandata.plan')
             .title
               | {{'Year ' + row.year + ' Semester ' + row.semester}}
             ul(dnd-list='row.course',dnd-allowed-types="34",dnd-disable-if="false")
               .dnd-row
-                div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1)', dnd-effect-allowed='move', dnd-disable-if='row.year < year.year || (row.year <= year.year && row.semester <= year.semester)', dnd-draggable='item', ng-class="{'disable': row.year < year.year || (row.year <= year.year && row.semester <= year.semester),'enable': 1==1,'elective':item.type == 2}")
-                  li.radius(ng-click='courseFun()' )
+                div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1)', dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year <= year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 2 && !(row.year < year.year || (row.year <= year && row.semester <= semester))) }")
+                  li.radius
                     span {{item.course_id +" "+item.name}}
-                  li.radius(ng-show="item.type == 2")
-                    a(type='button', data-toggle='modal', data-target='#myModal')
-                      | ลงทะเบียน
+                  li.radius(ng-show="item.type == 2 && !(row.year < year || (row.year <= year && row.semester <= semester))")
+                    a(type='button', data-toggle='modal', data-target='#myModal' ng-click='testfun($parent.$index,$index)' )
+                      | ลงทะเบียน {{year}}
       .col-md-4
         .block.radius
           h3.underline
@@ -60,26 +62,24 @@ block content
 
 
 
-
-
-
-  #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
-    .modal-dialog(role='document')
-      .modal-content
-        .modal-header
-          button.close(type='button', data-dismiss='modal', aria-label='Close')
-            span(aria-hidden='true') ×
-          h4#myModalLabel.modal-title ลงทะเบียน
-        .modal-body
-          ul(ng-repeat='item in courselist')
-            li test{{item}}
-            
         
-          label.radio 
-            input#inlineRadio1(type='radio', name='inlineRadioOptions', value='option1')
-            |CSC101 JAVA 1  
-            
 
-        .modal-footer
-          
-          button.btn.btn-primary(type='button') Save changes
+
+        #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')
+          .modal-dialog(role='document')
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal', aria-label='Close')
+                  span(aria-hidden='true') ×
+                h4#myModalLabel.modal-title ลงทะเบียน
+              .modal-body
+                .alert-message(style="display:none") โปรดเลือกวิชาที่ต้องการลองทะเบียน
+                ul(ng-repeat='item in courselist')
+                  label
+                    input(type='radio', name='elective', value='{{item}}')
+                    |     {{item.course_id + " " + item.course_name}}
+                  
+
+              .modal-footer
+                
+                button.btn.btn-primary(type='button', ng-click="register()") Register

@@ -16,7 +16,7 @@ var instructors = require('./routes/instructors');
 var course = require('./routes/course');
 var plan = require('./routes/plan');
 var api = require('./routes/api');
-
+var years = require('./routes/year_semester');
 //var yearSemester = require('./routes/year_semester');
 
 var mongoose = require('mongoose');
@@ -60,6 +60,7 @@ app.use('/admin', admin);
 app.use('/course', course);
 app.use('/api', api);
 app.use('/plan', plan);
+app.use('/years',years);
 // app.use('/year_semester', yearSemester);
 
 // catch 404 and forward to error handler

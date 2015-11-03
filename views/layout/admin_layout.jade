@@ -14,6 +14,7 @@ html(lang='en')
     link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css' type="text/css")
     
     link(rel="stylesheet", href="/css/admin.css")
+    link(rel="stylesheet", href="/datepicker/css/bootstrap-datepicker.min.css")
     // HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file.
     //if lt IE 9
     script(src='/js/vendor/html5shiv.js')
@@ -22,6 +23,8 @@ html(lang='en')
     // jQuery (necessary for Flat UI's JavaScript plugins)
     script(src='/js/vendor/jquery.min.js')
     script(src='/js/bootstrap.min.js')
+    script(src='/js/main.js')
+    script(src='/datepicker/js/bootstrap-datepicker.min.js')
   body
   html
 body
@@ -74,6 +77,10 @@ body
             a(href='/plan')
               i.fa.fa-fw.fa-folder-open
               |  Plan
+          li
+            a(href='/years')
+              i.fa.fa-fw.fa-folder-open
+              |  Years
               
     block content
     #studentModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="studentLabel")
