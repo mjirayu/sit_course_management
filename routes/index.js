@@ -7,7 +7,13 @@ var passport = require('./../middlewares/passport');
 
 // Models
 var dataPlan = require('./../models/plan');
+var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
+
+// Helpers
+var dateFunction = require('./../helpers/date');
+var authtentication = require('./../helpers/auth');
+var validate = require('./../helpers/validate');
 
 router.get('/', auth, function(req, res) {
   console.log(req.user);
@@ -37,5 +43,33 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: true,
 	})
 );
+
+router.post('/reset_password', auth, function(req, res) {
+  var today = dateFunction.getDate();
+
+  if (req.body.password_confirm == req.body.password) {
+    dataAuthUser.findByIdAndUpdate(
+      req.user._id,
+      {
+        $set: {
+          'password': authtentication.hashPwd(req.user.salt, req.body.password),
+          'reset_password': '',
+          'last_update': today,
+        },
+      },
+      function(err) {
+        if (err) {
+          message = validate.getMessage(err);
+          res.send(message);
+        }
+
+        res.redirect('/logout');
+      }
+    );
+  } else {
+    res.redirect('/');
+  }
+
+});
 
 module.exports = router;
