@@ -181,7 +181,9 @@ h2.title span,h3.title span{
 	text-align: center;
 	font-weight: bold;
 }
-
+#dnd ul{
+	padding: 0px;
+}
 .dndPlaceholder {
 	height: 40px;
 	background: #999 !important;
@@ -195,8 +197,12 @@ h2.title span,h3.title span{
 .dndDraggingSource  {
 	display: none;
 }
+.defaultplan .dnd-row{
+		background: #F2F2F2;
+}
 .dnd-row{
 	min-height: 50px;
+
 }
 .underline{
 	    border-bottom: 4px solid;

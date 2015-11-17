@@ -1,0 +1,87 @@
+
+/* Dnd section */
+#dnd .disable{
+	color:#999;
+}
+.dndDragove{
+	background: red;
+}
+#dnd .coursebox:not(.disable) li:hover{
+	background: #666;
+	color: #FFF;
+	border:solid 1px #525252;
+	border-bottom: solid 3px #525252;
+}
+#dnd .disable li{
+	cursor:not-allowed;
+}
+#dnd li{
+	text-align: center;
+	list-style: none;
+	background: #f2f2f2;
+	margin: 10px;
+	height: 40px;
+	line-height: 40px;
+	cursor: pointer;
+	border:solid 1px #E2E2E2;
+	border-bottom: solid 3px #E2E2E2;
+}
+#dnd  div{
+	overflow: hidden;
+}
+#dnd .elective li:nth-child(1){
+	width: 78%;
+	float: left;
+	margin: 1%;
+}
+#dnd .elective li:nth-child(2){
+	width: 18%;
+	float: right;
+	margin: 1%;
+}
+
+
+#dnd .title{
+	text-align: center;
+	font-weight: bold;
+}
+#dnd ul{
+	padding: 0px;
+}
+.dndPlaceholder {
+	height: 40px;
+	background: #999 !important;
+	border-bottom: 3px solid #525252 !important;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+
+}
+
+.dndDraggingSource  {
+	display: none;
+}
+.defaultplan .dnd-row{
+		background: #F2F2F2;
+}
+
+.defaultplan .block{
+	max-width: 600px;
+	margin:0 auto;
+}
+.dnd-row{
+	min-height: 50px;
+
+}
+.underline{
+	    border-bottom: 4px solid;
+}
+
+.alert-message{
+	text-align: center;
+	background: #FF9B9B;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	color: #FFF;
+}

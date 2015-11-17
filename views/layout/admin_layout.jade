@@ -14,6 +14,8 @@ html(lang='en')
     link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css' type="text/css")
     
     link(rel="stylesheet", href="/css/admin.css")
+    
+    link(rel="stylesheet", href='/css/dnd.css')
     link(rel="stylesheet", href="/datepicker/css/bootstrap-datepicker.min.css")
     // HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file.
     //if lt IE 9
@@ -25,9 +27,12 @@ html(lang='en')
     script(src='/js/bootstrap.min.js')
     script(src='/js/main.js')
     script(src='/datepicker/js/bootstrap-datepicker.min.js')
+    script(src='/js/vendor/angular.min.js')
+    script(src='/js/vendor/angular-drag-and-drop-lists.min.js')
+    script(src='/js/dnd.js')
   body
   html
-body
+body(ng-app="app")
   #wrapper
     // Navigation
     nav.navbar.navbar-inverse.navbar-fixed-top(role='navigation')

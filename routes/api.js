@@ -17,22 +17,36 @@ router.get('/user/:id', auth, function(req, res, next) {
 		res.json(collection);
 	});
 });
-
-router.post('/user/plan/:id', function(req, res){
+router.get('/adisak', auth, function(req,res){
+	res.send(req.user._id);
+});
+router.post('/user/plan', auth, function(req, res){
 	// dataUser.findOne({auth:req.params.id}, function(err, collection){
 	// 	if(err) res.send(err);
 	// 	res.send(collection);
 	// });
+	console.log(req.body);
 	data = {
 		update_date: new Date(),
-		course_id: objectId(req.body.user_id),
-		user_id: objectId(req.body.user_id),
+		course_id: objectId(req.body.course_id),
+		user_id: objectId(req.user._id),
 		action: req.body.action
 	};
 	datayearsemester.findOne({status:'active'}).sort('-year').update({}, { $push: {'courselist':data} }).exec(function(err,collection){
     if(err) res.send(err);
     res.send(collection);
   });
+
+});
+
+router.post('/user/user_profile', auth, function(req,res){
+	data = req.body.data;
+	if(data){
+		dataUser.findOne({_id:req.user._id}).update({}, { $set: {'plan':data} });
+		res.send('success');
+	}else{
+		res.send('error');
+	}
 
 });
 
@@ -58,6 +72,26 @@ router.post('/plan/:id', function(req, res, next) {
 			if(err){ res.send("Error");}else{res.send("Success");}
 		});
 	});
+});
+
+router.post('/plan',function(req,res,next){
+
+
+
+	dataPlan.create(req.body.data,function(err,collection){
+		if(err) res.send(err);
+		res.send(collection);
+	});
+
+});
+
+router.post('/plan/delete/:id',function(req,res,next){
+
+
+
+	dataPlan.findById(req.params.id).remove().exec();
+	res.redirect('/plan');
+
 });
 
 module.exports = router;

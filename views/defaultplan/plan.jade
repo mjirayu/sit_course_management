@@ -1,0 +1,83 @@
+extends ../layout/admin_layout
+
+block content
+  #page-wrapper
+    .container-fluid(ng-controller="planController")
+      .row
+        .col-lg-12
+          h1.page-header
+            | Create Default Plan 
+          ol.breadcrumb
+            li.active
+              i.fa.fa-file
+              |  Dufual Plan / Create
+      #dnd.row
+        .col-lg-12
+          div.alert-message(style="display:none")
+            h4 โปรดใส่ข้อมูลให้ครบถ้วน
+          br
+          .panel.panel-default
+            .panel-body
+              .row.defaultplan
+                .col-md-7
+                  .block.radius 
+                    
+                      form.form-horizontal#addplan
+                        div.form-group
+                          label.col-md-3.control-label Name
+                          div.col-md-8
+                            input(type="text", name="plan_name").form-control
+                        div.form-group
+                          label.col-md-3.control-label Description
+                          div.col-md-8
+                            input(type="text", name="description").form-control
+                        div.form-group
+                          label.col-md-3.control-label Department
+                          div.col-md-8
+                          
+                              
+                            select.form-control.select.select-default.mrs.mbm(data-toggle='select',name="department")
+                                option(value='it') IT
+                                option(value='cs') CS
+                      
+                    .row(ng-repeat='row in plandata.plan')
+                      .title
+                        | {{'Year ' + row.year + ' Semester ' + row.semester}}
+                      ul(dnd-list='row.course',dnd-allowed-types="34",dnd-disable-if="false")
+                        .dnd-row
+                          div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1)', dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year <= year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 2 && !(row.year < year.year || (row.year <= year && row.semester <= semester))) }")
+                            li.radius
+                              span {{item.course_id +" "+item.course_name}}
+                            li.radius(ng-show="item.type == 2 && !(row.year < year || (row.year <= year && row.semester <= semester))")
+                              a(type='button', data-toggle='modal', data-target='#myModal' ng-click='testfun($parent.$index,$index)' )
+                                | ลงทะเบียน {{year}}
+                
+                .col-md-4
+                  .block.radius
+                    button.btn.btn-success.btn-block.btn-lg(ng-click="save()")
+                      h4 Save
+                  .block.radius
+                    h3.underline
+                      span Course
+                    ul(dnd-list='courselist')
+                      .dnd-row
+                        div.coursebox(ng-repeat='item in courselist', dnd-moved='courselist.splice($index, 1)', dnd-effect-allowed='move', dnd-draggable='item')
+                          li.radius
+                            span {{item.course_id +" "+item.course_name}}
+                            
+                    
+              //- .row
+              //-   .col-md-12
+              //-     .block.radius
+              //-       pre.code.
+              //-         {{modelAsJson}}   
+
+
+
+
+
+
+                  
+
+    script(src='/js/flat-ui.min.js')
+    script(src='/js/application.js')

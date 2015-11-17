@@ -5,8 +5,13 @@ block content
 		.container-fluid
 			.row
 				.col-lg-12
-					h1.page-header
-						| Plan
+					.row
+						.col-lg-8
+							h1.page-header
+								| Plan
+						.col-lg-2
+						h1.page-header
+							a(href='defaultplan/create').btn.btn-success.btn-lg Create New Default Plan
 					ol.breadcrumb
 						li.active
 							i.fa.fa-dashboard
@@ -21,13 +26,14 @@ block content
 									th Department
 									th 
 								tbody
+								
 								each data in datas
 									tr
 										td=data.plan_name
 										td=data.department
 										td
-											a(href='/plan/edit/' + data._id).btn.btn-info Edit  
+											a(href="defaultplan/"+data._id).btn.btn-success View
 										td
-											form(name="delete-form", method="post" action='/users/delete/' + data._id)
+											form(name="delete-form", method="post" action='api/plan/delete/' + data._id)
 												input(type="hidden" name="_method" value="delete")
 												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete

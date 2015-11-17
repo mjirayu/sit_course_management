@@ -8,6 +8,7 @@ var dataCourse = require('./../models/course');
 router.get('/', function(req, res, next) {
 	dataPlan.find({}, function(err, collection) {
 		res.render('plan/plan-admin', {datas: collection});
+
 	});
 });
 
