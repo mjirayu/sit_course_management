@@ -70,6 +70,7 @@ router.get('/edit/:id', function(req, res) {
 
 router.post('/edit/:id', function(req, res) {
   var today = dateFunction.getDate();
+
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
@@ -114,40 +115,39 @@ router.post('/signup', function(req, res) {
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
 
-  if (req.body.password == req.body.confirm_password) {
-    dataAuthUser.create({
-        username: req.body.username,
-        salt: salt,
-        password: authtentication.hashPwd(salt, req.body.password),
-      }, function(err, data) {
+  dataAuthUser.create({
+      username: req.body.username,
+      salt: salt,
+      reset_password: authtentication.generate_reset_password(),
+      password: 'start',
+    }, function(err, data) {
+      if (err) {
+        message = validate.getMessage(err);
+        req.flash('errorMessage', message);
+        res.redirect('/students/signup');
+      }
+
+      dataUser.create({
+        fullname: req.body.fullname,
+        department: req.body.department,
+        email: req.body.email,
+        identity: req.body.identity,
+        entranced_year: req.body.entranced_year,
+        plan: req.body.plan_id,
+        auth: data._id,
+        last_update: today,
+      }, function(err) {
         if (err) {
+          data.remove();
           message = validate.getMessage(err);
           req.flash('errorMessage', message);
           res.redirect('/students/signup');
         }
 
-        dataUser.create({
-          fullname: req.body.fullname,
-          department: req.body.department,
-          email: req.body.email,
-          identity: req.body.identity,
-          entranced_year: req.body.entranced_year,
-          plan: req.body.plan_id,
-          auth: data._id,
-          last_update: today,
-        }, function(err) {
-          if (err) {
-            data.remove();
-            message = validate.getMessage(err);
-            req.flash('errorMessage', message);
-            res.redirect('/students/signup');
-          }
-
-          req.flash('successMessage', 'Sign Up Successfully');
-          res.redirect('/students');
-        });
+        req.flash('successMessage', 'Sign Up Successfully');
+        res.redirect('/students');
       });
-  }
+    });
 });
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
@@ -174,7 +174,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
         dataAuthUser.create({
           username: data[6],
           salt: salt,
-          password: authtentication.hashPwd(salt, '1234'),
+          reset_password: authtentication.generate_reset_password(),
+          password: 'start',
         }, function(err, authUser) {
           if (err) {
             message = validate.getMessage(err);
