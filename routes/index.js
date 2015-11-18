@@ -20,7 +20,7 @@ router.get('/', auth, function(req, res) {
   if (req.user.reset_password != '') {
     res.render('account/reset_password');
 	}
-
+  //res.send(req.user._id);
   res.render('./dnd/dnd', req.user);
 });
 

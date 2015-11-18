@@ -1,0 +1,35 @@
+extends ../layout/admin_layout
+block content
+  #page-wrapper
+    .container-fluid
+      .row
+        .col-lg-12
+          h1.page-header
+            | Create Years 
+          ol.breadcrumb
+            li.active
+              i.fa.fa-file
+              |  Years / Create
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              form(name="create-course", method="post" action='/years')
+                div.form-group
+                  label Year Number
+                  input(type="text", name="Year", placeholder="ex 2555", value=year).form-control
+                div.form-group.pickdate
+                  label Semester 1
+                  div.input-daterange.input-group
+                    input.input-sm.form-control(type='text', name='startsemester1', placeholder="ex 2015/01/01", value=startSemesterOne)
+                    span.input-group-addon to
+                    input.input-sm.form-control(type='text', name='endsemester1', placeholder="ex 2015/01/01", value=endSemesterOne)
+                div.form-group.pickdate
+                  label Semester 2
+                  div.input-daterange.input-group
+                    input.input-sm.form-control(type='text', name='startsemester2', placeholder="ex 2015/01/01", value=startSemesterTwo)
+                    span.input-group-addon to
+                    input.input-sm.form-control(type='text', name='endsemester2', placeholder="ex 2015/01/01", value=endSemesterTwo)
+                
+                div.form-group
+                  button(type="submit").btn.btn-primary submit

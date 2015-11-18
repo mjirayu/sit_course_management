@@ -5,7 +5,9 @@ var planSchema = new Schema({
   plan_name: String,
   description: String,
   department: String,
-  course_list: Array,
+  course_list: {
+    plan: Array
+  },
   last_update: { type: Date, default: Date.now }
 });
 

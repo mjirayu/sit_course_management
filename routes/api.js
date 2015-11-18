@@ -50,7 +50,7 @@ router.post('/user/user_profile', auth, function(req,res){
 
 });
 
-router.get('/plan/:id', function(req, res, next) {
+router.get('/defaultplan/:id', function(req, res, next) {
 	dataPlan.findById(req.params.id, function(err,collection) {
 		res.json(collection);
 	});
@@ -84,6 +84,40 @@ router.post('/plan',function(req,res,next){
 	});
 
 });
+
+
+router.put('/defaultplan/:id',function(req,res,next){
+
+	console.log(req.params.id);
+	console.log(req.body);
+	if(req.body.data){
+		console.log(JSON.parse(req.body.data));
+		dataPlan.findByIdAndUpdate(
+	    req.params.id,
+	    {
+	      $set: {
+	        'course_list': JSON.parse(req.body.data).course_list
+
+	      },
+	    },
+	    function(err, collection) {
+	      if (err) {
+					console.log("ERRRRRRRRRRRRRRRRRRRRRR");
+	        res.send(err);
+	      }else{
+					res.send('ok');
+				}
+	    }
+	  );
+	}else{
+		console.log('NO DATA');
+		res.sendStatus(500);
+	}
+
+
+
+});
+
 
 router.post('/plan/delete/:id',function(req,res,next){
 

@@ -68,6 +68,32 @@ router.get('/edit/:id', function(req, res) {
     });
 });
 
+//update from dnd page only
+router.post('/update', function(req, res) {
+  var today = dateFunction.getDate();
+  console.log(req.body.data);
+  console.log(req.user._id);
+
+  dataUser.findOneAndUpdate(
+    {auth:req.user._id},
+    {
+      $set: {
+        'plan': req.body.data,
+
+      },
+    },
+    function(err, collection) {
+      if (err) {
+        message = validate.getMessage(err);
+        res.send(message);
+      }else{
+        res.send(collection);
+      }
+    }
+  );
+
+});
+
 router.post('/edit/:id', function(req, res) {
   var today = dateFunction.getDate();
 
