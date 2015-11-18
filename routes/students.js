@@ -190,7 +190,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                 entranced_year: data[4],
                 plan: {
                   plan_name: plan.plan_name,
-                  status: plan.status,
+                  plan_status: plan.status,
                   department: plan.department,
                   course_list: plan.course_list
                 },
