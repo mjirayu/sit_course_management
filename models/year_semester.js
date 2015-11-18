@@ -18,13 +18,11 @@ var yearSemesterSchema = new Schema({
   courselist: [{
     user_id:{
       type: Schema.ObjectId,
-      ref: 'Auth_User',
-      unique: true
+      ref: 'Auth_User'
     },
     course_id: {
       type: Schema.ObjectId,
-      ref: 'courses',
-      unique: true
+      ref: 'courses'
     },
     message: String
     ,

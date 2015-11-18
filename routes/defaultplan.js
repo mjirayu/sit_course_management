@@ -16,8 +16,15 @@ router.get('/create', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
 
+  dataPlan.findById(req.params.id,function(err,data){
 
-      res.render('defaultplan/plan');
+    if(err) res.redirect('/plan');
+    res.render('defaultplan/edit')
+
+    //res.render('defaultplan/edit');
+
+});
+
 
 });
 

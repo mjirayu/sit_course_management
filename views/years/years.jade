@@ -1,0 +1,39 @@
+extends ../layout/admin_layout
+
+block content
+	#page-wrapper
+		.container-fluid
+			.row
+				.col-lg-12
+					.row
+						.col-lg-8
+							h1.page-header
+								| Years
+						.col-lg-2
+						h1.page-header
+							a(href='years/add').btn.btn-success.btn-lg Create New Years 
+					ol.breadcrumb
+						li.active
+							i.fa.fa-dashboard
+							|  years
+			.row
+				.col-lg-12
+					.panel.panel-default
+						.panel-body
+							table.table
+								thead
+									th  Name
+									th Status
+									th 
+								tbody
+								
+								each data in datas
+									tr
+										td=data.year
+										td=data.status
+										td
+											a(href="years/"+data._id).btn.btn-success View
+										td
+											form(name="delete-form", method="post" action='years/delete/' + data._id)
+												input(type="hidden" name="_method" value="delete")
+												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
