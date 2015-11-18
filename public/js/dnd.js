@@ -1,4 +1,4 @@
-var base_url = "http://localhost:3000/";
+var base_url = "http://55.55.55.55:3000/";
 var year = {
   year:4  ,
   semester:1,
@@ -11,7 +11,7 @@ var selectElement = {};
 angular.module("app",["dndLists"]).controller("dndController", function($scope,$http) {
   $scope.entranced_year = 2555;
   $scope.plandata = {};
-  $http.get('http://localhost:3000/api/course').success(function(response) {
+  $http.get(base_url + 'api/course').success(function(response) {
     $scope.courselist = response; console.log($scope.courselist);
 
   });
@@ -98,8 +98,8 @@ angular.module("app",["dndLists"]).controller("dndController", function($scope,$
   $scope.allowType = "it";
 
 
-  $http.get('http://localhost:3000/api/user/'+$('#userinfo input[name="id"]').val()).success(function(response) {
-    console.log('User data ' + 'http://localhost:3000/api/user/'+$('#userinfo input[name="id"]').val());
+  $http.get(base_url + 'api/user/'+$('#userinfo input[name="id"]').val()).success(function(response) {
+    console.log('User data ' + base_url + 'api/user/'+$('#userinfo input[name="id"]').val());
 
     $scope.plandata = response; console.log(response);
   });
@@ -119,7 +119,7 @@ angular.module("app",["dndLists"]).controller("dndController", function($scope,$
 }).controller("planController", function($scope,$http) {
 
   $scope.courselist = {};
-  $http.get('http://localhost:3000/api/course').success(function(response) {
+  $http.get(base_url+ 'api/course').success(function(response) {
     $scope.courselist = response; console.log($scope.courselist);
 
   });
@@ -189,7 +189,7 @@ angular.module("app",["dndLists"]).controller("dndController", function($scope,$
 
       }).then(function(response){
         console.log(response);
-        window.location.replace("http://localhost:3000/plan");
+        window.location.replace(base_url + "plan");
       }, function(response){
         console.log(response);
       });
