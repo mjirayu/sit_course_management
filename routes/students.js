@@ -79,14 +79,13 @@ router.post('/update', function(req, res) {
     {
       $set: {
         'plan': req.body.data,
-
       },
     },
     function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
         res.send(message);
-      }else{
+      } else {
         res.send(collection);
       }
     }
@@ -134,7 +133,12 @@ router.post('/delete/:id', function(req, res) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('account/student-signup', {errorMessage: req.flash('errorMessage')});
+  dataPlan.find({}, function(err, collection) {
+    res.render('account/student-signup', {
+      errorMessage: req.flash('errorMessage'),
+      plans: collection,
+    });
+  });
 });
 
 router.post('/signup', function(req, res) {
@@ -153,25 +157,27 @@ router.post('/signup', function(req, res) {
         res.redirect('/students/signup');
       }
 
-      dataUser.create({
-        fullname: req.body.fullname,
-        department: req.body.department,
-        email: req.body.email,
-        identity: req.body.identity,
-        entranced_year: req.body.entranced_year,
-        plan: req.body.plan_id,
-        auth: data._id,
-        last_update: today,
-      }, function(err) {
-        if (err) {
-          data.remove();
-          message = validate.getMessage(err);
-          req.flash('errorMessage', message);
-          res.redirect('/students/signup');
-        }
+      dataPlan.findOne({plan_name: req.body.plan_name}, function(err , plan) {
+        dataUser.create({
+          fullname: req.body.fullname,
+          department: req.body.department,
+          email: req.body.email,
+          identity: req.body.identity,
+          entranced_year: req.body.entranced_year,
+          plan: plan.course_list.plan,
+          auth: data._id,
+          last_update: today,
+        }, function(err) {
+          if (err) {
+            data.remove();
+            message = validate.getMessage(err);
+            req.flash('errorMessage', message);
+            res.redirect('/students/signup');
+          }
 
-        req.flash('successMessage', 'Sign Up Successfully');
-        res.redirect('/students');
+          req.flash('successMessage', 'Sign Up Successfully');
+          res.redirect('/students');
+        });
       });
     });
 });
@@ -214,12 +220,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                 email: data[2],
                 identity: data[3],
                 entranced_year: data[4],
-                plan: {
-                  plan_name: plan.plan_name,
-                  plan_status: plan.status,
-                  department: plan.department,
-                  course_list: plan.course_list
-                },
+                plan: plan.course_list.plan,
                 auth: authUser._id,
                 last_update: today
               }, function(err) {
@@ -227,10 +228,10 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                   authUser.remove();
                   message = validate.getMessage(err);
                   res.send(message);
-                } else {
-                  req.flash('successMessage', 'Import CSV Successfully');
-                  res.redirect('/students');
                 }
+
+                req.flash('successMessage', 'Import CSV Successfully');
+                // res.redirect('/students');
               });
             });
           }
@@ -239,9 +240,43 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 
       isColumn = false;
     });
-  }
 
-  fs.unlink(req.file.path);
+    fs.unlink(req.file.path);
+  }
+});
+
+
+// Approve Plan
+
+router.get('/edit/plan_status/:id', function(req, res) {
+  dataUser.findById(req.params.id)
+    .populate('auth')
+    .exec(function(err, collection) {
+      res.render('account/student-edit-status', {data: collection});
+    });
+});
+
+router.post('/edit/plan_status/:id', function(req, res) {
+  var today = dateFunction.getDate();
+
+  dataUser.findByIdAndUpdate(
+    req.params.id,
+    {
+      $set: {
+        'status': req.body.status,
+        'last_update': today,
+      },
+    },
+    function(err, collection) {
+      if (err) {
+        message = validate.getMessage(err);
+        res.send(message);
+      }
+
+      req.flash('successMessage', 'Change Status Successfully');
+      res.redirect('/instructors/approve_plan');
+    }
+  );
 });
 
 module.exports = router;

@@ -167,7 +167,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
       output: process.stdout,
       terminal: false,
     });
-    
+
     read.on('line', function(line) {
       if (!isColumn) {
         var data = line.split(',');
@@ -208,6 +208,16 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
   }
 
   fs.unlink(req.file.path);
+});
+
+router.get('/approve_plan', function(req, res) {
+  dataUser.find({status: 'Pending'}, function(err, collection) {
+    res.render('account/instructor-approve', {
+      datas: collection,
+      successMessage: req.flash('successMessage'),
+      errorMessage: req.flash('errorMessage'),
+    });
+  });
 });
 
 module.exports = router;

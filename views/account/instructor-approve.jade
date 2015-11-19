@@ -6,17 +6,18 @@ block content
 			.row
 				.col-lg-12
 					h1.page-header
-						| Students
-						a(href="/students/signup").btn.btn-success.pull-right Sign Up
-						button(type"button" data-toggle="modal", data-target="#studentModal").btn.btn-success.pull-right.import-btn Import CSV
+						| Approve Plan
+						a(href="/instructors/signup").btn.btn-success.pull-right Sign Up
+						button(type"button" data-toggle="modal", data-target="#instructorModal").btn.btn-success.pull-right.import-btn Import CSV
 					ol.breadcrumb
 						li.active
 							i.fa.fa-user
-							|  Students
+							|  Instructors / Approve Plan
 			if successMessage != ''
 				.row
 					.col-lg-12
 						.alert.alert-success=successMessage
+						
 			if errorMessage != ''
 				.row
 					.col-lg-12
@@ -24,6 +25,7 @@ block content
 							ul
 							each message in errorMessage
 								li= message
+								
 			.row
 				.col-lg-12
 					.panel.panel-default
@@ -32,20 +34,18 @@ block content
 								thead
 									th Student ID
 									th Full Name
-									th Dapartment
-									th Entranced Year
+									th Plan Status
 									th Last Update
+									th
+									th 
 								tbody
 								each data in datas
 									tr
 										td.list-data=data.identity
 										td.list-data=data.fullname
-										td.list-data=data.department
-										td.list-data=data.entranced_year
+										td.list-data=data.status
 										td.list-data=data.last_update
 										td
-											a(href='/students/edit/' + data._id).btn.btn-info Edit  
+											a(href='/students/plan/' + data._id).btn.btn-primary View
 										td
-											form(name="delete-form", method="post" action='/students/delete/' + data._id)
-												input(type="hidden" name="_method" value="delete")
-												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
+											a(href='/students/edit/plan_status/' + data._id).btn.btn-info Edit  

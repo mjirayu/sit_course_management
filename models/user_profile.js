@@ -31,6 +31,10 @@ var userProfileSchema = new Schema({
     unique: 'This auth id is already exist!',
     required: 'auth id is requried!',
   },
+  status: {
+    type: String,
+    default: 'Approve',
+  },
   last_update: {
     type: String,
     required: 'last_update is required!',

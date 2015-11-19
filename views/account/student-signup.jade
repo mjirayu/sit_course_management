@@ -36,9 +36,9 @@ block content
                     option(value="Information Technology") Information Technology
                 div.form-group
                   label Plan
-                  select(name="plan_id").form-control
-                    option(value="CS Plan 56") CS Plan 56
-                    option(value="CS Plan 55") CS Plan 55
+                  select(name="plan_name").form-control
+                    each plan in plans
+                      option(value="#{plan.plan_name}") #{plan.plan_name}
                 div.form-group
                   label Student ID
                   input(type="text", name="identity").form-control
