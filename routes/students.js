@@ -182,6 +182,7 @@ router.post('/signup', function(req, res) {
     });
 });
 
+// Import CSV
 router.post('/csv', upload.single('csv'), function(req, res, next) {
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
@@ -228,10 +229,10 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                   authUser.remove();
                   message = validate.getMessage(err);
                   res.send(message);
+                } else {
+                  req.flash('successMessage', 'Import CSV Successfully');
+                  res.redirect('/students');
                 }
-
-                req.flash('successMessage', 'Import CSV Successfully');
-                // res.redirect('/students');
               });
             });
           }
@@ -245,9 +246,7 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
   }
 });
 
-
 // Approve Plan
-
 router.get('/edit/plan_status/:id', function(req, res) {
   dataUser.findById(req.params.id)
     .populate('auth')
@@ -258,25 +257,29 @@ router.get('/edit/plan_status/:id', function(req, res) {
 
 router.post('/edit/plan_status/:id', function(req, res) {
   var today = dateFunction.getDate();
-
+  console.log(req.body);
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
       $set: {
-        'status': req.body.status,
-        'last_update': today,
+        "status": req.body.status,
+        "last_update": today,
       },
     },
     function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
         res.send(message);
+      } else {
+        req.flash('successMessage', 'Change Status Successfully');
+        res.redirect('/instructors/approve_plan');
       }
-
-      req.flash('successMessage', 'Change Status Successfully');
-      res.redirect('/instructors/approve_plan');
     }
   );
+});
+
+router.get('/plan/:id', function(req, res) {
+  res.render('account/approve', req.user);
 });
 
 module.exports = router;

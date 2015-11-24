@@ -7,8 +7,6 @@ block content
 				.col-lg-12
 					h1.page-header
 						| Approve Plan
-						a(href="/instructors/signup").btn.btn-success.pull-right Sign Up
-						button(type"button" data-toggle="modal", data-target="#instructorModal").btn.btn-success.pull-right.import-btn Import CSV
 					ol.breadcrumb
 						li.active
 							i.fa.fa-user
@@ -35,17 +33,16 @@ block content
 									th Student ID
 									th Full Name
 									th Plan Status
+									th Department
 									th Last Update
 									th
-									th 
 								tbody
 								each data in datas
 									tr
 										td.list-data=data.identity
 										td.list-data=data.fullname
 										td.list-data=data.status
+										td.list-data=data.department
 										td.list-data=data.last_update
 										td
 											a(href='/students/plan/' + data._id).btn.btn-primary View
-										td
-											a(href='/students/edit/plan_status/' + data._id).btn.btn-info Edit  

@@ -8,124 +8,118 @@ var dataCourse = require('./../models/course');
 var datayearsemester = require('./../models/year_semester');
 
 router.get('/', auth, function(req, res, next) {
-	res.redirect('/');
+  res.redirect('/');
 });
 
 router.get('/user/:id', auth, function(req, res, next) {
-	dataUser.findOne({auth:req.params.id}, function(err, collection) {
-		//res.render('plan-list',{user:req.user,datas:collection});
-		res.json(collection);
-	});
+  dataUser.findOne({auth:req.params.id}, function(err, collection) {
+    res.json(collection);
+  });
 });
-router.get('/adisak', auth, function(req,res){
-	res.send(req.user._id);
+
+router.get('/adisak', auth, function(req, res) {
+  res.send(req.user._id);
 });
-router.post('/user/plan', auth, function(req, res){
-	// dataUser.findOne({auth:req.params.id}, function(err, collection){
-	// 	if(err) res.send(err);
-	// 	res.send(collection);
-	// });
-	console.log(req.body);
-	data = {
-		update_date: new Date(),
-		course_id: objectId(req.body.course_id),
-		user_id: objectId(req.user._id),
-		action: req.body.action
-	};
-	datayearsemester.findOne({status:'active'}).sort('-year').update({}, { $push: {'courselist':data} }).exec(function(err,collection){
-    if(err) res.send(err);
+
+router.post('/user/plan', auth, function(req, res) {
+  console.log(req.body);
+  data = {
+    update_date: new Date(),
+    course_id: objectId(req.body.course_id),
+    user_id: objectId(req.user._id),
+    action: req.body.action,
+  };
+
+  datayearsemester.findOne({status:'active'})
+    .sort('-year').update({}, { $push: {'courselist': data} })
+    .exec(function(err, collection) {
+    if (err) res.send(err);
     res.send(collection);
   });
 
 });
 
-router.post('/user/user_profile', auth, function(req,res){
-	data = req.body.data;
-	if(data){
-		dataUser.findOne({_id:req.user._id}).update({}, { $set: {'plan':data} });
-		res.send('success');
-	}else{
-		res.send('error');
+router.post('/user/user_profile', auth, function(req, res) {
+  data = req.body.data;
+  if (data) {
+    dataUser.findOne({_id:req.user._id}).update({}, { $set: {'plan':data} });
+    res.send('success');
+  } else {
+    res.send('error');
 	}
-
 });
 
 router.get('/defaultplan/:id', function(req, res, next) {
-	dataPlan.findById(req.params.id, function(err,collection) {
-		res.json(collection);
-	});
-});
-router.get('/course', function(req, res) {
-	dataCourse.find({}, function(err,collection) {
-		res.json(collection);
-	});
+  dataPlan.findById(req.params.id, function(err, collection) {
+    res.json(collection);
+  });
 });
 
+router.get('/course', function(req, res) {
+  dataCourse.find({}, function(err, collection) {
+    res.json(collection);
+  });
+});
 
 router.post('/plan/:id', function(req, res, next) {
-	var data = JSON.parse(req.body.data);
-	dataPlan.findOne({_id:req.params.id}, function(err,collection) {
-		//res.render('plan-list',{user:req.user,datas:collection});
-		console.log(data);
-		collection.plan_course = data.plan_course;
-		collection.save(function(err,data){
-			if(err){ res.send("Error");}else{res.send("Success");}
-		});
-	});
+  var data = JSON.parse(req.body.data);
+  dataPlan.findOne({_id:req.params.id}, function(err, collection) {
+    console.log(data);
+    collection.plan_course = data.plan_course;
+    collection.save(function(err, data) {
+      if (err) {
+        res.send('Error');
+      } else {
+        res.send('Success');
+			}
+    });
+  });
 });
 
-router.post('/plan',function(req,res,next){
-
-
-
-	dataPlan.create(req.body.data,function(err,collection){
-		if(err) res.send(err);
-		res.send(collection);
-	});
-
+router.post('/plan', function(req, res, next) {
+  dataPlan.create(req.body.data, function(err, collection) {
+    if (err)
+			res.send(err);
+    res.send(collection);
+  });
 });
 
-
-router.put('/defaultplan/:id',function(req,res,next){
-
-	console.log(req.params.id);
-	console.log(req.body);
-	if(req.body.data){
-		console.log(JSON.parse(req.body.data));
-		dataPlan.findByIdAndUpdate(
-	    req.params.id,
+router.put('/defaultplan/:id', function(req, res, next) {
+  console.log(req.params.id);
+  console.log(req.body);
+  if (req.body.data) {
+    console.log(JSON.parse(req.body.data));
+    dataPlan.findByIdAndUpdate(
+      req.params.id,
 	    {
-	      $set: {
-	        'course_list': JSON.parse(req.body.data).course_list
-
+        $set: {
+          'course_list': JSON.parse(req.body.data).course_list,
 	      },
 	    },
 	    function(err, collection) {
-	      if (err) {
+        if (err) {
 					console.log("ERRRRRRRRRRRRRRRRRRRRRR");
 	        res.send(err);
-	      }else{
+        } else {
 					res.send('ok');
 				}
 	    }
 	  );
-	}else{
-		console.log('NO DATA');
-		res.sendStatus(500);
+  } else {
+    console.log('NO DATA');
+    res.sendStatus(500);
 	}
-
-
-
 });
 
+router.post('/plan/delete/:id',function(req, res, next) {
+  dataPlan.findById(req.params.id).remove().exec();
+  res.redirect('/plan');
+});
 
-router.post('/plan/delete/:id',function(req,res,next){
-
-
-
-	dataPlan.findById(req.params.id).remove().exec();
-	res.redirect('/plan');
-
+router.get('/students/plan/:id', function(req, res) {
+  dataUser.findById(req.params.id, function(err, data) {
+    res.json(data);
+  });
 });
 
 module.exports = router;

@@ -2,15 +2,15 @@ extends ../layout/admin_layout
 
 block content
   #page-wrapper
-    .container-fluid(ng-controller="planControllerEdit")
+    .container-fluid(ng-controller="planControllerApprove")
       .row
         .col-lg-12
           h1.page-header
-            | Create Default Plan 
+            | Plan 
           ol.breadcrumb
             li.active
               i.fa.fa-file
-              |  Default Plan / Create
+              |  User Plan
       #dnd.row
         .col-lg-12
           div.alert-message(style="display:none")
@@ -27,10 +27,7 @@ block content
                           label.col-md-3.control-label Name
                           div.col-md-8
                             input(type="text", name="plan_name").form-control
-                        div.form-group
-                          label.col-md-3.control-label Description
-                          div.col-md-8
-                            input(type="text", name="description").form-control
+                        
                         div.form-group
                           label.col-md-3.control-label Department
                           div.col-md-8
@@ -52,8 +49,10 @@ block content
                 
                 .col-md-4
                   .block.radius
-                    button.btn.btn-success.btn-block.btn-lg(ng-click="save()")
-                      h4 Save
+                    a.btn.btn-success.btn-block.btn-lg(ng-click="approve()")
+                      h4 Approve
+                    a.btn.btn-danger.btn-block.btn-lg(ng-click="reject()")
+                      h4 Reject
                   .block.radius
                     h3.underline
                       span Course
@@ -63,5 +62,19 @@ block content
                           li.radius
                             span {{item.course_id +" "+item.course_name}}
                             
+                    
+              //- .row
+              //-   .col-md-12
+              //-     .block.radius
+              //-       pre.code.
+              //-         {{modelAsJson}}   
+
+
+
+
+
+
+                  
+
     script(src='/js/flat-ui.min.js')
     script(src='/js/application.js')
