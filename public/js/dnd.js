@@ -98,9 +98,10 @@ angular.module('app',['dndLists']).controller('dndController', function($scope,$
   $scope.allowType = 'it';
 
   $http.get(base_url + 'api/user/' + $('#userinfo input[name="id"]').val()).success(function(response) {
-    console.log('User data ' + base_url + 'api/user/' + $('#userinfo input[name='id']').val());
+    console.log('User data ' + base_url + 'api/user/' + $('#userinfo input[name="id"]').val());
 
-    $scope.plandata = response; console.log(response);
+    $scope.plandata = response;
+    console.log(response);
   });
 
   $scope.alertData = function(data){
