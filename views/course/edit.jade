@@ -31,7 +31,7 @@ block content
                   select(name="instructor").form-control
                     each user in users
                       if user.auth.is_instructor == 1
-                        option(value="#{user._id}") #{user.firstname} #{user.lastname}
+                        option(value="#{user._id}") #{user.fullname}
                 div.form-group
                   label Department
                   select(name="department").form-control

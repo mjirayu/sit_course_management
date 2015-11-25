@@ -8,6 +8,7 @@ var dataUserProfile = require('./../models/user_profile');
 
 router.get('/', function(req, res, next) {
   dataCourse.find({})
+    .sort('recommended_year')
     .populate('instructor')
     .exec(function(err, collection) {
       console.log(collection);
