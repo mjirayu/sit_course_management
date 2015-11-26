@@ -23,18 +23,20 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 
-// Middlewares
+// ========== Middlewares ==========
 var auth = require('./../middlewares/auth');
 
-// Models
+// ========== Models ==========
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
 
-// Helpers
+// ========== Helpers ==========
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
+
+//========== GET Instrutor ==========
 
 router.get('/', function(req, res, next) {
   dataUser.find({})
@@ -61,6 +63,10 @@ router.get('/', function(req, res, next) {
 
     });
 });
+
+// ========== End Instructor ==========
+
+// ========== Edit Instructor ==========
 
 router.get('/edit/:id', function(req, res) {
   dataUser.findById(req.params.id)
@@ -91,6 +97,10 @@ router.post('/edit/:id', function(req, res) {
   res.redirect('/instructors');
 });
 
+// ========== End Edit Instructor ==========
+
+// ========== Delete Instructor ==========
+
 router.post('/delete/:id', function(req, res) {
   dataUser.findById(req.params.id, function(err, data) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
@@ -107,6 +117,10 @@ router.post('/delete/:id', function(req, res) {
       data.remove();
     });
 });
+
+// ========== End Delete Instructor ==========
+
+// ========== Signup Instructor ==========
 
 router.get('/signup', function(req, res) {
   res.render('account/instructor-signup', {errorMessage: req.flash('errorMessage')});
@@ -150,6 +164,10 @@ router.post('/signup', function(req, res) {
       });
   }
 });
+
+// ========== End Signup Instructor ==========
+
+// ========== CSV Instructor ==========
 
 router.post('/csv', upload.single('csv'), function(req, res, next) {
   var today = dateFunction.getDate();
@@ -210,6 +228,10 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
   fs.unlink(req.file.path);
 });
 
+// ========== End CSV Instructor ==========
+
+// ========== Approve Plan ==========
+
 router.get('/approve_plan', function(req, res) {
   dataUser.find({status: 'Pending'}, function(err, collection) {
     res.render('account/instructor-approve', {
@@ -219,5 +241,7 @@ router.get('/approve_plan', function(req, res) {
     });
   });
 });
+
+// ========== End Approve Plan ==========
 
 module.exports = router;

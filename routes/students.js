@@ -35,6 +35,8 @@ var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
 
+//========== GET Student ==========
+
 router.get('/', function(req, res, next) {
   dataUser.find({})
     .populate('auth', null, {is_student: 1})
@@ -67,6 +69,10 @@ router.get('/', function(req, res, next) {
     });
 });
 
+//========== End GET Student ==========
+
+//========== Edit Student ==========
+
 router.get('/edit/:id', function(req, res) {
   dataDepartment.find({}, function(err, departments) {
     dataUser.findById(req.params.id)
@@ -78,32 +84,6 @@ router.get('/edit/:id', function(req, res) {
         });
       });
   });
-});
-
-//update from dnd page only
-router.post('/update', function(req, res) {
-  var today = dateFunction.getDate();
-  console.log(req.body.data);
-  console.log(req.user._id);
-
-  dataUser.findOneAndUpdate(
-    {auth:req.user._id},
-    {
-      $set: {
-        'status': 'Pending',
-        'plan': req.body.data,
-      },
-    },
-    function(err, collection) {
-      if (err) {
-        message = validate.getMessage(err);
-        res.send(message);
-      } else {
-        res.send(collection);
-      }
-    }
-  );
-
 });
 
 router.post('/edit/:id', function(req, res) {
@@ -128,6 +108,10 @@ router.post('/edit/:id', function(req, res) {
   res.redirect('/students');
 });
 
+//========== End Edit Student ==========
+
+// ========== Delete Student ==========
+
 router.post('/delete/:id', function(req, res) {
   dataUser.findById(req.params.id, function(err, data) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
@@ -144,6 +128,10 @@ router.post('/delete/:id', function(req, res) {
       data.remove();
     });
 });
+
+// ========== End Delete Student ==========
+
+//========== Sign Up Students ==========
 
 router.get('/signup', function(req, res) {
   dataPlan.find({}, function(err, collection) {
@@ -198,7 +186,10 @@ router.post('/signup', function(req, res) {
     });
 });
 
-// Search Student
+//========== End Sign Up Students ==========
+
+//========== Search Student ==========
+
 router.get('/search', function(req, res, next) {
   var params = req.query;
   var student_id = new RegExp(params.student_id, 'i');
@@ -238,7 +229,10 @@ router.get('/search', function(req, res, next) {
     });
 });
 
-// Import CSV
+//========== End Search Student ==========
+
+//========== Import CSV ==========
+
 router.post('/csv', upload.single('csv'), function(req, res, next) {
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
@@ -286,8 +280,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                   message = validate.getMessage(err);
                   res.send(message);
                 } else {
-                  // req.flash('successMessage', 'Import CSV Successfully');
-                  // res.redirect('/students');
+                  req.flash('successMessage', 'Import CSV Successfully');
+                  res.redirect('/students');
                 }
               });
             });
@@ -302,7 +296,14 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
   }
 });
 
-// Approve Plan
+//========== End Import CSV ==========
+
+//========== Approve Plan ==========
+
+router.get('/plan/:id', function(req, res) {
+  res.render('account/approve', req.user);
+});
+
 router.get('/edit/plan_status/:id', function(req, res) {
   dataUser.findById(req.params.id)
     .populate('auth')
@@ -334,8 +335,34 @@ router.post('/edit/plan_status/:id', function(req, res) {
   );
 });
 
-router.get('/plan/:id', function(req, res) {
-  res.render('account/approve', req.user);
+//========== End Approve Plan ==========
+
+//========== DND ==========
+
+router.post('/update', function(req, res) {
+  var today = dateFunction.getDate();
+  console.log(req.body.data);
+  console.log(req.user._id);
+
+  dataUser.findOneAndUpdate(
+    {auth:req.user._id},
+    {
+      $set: {
+        'status': 'Pending',
+        'plan': req.body.data,
+      },
+    },
+    function(err, collection) {
+      if (err) {
+        message = validate.getMessage(err);
+        res.send(message);
+      } else {
+        res.send(collection);
+      }
+    }
+  );
 });
+
+//========== End DND ==========
 
 module.exports = router;
