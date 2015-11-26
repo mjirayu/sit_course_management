@@ -9,15 +9,21 @@ block content
           ol.breadcrumb
             li.active
               i.fa.fa-calendar
-              |  Years / Create
+              |  Years / Edit
       .row
         .col-lg-12
           .panel.panel-default
             .panel-body
-              form(name="create-course", method="post" action='/years')
+              form(name="create-course", method="post" action='/years/edit/' + id)
+                input(type="hidden" name="_method" value="put")
                 div.form-group
                   label Year Number
-                  input(type="text", name="Year", placeholder="ex 2555", value=year).form-control
+                  input(type="text", name="year", placeholder="ex 2555", value=year).form-control
+                div.form-group
+                  label Status
+                  select(name="status").form-control
+                    option(value="Active") Active
+                    option(value="Inactive") Inactive
                 div.form-group.pickdate
                   label Semester 1
                   div.input-daterange.input-group
@@ -33,3 +39,9 @@ block content
                 
                 div.form-group
                   button(type="submit").btn.btn-primary submit
+    script.
+        $('select[name="status"] option').each(function(){
+          if ($(this).val() == '#{status}'){
+            $(this).attr('selected', 'selected');
+          } 
+        });

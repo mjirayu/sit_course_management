@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var yearSemesterData = require('./../models/year_semester');
 
+var validate = require('./../helpers/validate');
+
 router.get('/', function(req, res) {
   yearSemesterData.find({}, function(err, collection) {
     if (err)
@@ -38,13 +40,15 @@ router.post('/', function(req, res) {
   });
 });
 
-router.get('/:id', function(req, res) {
+router.get('/edit/:id', function(req, res) {
   yearSemesterData.findById(req.params.id, function(err, collection) {
     if (err)
       res.send(err);
 
     data = {};
+    data.id = collection._id;
     data.year = collection.year;
+    data.status = collection.status;
     var temp = new Date(collection.startSemesterOne);
     data.startSemesterOne = (temp.getMonth() + 1) + '/' + temp.getDate() + '/' + temp.getFullYear();
     temp = new Date(collection.endSemesterOne);
@@ -56,6 +60,30 @@ router.get('/:id', function(req, res) {
     res.render('years/edit', data);
   });
 
+});
+
+router.post('/edit/:id', function(req, res) {
+  yearSemesterData.findByIdAndUpdate(
+    req.params.id,
+      {
+        $set: {
+          'year': req.body.year,
+          'status': req.body.status,
+          'startSemesterOne': req.body.startsemester1,
+          'endSemesterOne': req.body.endsemester1,
+          'startSemesterTwo': req.body.startsemester2,
+          'endSemesterTwo': req.body.endsemester2,
+        },
+      },
+      function(err, collection) {
+        if (err) {
+          message = validate.getMessage(err);
+          res.send(message);
+        } else {
+          res.redirect('/years');
+        }
+      }
+    );
 });
 
 router.post('/delete/:id', function(req, res) {

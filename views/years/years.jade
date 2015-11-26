@@ -32,7 +32,7 @@ block content
 										td=data.year
 										td=data.status
 										td
-											a(href="years/"+data._id).btn.btn-success View
+											a(href="years/edit/" + data._id).btn.btn-success View
 										td
 											form(name="delete-form", method="post" action='years/delete/' + data._id)
 												input(type="hidden" name="_method" value="delete")
