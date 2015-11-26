@@ -5,13 +5,19 @@ var mongoose = require('mongoose');
 var auth = require('./../middlewares/auth');
 var dataCourse = require('./../models/course');
 var dataUserProfile = require('./../models/user_profile');
+var dataDepartment = require('./../models/department');
+
+//Helpers
+var dateFunction = require('./../helpers/date');
+var authtentication = require('./../helpers/auth');
+var validate = require('./../helpers/validate');
 
 router.get('/', function(req, res, next) {
   dataCourse.find({})
     .sort('recommended_year')
     .populate('instructor')
+    .populate('department')
     .exec(function(err, collection) {
-      console.log(collection);
       res.render('course/index', {
         datas: collection,
       });
@@ -20,14 +26,17 @@ router.get('/', function(req, res, next) {
 
 router.get('/create', function(req, res) {
   dataCourse.find({}, function(err, collection) {
-    dataUserProfile.find({})
-      .populate('auth')
-      .exec(function(err, users) {
-        res.render('course/create', {
-          datas: collection,
-          users: users,
+    dataDepartment.find({}, function(err, departments) {
+      dataUserProfile.find({})
+        .populate('auth')
+        .exec(function(err, users) {
+          res.render('course/create', {
+            datas: collection,
+            users: users,
+            departments: departments,
+          });
         });
-      });
+    });
   });
 });
 
@@ -46,30 +55,26 @@ router.post('/create', function(req, res) {
   res.redirect('/course');
 });
 
-router.get('/:id', function(req, res) {
-  dataCourse.findById(req.params.id, function(err, collection) {
-    res.json(collection);
-  });
-});
-
 router.get('/edit/:id', function(req, res, next) {
   dataCourse.findById(req.params.id, function(err, collection) {
     dataCourse.find({}, function(err, courses) {
-      dataUserProfile.find({})
-        .populate('auth')
-        .exec(function(err, users) {
-          res.render('course/edit', {
-            data: collection,
-            courses: courses,
-            users: users,
+      dataDepartment.find({}, function(err, departments) {
+        dataUserProfile.find({})
+          .populate('auth')
+          .exec(function(err, users) {
+            res.render('course/edit', {
+              data: collection,
+              courses: courses,
+              users: users,
+              departments: departments,
+            });
           });
-        });
+      });
     });
   });
 });
 
 router.post('/edit/:id', function(req, res) {
-  console.log(req.body);
   dataCourse.findById(req.params.id, function(err, collection) {
     collection.update({
       course_name: req.body.course_name,

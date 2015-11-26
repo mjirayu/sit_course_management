@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var User_Profile = require('./user_profile');
+var Department = require('./department');
 
 var courseSchema = new Schema({
   course_name: String,
@@ -11,14 +12,17 @@ var courseSchema = new Schema({
   credit: String,
   instructor: {
     type: Schema.ObjectId,
-    ref: 'User_Profile'
+    ref: 'User_Profile',
   },
-  department: String,
+  department: {
+    type: Schema.ObjectId,
+    ref: 'Department',
+  },
   prerequisite: Array,
+  corequisite: Array,
   description: String,
   recommended_year: Number,
   type: String,
-  last_update: String,
 });
 
 module.exports = mongoose.model('Course', courseSchema);
