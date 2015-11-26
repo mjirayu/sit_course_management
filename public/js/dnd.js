@@ -6,7 +6,7 @@ var year = {
 
 var selectElement = {};
 
-angular.module('app',['dndLists']).controller('dndController', function($scope,$http) {
+angular.module('app', ['dndLists']).controller('dndController', function($scope, $http) {
   $scope.entranced_year = 2555;
   $scope.plandata = {};
   $http.get(base_url + 'api/course').success(function(response) {
@@ -19,7 +19,7 @@ angular.module('app',['dndLists']).controller('dndController', function($scope,$
       console.log('true');
       $http({
         method: 'POST',
-        url: base_url+'students/update',
+        url: base_url + 'students/update',
         data: {data: $scope.plandata.plan},
       }).then(function(response) {
         console.log(response);
