@@ -1,10 +1,14 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var Department = require('./department');
 
 var planSchema = new Schema({
   plan_name: String,
   description: String,
-  department: String,
+  department: {
+    type: Schema.ObjectId,
+    ref: 'Department',
+  },
   course_list: {
     plan: Array
   },

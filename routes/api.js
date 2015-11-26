@@ -17,10 +17,6 @@ router.get('/user/:id', auth, function(req, res, next) {
   });
 });
 
-router.get('/adisak', auth, function(req, res) {
-  res.send(req.user._id);
-});
-
 router.post('/user/plan', auth, function(req, res) {
   console.log(req.body);
   data = {
@@ -50,9 +46,11 @@ router.post('/user/user_profile', auth, function(req, res) {
 });
 
 router.get('/defaultplan/:id', function(req, res, next) {
-  dataPlan.findById(req.params.id, function(err, collection) {
-    res.json(collection);
-  });
+  dataPlan.findById(req.params.id)
+    .populate('department')
+    .exec(function(err, collection) {
+      res.json(collection);
+    });
 });
 
 router.get('/course', function(req, res) {

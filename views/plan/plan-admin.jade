@@ -30,7 +30,7 @@ block content
 								each data in datas
 									tr
 										td=data.plan_name
-										td=data.department
+										td=data.department.name
 										td
 											a(href="defaultplan/"+data._id).btn.btn-success View
 										td
