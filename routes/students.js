@@ -53,12 +53,17 @@ router.get('/', function(req, res, next) {
         return item;
       });
 
-      res.render('account/student', {
-        datas: datas,
-        successMessage: req.flash('successMessage'),
-        errorMessage: req.flash('errorMessage'),
+      dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
+        dataDepartment.find({}, function(err, departments) {
+          res.render('account/student', {
+            datas: datas,
+            departments: departments,
+            entracnedYears: entracnedYears,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+          });
+        });
       });
-
     });
 });
 
@@ -194,33 +199,44 @@ router.post('/signup', function(req, res) {
 });
 
 // Search Student
-// router.get('/search', function(req, res, next) {
-//   var params = req.query;
-//   var po_id = new RegExp(params.po_id, 'i');
-//   var po_status = new RegExp(params.po_status, 'i');
-//   var sp_name = new RegExp(params.sp_name, 'i');
-//   var order_date = new RegExp(params.order_date, 'i');
-//
-//   dataPOHeader
-//     .find({
-//       po_id: { $regex: po_id },
-//       po_status: { $regex: po_status },
-//       order_date: { $regex: order_date },
-//     })
-//     .populate('sp_id', null, {name: { $regex: sp_name }})
-//     .exec(function(err, collection) {
-//       if (err) res.send(err);
-//       data = collection.filter(function(item) {
-//         if (item.sp_id == null) return false;
-//         return true;
-//       })
-//       .map(function(item) {
-//         return item;
-//       });
-//
-//       res.send(data);
-//     });
-// });
+router.get('/search', function(req, res, next) {
+  var params = req.query;
+  var student_id = new RegExp(params.student_id, 'i');
+  var department = new RegExp(params.department, 'i');
+  var entranced_year = new RegExp(params.entranced_year, 'i');
+
+  dataUser
+    .find({
+      identity: { $regex: student_id },
+      entranced_year: { $regex: entranced_year },
+    })
+    .populate('department', null, {abbreviation: { $regex: department }})
+    .exec(function(err, collection) {
+      if (err) res.send(err);
+      datas = collection.filter(function(item) {
+        if (item.department == null) return false;
+        return true;
+      })
+      .map(function(item) {
+        return item;
+      });
+
+      dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
+        dataDepartment.find({}, function(err, departments) {
+          res.render('account/student', {
+            datas: datas,
+            departments: departments,
+            departmentSearch: params.department,
+            entrancedYearSearch: params.entranced_year,
+            entracnedYears: entracnedYears,
+            studentID: params.student_id,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+          });
+        });
+      });
+    });
+});
 
 // Import CSV
 router.post('/csv', upload.single('csv'), function(req, res, next) {

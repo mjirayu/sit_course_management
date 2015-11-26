@@ -29,3 +29,13 @@ td.list-data {
 .import-btn {
   margin-right: 0.5em;
 }
+
+.search-group {
+  width: 20%;
+  float: left;
+  margin-right: 1em;
+}
+
+.search-button-group {
+  margin-top: 2.5em;  
+}

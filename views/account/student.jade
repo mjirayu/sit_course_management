@@ -13,6 +13,7 @@ block content
 						li.active
 							i.fa.fa-user
 							|  Students
+							
 			if successMessage != ''
 				.row
 					.col-lg-12
@@ -24,6 +25,31 @@ block content
 							ul
 							each message in errorMessage
 								li= message
+								
+			.row
+				.col-lg-12
+					.panel.panel-default
+						.panel-body
+							form(name="signup-form", method="get" action='/students/search')
+								div.form-group.search-group
+									label StudentID
+									input(type="text", name="student_id").form-control
+								div.form-group.search-group
+									label Department
+									select(name="department").form-control
+										option(value="") Choose Department
+										each department in departments
+											option(value="#{department.abbreviation}") #{department.name}
+								div.form-group.search-group
+									label Entranced Year
+									select(name="entranced_year").form-control
+										option(value="") Choose Entranced Year
+										each entracnedYear in entracnedYears
+											option(value="#{entracnedYear}") #{entracnedYear}
+								div.form-group.search-button-group.pull-left
+									button(type="submit" style="margin-right: 1em").btn.btn-primary Search
+									a(href="/students").btn.btn-danger Clear
+								
 			.row
 				.col-lg-12
 					.panel.panel-default
@@ -49,3 +75,20 @@ block content
 											form(name="delete-form", method="post" action='/students/delete/' + data._id)
 												input(type="hidden" name="_method" value="delete")
 												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
+			
+				script.
+					$('select[name="department"] option').each(function(){
+						if ($(this).val() == '#{departmentSearch}'){
+							$(this).attr('selected', 'selected');
+						} 
+					});
+
+					$('select[name="entranced_year"] option').each(function(){
+						if ($(this).val() == '#{entrancedYearSearch}'){
+							$(this).attr('selected', 'selected');
+						} 
+					});
+
+					$('input[name="student_id"]').each(function(){
+						$(this).val(#{studentID});
+					});
