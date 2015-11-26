@@ -48,6 +48,7 @@ router.post('/create', function(req, res) {
     instructor: req.body.instructor,
     department: req.body.department,
     prerequisite: req.body.prerequisite,
+    corequisite: req.body.prerequisite,
     recommended_year: req.body.recommended_year,
     description: req.body.description,
     type: req.body.type,
@@ -85,7 +86,7 @@ router.post('/edit/:id', function(req, res) {
       prerequisite: req.body.prerequisite,
       recommended_year: req.body.recommended_year,
       description: req.body.description,
-      type: req.body.type
+      type: req.body.type,
     }, function(err) {
       if (err) {
         res.send(err);

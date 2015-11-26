@@ -114,14 +114,13 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     $scope.modelAsJson = angular.toJson(model, true);
   }, true);
 
-}).controller("planController", function($scope,$http) {
+}).controller('planController', function($scope,$http) {
 
   $scope.courselist = {};
   $http.get(base_url+ 'api/course').success(function(response) {
-    $scope.courselist = response; console.log($scope.courselist);
-
+    $scope.courselist = response;
+    console.log($scope.courselist);
   });
-
 
   $scope.plandata = {
 
@@ -129,60 +128,59 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       {
         course: [],
         semester: 1,
-        year: 1
+        year: 1,
       },
       {
         course: [],
         semester: 2,
-        year: 1
+        year: 1,
       },
       {
         course: [],
         semester: 1,
-        year: 2
+        year: 2,
       },
       {
         course: [],
         semester: 2,
-        year: 2
+        year: 2,
       },
       {
         course: [],
         semester: 1,
-        year: 3
+        year: 3,
       },
       {
         course: [],
         semester: 2,
-        year: 3
+        year: 3,
       },
       {
         course: [],
         semester: 1,
-        year: 4
+        year: 4,
       },
       {
         course: [],
         semester: 2,
-        year: 4
-      }
-
-    ]
+        year: 4,
+      },
+    ],
   };
 
-  $scope.save = function(){
+  $scope.save = function() {
     var data = {};
     data.department = $('select[name="department"]').val();
     data.description = $('input[name="description"]').val();
     data.plan_name = $('input[name="plan_name"]').val();
     data.course_list = angular.copy(this.plandata);
-    if(data.department == "" || data.description == "" || data.plan_name == ""){
+    if (data.department == '' || data.description == '' || data.plan_name == '') {
         $('.alert-message').slideDown().delay(2000).slideUp();
-    }else{
+    } else {
 
       $http({
         method: 'POST',
-        url: base_url+'api/plan',
+        url: base_url + 'api/plan',
         data: {data: data},
 
       }).then(function(response){
@@ -197,31 +195,27 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   $scope.$watch('plandata', function(model) {
     $scope.modelAsJson = angular.toJson(model, true);
   }, true);
-}).controller("planControllerEdit", function($scope,$http) {
+}).controller('planControllerEdit', function($scope,$http) {
 
   $scope.courselist = {};
   $http.get(base_url + 'api/course').success(function(response) {
-    $scope.courselist = response; console.log($scope.courselist);
-
+    $scope.courselist = response;
+    console.log($scope.courselist);
   });
-  var filter_course = function(id){
-    $scope.courselist = $scope.courselist.filter(function(element){
+
+  var filter_course = function(id) {
+    $scope.courselist = $scope.courselist.filter(function(element) {
       return element.course_id != id;
     });
   };
-  $http.get(window.location.origin+"/api"+window.location.pathname).success(function(response) {
 
-    $scope.plandata = response.course_list; console.log($scope.plandata);
+  $http.get(window.location.origin + '/api' + window.location.pathname).success(function(response) {
+    $scope.plandata = response.course_list;
+    console.log($scope.plandata);
     $("input[name='plan_name']").val(response.plan_name);
     $("input[name='description']").val(response.description);
-    $('#Departmentinfo').text(response.department);
-    // $('option').each(function(){
-    //   console.log($(this).val());
-    //   if($(this).val() == response.department){
-    //     $(this).prop('selected', true);
-    //     console.log('hi');
-    //   }
-    // });
+    $('#Departmentinfo').text(response.department.abbreviation);
+
     if($scope.plandata.plan){
       $scope.plandata.plan.map(function(item){
         if(item.course){
@@ -250,14 +244,19 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
         $('.alert-message').slideDown().delay(2000).slideUp();
     }else{
 
-      $.ajax({type:"PUT",url:base_url+'api'+window.location.pathname,data: {data: JSON.stringify(data)}}).done(function(data) {
-            console.log(data);
-            window.location.replace(base_url+"plan");
+      $.ajax({
+        type:"PUT",
+        url:base_url + 'api' + window.location.pathname, data: {
+          data: JSON.stringify(data)
+        }
+      }).done(function(data) {
+        console.log(data);
+        window.location.replace(base_url + "plan");
 
-          }).fail(function(data) {
-            console.log("fail");
-            console.log(data);
-          });
+      }).fail(function(data) {
+        console.log("fail");
+        console.log(data);
+      });
 
       // $http.put({
       //   url: base_url+'api/plan',
@@ -276,20 +275,13 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   }, true);
 }).controller("planControllerApprove", function($scope,$http) {
 
-
   $http.get(window.location.origin+"/api"+window.location.pathname).success(function(response) {
     console.log(response);
     $scope.plandata = response; console.log($scope.plandata);
     $("input[name='plan_name']").val(response.fullname);
 
     $('#Departmentinfo').text(response.department);
-    // $('option').each(function(){
-    //   console.log($(this).val());
-    //   if($(this).val() == response.department){
-    //     $(this).prop('selected', true);
-    //     console.log('hi');
-    //   }
-    // });
+
     if($scope.plandata.plan){
       $scope.plandata.plan.map(function(item){
         if(item.course){
@@ -304,7 +296,6 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
 
       });
     }
-
 
   });
 
