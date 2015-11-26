@@ -1,0 +1,27 @@
+extends ../layout/admin_layout
+
+block content
+  #page-wrapper
+    .container-fluid
+      .row
+        .col-lg-12
+          h1.page-header
+            | Edit Department
+          ol.breadcrumb
+            li.active
+              i.fa.fa-location-arrow
+              |  Department / Edit
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              form(name="edit-course", method="post" action='/department/edit/#{data._id}')
+                input(type="hidden" name="_method" value="put")
+                div.form-group
+                  label Department Name
+                  input(type="text", name="name" value="#{data.name}").form-control
+                div.form-group
+                  label Abbreviation
+                  input(type="text", name="abbreviation" value="#{data.abbreviation}").form-control
+                div.form-group
+                  button(type="submit").btn.btn-primary submit

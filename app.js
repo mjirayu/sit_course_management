@@ -14,11 +14,11 @@ var admin = require('./routes/admin');
 var students = require('./routes/students');
 var instructors = require('./routes/instructors');
 var course = require('./routes/course');
+var department = require('./routes/department');
 var plan = require('./routes/plan');
 var api = require('./routes/api');
 var years = require('./routes/year_semester');
 var defaultplan = require('./routes/defaultplan');
-//var yearSemester = require('./routes/year_semester');
 
 var mongoose = require('mongoose');
 
@@ -38,14 +38,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.use(session({
   secret: 'anything', proxy: true,
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
 }));
 app.use(methodOverride('_method'));
 
@@ -59,10 +60,12 @@ app.use('/students', students);
 app.use('/instructors', instructors);
 app.use('/admin', admin);
 app.use('/course', course);
+app.use('/department', department);
 app.use('/api', api);
 app.use('/plan', plan);
-app.use('/years',years);
-app.use('/defaultplan',defaultplan);
+app.use('/years', years);
+app.use('/defaultplan', defaultplan);
+
 // app.use('/year_semester', yearSemester);
 
 // catch 404 and forward to error handler
@@ -81,7 +84,7 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
     });
   });
 }
@@ -92,7 +95,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
   });
 });
 

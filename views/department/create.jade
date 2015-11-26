@@ -1,0 +1,26 @@
+extends ../layout/admin_layout
+
+block content
+  #page-wrapper
+    .container-fluid
+      .row
+        .col-lg-12
+          h1.page-header
+            | Create Department 
+          ol.breadcrumb
+            li.active
+              i.fa.fa-location-arrow
+              |  Department / Create
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              form(name="create-course", method="post" action='/department/create')
+                div.form-group
+                  label Department Name
+                  input(type="text", name="name").form-control
+                div.form-group
+                  label Abbreviation
+                  input(type="text", name="abbreviation").form-control
+                div.form-group
+                  button(type="submit").btn.btn-primary submit

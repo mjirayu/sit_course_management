@@ -1,0 +1,36 @@
+extends ../layout/admin_layout
+
+block content
+  #page-wrapper
+    .container-fluid
+      .row
+        .col-lg-12
+          h1.page-header
+            | Department
+            a(href='department/create').btn.btn-success.pull-right Create
+          ol.breadcrumb
+            li.active
+              i.fa.fa-location-arrow
+              | Department
+              
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              table.table
+                thead
+                  th Name
+                  th Abbreviation
+                  th 
+                  th 
+                tbody
+                each data in datas
+                  tr
+                    td.list-data=data.name
+                    td.list-data=data.abbreviation
+                    td.course-edit  
+                      a(href='department/edit/' + data._id).btn.btn-info Edit  
+                    td.course-delete
+                      form(name="delete-form", method="post" action='/department/delete/' + data._id)
+                        input(type="hidden" name="_method" value="delete")
+                        button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
