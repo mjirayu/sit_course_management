@@ -43,6 +43,12 @@ block content
                     each data in datas
                       option(value="#{data.course_id}") #{data.course_id}
                 div.form-group
+                  label Corequisite
+                  select(name="corequisite").form-control
+                    option(value="None") None
+                    each data in datas
+                      option(value="#{data.course_id}") #{data.course_id}
+                div.form-group
                   label Recommended Year
                   select(name="recommended_year").form-control
                     option(value="1") 1

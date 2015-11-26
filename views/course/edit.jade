@@ -45,6 +45,13 @@ block content
                       if(course.course_id != data.course_id)
                         option(value="#{course.course_id}") #{course.course_id}
                 div.form-group
+                  label Corequisite
+                  select(name="corequisite").form-control
+                    option(value="None") None
+                    each course in courses
+                      if(course.course_id != data.course_id)
+                        option(value="#{course.course_id}") #{course.course_id}
+                div.form-group
                   label Recommended Year
                   select(name="recommended_year").form-control
                     option(value="1") 1
@@ -70,6 +77,12 @@ block content
         
         $('select[name="prerequisite"] option').each(function(){
           if ($(this).val() == '#{data.prerequisite}'){
+            $(this).attr('selected', 'selected');
+          } 
+        })
+        
+        $('select[name="corequisite"] option').each(function(){
+          if ($(this).val() == '#{data.corequisite}'){
             $(this).attr('selected', 'selected');
           } 
         })
