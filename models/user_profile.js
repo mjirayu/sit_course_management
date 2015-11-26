@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
+var Department = require('./department');
 
 var Auth_User = require('./auth_user');
 var Plan  = require('./plan');
@@ -12,7 +13,8 @@ var userProfileSchema = new Schema({
     required: 'fullname is requried!',
   },
   department: {
-    type: String,
+    type: Schema.ObjectId,
+    ref: 'Department',
   },
   email: {
     type: String,
@@ -38,7 +40,7 @@ var userProfileSchema = new Schema({
   last_update: {
     type: String,
     required: 'last_update is required!',
-  }
+  },
 });
 
 userProfileSchema.plugin(uniqueValidator);

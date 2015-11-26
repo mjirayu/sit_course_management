@@ -32,8 +32,8 @@ block content
                 div.form-group
                   label Department
                   select(name="department").form-control
-                    option(value="Computer Science") Computer Science
-                    option(value="Information Technology") Information Technology
+                    each department in departments
+                      option(value="#{department._id}") #{department.name}
                 div.form-group
                   label Plan
                   select(name="plan_name").form-control

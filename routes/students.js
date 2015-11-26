@@ -28,6 +28,7 @@ var auth = require('./../middlewares/auth');
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
+var dataDepartment = require('./../models/department');
 
 // Helpers
 var dateFunction = require('./../helpers/date');
@@ -37,6 +38,7 @@ var validate = require('./../helpers/validate');
 router.get('/', function(req, res, next) {
   dataUser.find({})
     .populate('auth', null, {is_student: 1})
+    .populate('department')
     .exec(function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
@@ -61,11 +63,16 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/edit/:id', function(req, res) {
-  dataUser.findById(req.params.id)
-    .populate('auth')
-    .exec(function(err, collection) {
-      res.render('account/student-edit', {data: collection});
-    });
+  dataDepartment.find({}, function(err, departments) {
+    dataUser.findById(req.params.id)
+      .populate('auth')
+      .exec(function(err, collection) {
+        res.render('account/student-edit', {
+          data: collection,
+          departments: departments,
+        });
+      });
+  });
 });
 
 //update from dnd page only
@@ -78,6 +85,7 @@ router.post('/update', function(req, res) {
     {auth:req.user._id},
     {
       $set: {
+        'status': 'Pending',
         'plan': req.body.data,
       },
     },
@@ -134,9 +142,12 @@ router.post('/delete/:id', function(req, res) {
 
 router.get('/signup', function(req, res) {
   dataPlan.find({}, function(err, collection) {
-    res.render('account/student-signup', {
-      errorMessage: req.flash('errorMessage'),
-      plans: collection,
+    dataDepartment.find({}, function(err, departments) {
+      res.render('account/student-signup', {
+        errorMessage: req.flash('errorMessage'),
+        plans: collection,
+        departments: departments,
+      });
     });
   });
 });
@@ -181,6 +192,35 @@ router.post('/signup', function(req, res) {
       });
     });
 });
+
+// Search Student
+// router.get('/search', function(req, res, next) {
+//   var params = req.query;
+//   var po_id = new RegExp(params.po_id, 'i');
+//   var po_status = new RegExp(params.po_status, 'i');
+//   var sp_name = new RegExp(params.sp_name, 'i');
+//   var order_date = new RegExp(params.order_date, 'i');
+//
+//   dataPOHeader
+//     .find({
+//       po_id: { $regex: po_id },
+//       po_status: { $regex: po_status },
+//       order_date: { $regex: order_date },
+//     })
+//     .populate('sp_id', null, {name: { $regex: sp_name }})
+//     .exec(function(err, collection) {
+//       if (err) res.send(err);
+//       data = collection.filter(function(item) {
+//         if (item.sp_id == null) return false;
+//         return true;
+//       })
+//       .map(function(item) {
+//         return item;
+//       });
+//
+//       res.send(data);
+//     });
+// });
 
 // Import CSV
 router.post('/csv', upload.single('csv'), function(req, res, next) {
@@ -230,8 +270,8 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                   message = validate.getMessage(err);
                   res.send(message);
                 } else {
-                  req.flash('successMessage', 'Import CSV Successfully');
-                  res.redirect('/students');
+                  // req.flash('successMessage', 'Import CSV Successfully');
+                  // res.redirect('/students');
                 }
               });
             });
