@@ -230,6 +230,41 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 
 // ========== End CSV Instructor ==========
 
+//========== Search Instructor ==========
+
+router.get('/search', function(req, res, next) {
+  var params = req.query;
+  var instructor_id = new RegExp(params.instructor_id, 'i');
+  var fullname = new RegExp(params.fullname, 'i');
+
+  dataUser
+    .find({
+      identity: { $regex: instructor_id },
+      fullname: { $regex: fullname },
+    })
+    .populate('auth', null, {is_instructor: 1})
+    .exec(function(err, collection) {
+
+      datas = collection.filter(function(item) {
+        if (item.auth == null) return false;
+        return true;
+      })
+      .map(function(item) {
+        return item;
+      });
+
+      res.render('account/instructor', {
+        datas: datas,
+        fullName: params.fullname,
+        instructorID: params.instructor_id,
+        successMessage: req.flash('successMessage'),
+        errorMessage: req.flash('errorMessage'),
+      });
+    });
+});
+
+//========== End Search Instructor ==========
+
 // ========== Approve Plan ==========
 
 router.get('/approve_plan', function(req, res) {

@@ -195,17 +195,22 @@ router.get('/search', function(req, res, next) {
   var student_id = new RegExp(params.student_id, 'i');
   var department = new RegExp(params.department, 'i');
   var entranced_year = new RegExp(params.entranced_year, 'i');
+  var fullname = new RegExp(params.fullname, 'i');
 
   dataUser
     .find({
       identity: { $regex: student_id },
       entranced_year: { $regex: entranced_year },
+      fullname: { $regex: fullname },
     })
     .populate('department', null, {abbreviation: { $regex: department }})
+    .populate('auth', null, {is_student: 1})
     .exec(function(err, collection) {
+
       if (err) res.send(err);
       datas = collection.filter(function(item) {
         if (item.department == null) return false;
+        if (item.auth == null) return false;
         return true;
       })
       .map(function(item) {
@@ -220,6 +225,7 @@ router.get('/search', function(req, res, next) {
             departmentSearch: params.department,
             entrancedYearSearch: params.entranced_year,
             entracnedYears: entracnedYears,
+            fullName: params.fullname,
             studentID: params.student_id,
             successMessage: req.flash('successMessage'),
             errorMessage: req.flash('errorMessage'),

@@ -13,6 +13,7 @@ block content
 						li.active
 							i.fa.fa-user
 							|  Instructors
+							
 			if successMessage != ''
 				.row
 					.col-lg-12
@@ -25,6 +26,21 @@ block content
 							ul
 							each message in errorMessage
 								li= message
+								
+			.row
+				.col-lg-12
+					.panel.panel-default
+						.panel-body
+							form(name="signup-form", method="get" action='/instructors/search')
+								div.form-group.search-group
+									label Instructor ID
+									input(type="text", name="instructor_id").form-control
+								div.form-group.search-group
+									label Full Name
+									input(type="text", name="fullname").form-control
+								div.form-group.search-button-group.pull-left
+									button(type="submit" style="margin-right: 1em").btn.btn-primary Search
+									a(href="/instructors").btn.btn-danger Clear
 								
 			.row
 				.col-lg-12
@@ -47,3 +63,12 @@ block content
 											form(name="delete-form", method="post" action='/instructors/delete/' + data._id)
 												input(type="hidden" name="_method" value="delete")
 												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
+												
+				script.
+					$('input[name="instructor_id"]').each(function(){
+						$(this).val(#{instructorID});
+					});
+
+					$('input[name="fullname"]').each(function(){
+						$(this).val('#{fullName}');
+					});

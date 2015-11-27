@@ -35,6 +35,9 @@ block content
 									label StudentID
 									input(type="text", name="student_id").form-control
 								div.form-group.search-group
+									label Full Name
+									input(type="text", name="fullname").form-control
+								div.form-group.search-group
 									label Department
 									select(name="department").form-control
 										option(value="") Choose Department
@@ -91,4 +94,8 @@ block content
 
 					$('input[name="student_id"]').each(function(){
 						$(this).val(#{studentID});
+					});
+					
+					$('input[name="fullname"]').each(function(){
+						$(this).val('#{fullName}');
 					});
