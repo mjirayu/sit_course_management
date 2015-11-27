@@ -12,6 +12,44 @@ block content
             li.active
               i.fa.fa-file
               |  Course
+              
+      if successMessage != ''
+        .row
+          .col-lg-12
+            .alert.alert-success=successMessage
+            
+      if errorMessage != ''
+        .row
+          .col-lg-12
+            .alert.alert-danger
+              ul
+              each message in errorMessage
+                li= message
+                
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              form(name="signup-form", method="get" action='/course/search')
+                div.form-group.search-group
+                  label Couse Name
+                  input(type="text", name="course_name").form-control
+                div.form-group.search-group
+                  label Course ID
+                  input(type="text", name="course_id").form-control
+                div.form-group.search-group
+                  label Instructor Name
+                  input(type="text", name="fullname").form-control
+                div.form-group.search-group
+                  label Department
+                  select(name="department").form-control
+                    option(value="") Choose Department
+                    each department in departments
+                      option(value="#{department.abbreviation}") #{department.name}
+                div.form-group.search-button-group.pull-left
+                  button(type="submit" style="margin-right: 1em").btn.btn-primary Search
+                  a(href="/course").btn.btn-danger Clear
+            
       .row
         .col-lg-12
           .panel.panel-default
@@ -41,3 +79,22 @@ block content
                       form(name="delete-form", method="post" action='/course/delete/' + data._id)
                         input(type="hidden" name="_method" value="delete")
                         button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
+                        
+        script.
+          $('select[name="department"] option').each(function(){
+            if ($(this).val() == '#{departmentSearch}'){
+              $(this).attr('selected', 'selected');
+            } 
+          });
+
+          $('input[name="course_id"]').each(function(){
+            $(this).val('#{courseID}');
+          });
+
+          $('input[name="course_name"]').each(function(){
+            $(this).val('#{courseName}');
+          });
+          
+          $('input[name="fullname"]').each(function(){
+            $(this).val('#{fullName}');
+          });
