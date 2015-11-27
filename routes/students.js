@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var multer  = require('multer');
 var fs = require('fs');
+var json2csv = require('json2csv');
 var readline = require('readline');
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -306,6 +307,30 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 });
 
 //========== End Import CSV ==========
+
+//========== Export CSV ==========
+
+router.get('/exports', function(req, res, next) {
+  dataAuthUser.find({is_student: 1}, 'username reset_password', function(err, collection) {
+    datas = collection.filter(function(item) {
+      if (item.reset_password == '') return false;
+      return true;
+    })
+    .map(function(item) {
+      return item;
+    });
+
+    json2csv({data: datas, fields: ['username', 'reset_password']}, function(err, csv) {
+      if (err) console.log(err);
+      fs.writeFile('public/exports/file.csv', csv, function(err) {
+        if (err) throw err;
+        res.redirect('/exports/file.csv');
+      });
+    });
+  });
+});
+
+//========== End Export CSV ==========
 
 //========== Approve Plan ==========
 
