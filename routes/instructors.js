@@ -212,10 +212,10 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
                 message = validate.getMessage(err);
                 req.flash('errorMessage', message);
                 res.redirect('/instructors');
-              } else {
-                req.flash('successMessage', 'Import CSV Successfully');
-                res.redirect('/instructors');
               }
+            }).then(function() {
+              req.flash('successMessage', 'Import CSV Successfully');
+              res.redirect('/instructors');
             });
           }
         });

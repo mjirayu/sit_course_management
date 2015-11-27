@@ -270,26 +270,29 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
             message = validate.getMessage(err);
             res.send(message);
           } else {
-            dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
-              dataUser.create({
-                fullname: data[0],
-                department: data[1],
-                email: data[2],
-                identity: data[3],
-                entranced_year: data[4],
-                plan: plan.course_list.plan,
-                auth: authUser._id,
-                last_update: today
-              }, function(err) {
-                if (err) {
-                  authUser.remove();
-                  message = validate.getMessage(err);
-                  res.send(message);
-                } else {
-                  req.flash('successMessage', 'Import CSV Successfully');
-                  res.redirect('/students');
-                }
+            dataDepartment.findOne({abbreviation: data[1]}, function(err, department) {
+              dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
+                console.log(department._id);
+                dataUser.create({
+                  fullname: data[0],
+                  department: department._id,
+                  email: data[2],
+                  identity: data[3],
+                  entranced_year: data[4],
+                  plan: plan.course_list.plan,
+                  auth: authUser._id,
+                  last_update: today
+                }, function(err) {
+                  if (err) {
+                    authUser.remove();
+                    message = validate.getMessage(err);
+                    res.send(message);
+                  }
+                });
               });
+            }).then(function() {
+              req.flash('successMessage', 'Import CSV Successfully');
+              res.redirect('/students');
             });
           }
         });
