@@ -19,6 +19,8 @@ var storage = multer.diskStorage({
     cb(null, file.fieldname + '-' + Date.now() + filetype);
   },
 });
+var url = require('url');
+var qs = require('querystring');
 
 var upload = multer({ storage: storage });
 
@@ -35,13 +37,24 @@ var dataDepartment = require('./../models/department');
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
+var pagination = require('./../helpers/pagination');
 
 //========== GET Student ==========
 
 router.get('/', function(req, res, next) {
-  dataUser.find({})
+  var perPage = 10;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var params = qs.parse(url.parse(req.url).query);
+
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, params);
+  };
+
+  dataUser.find({ department: { $ne: null } })
     .populate('auth', null, {is_student: 1})
     .populate('department')
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
@@ -56,14 +69,19 @@ router.get('/', function(req, res, next) {
         return item;
       });
 
+
       dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
-        dataDepartment.find({}, function(err, departments) {
-          res.render('account/student', {
-            datas: datas,
-            departments: departments,
-            entracnedYears: entracnedYears,
-            successMessage: req.flash('successMessage'),
-            errorMessage: req.flash('errorMessage'),
+        dataUser.find({ department: { $ne: null } }).count().exec(function(err, count) {
+          dataDepartment.find({}, function(err, departments) {
+            res.render('account/student', {
+              datas: datas,
+              page: page,
+              pages: count / perPage,
+              departments: departments,
+              entracnedYears: entracnedYears,
+              successMessage: req.flash('successMessage'),
+              errorMessage: req.flash('errorMessage'),
+            });
           });
         });
       });
@@ -192,20 +210,31 @@ router.post('/signup', function(req, res) {
 //========== Search Student ==========
 
 router.get('/search', function(req, res, next) {
+  var perPage = 10;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var paramsPage = qs.parse(url.parse(req.url).query);
+
   var params = req.query;
   var student_id = new RegExp(params.student_id, 'i');
   var department = new RegExp(params.department, 'i');
   var entranced_year = new RegExp(params.entranced_year, 'i');
   var fullname = new RegExp(params.fullname, 'i');
 
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, paramsPage);
+  };
+
   dataUser
     .find({
       identity: { $regex: student_id },
       entranced_year: { $regex: entranced_year },
       fullname: { $regex: fullname },
+      department: { $ne: null },
     })
     .populate('department', null, {abbreviation: { $regex: department }})
     .populate('auth', null, {is_student: 1})
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
 
       if (err) res.send(err);
@@ -219,17 +248,21 @@ router.get('/search', function(req, res, next) {
       });
 
       dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
-        dataDepartment.find({}, function(err, departments) {
-          res.render('account/student', {
-            datas: datas,
-            departments: departments,
-            departmentSearch: params.department,
-            entrancedYearSearch: params.entranced_year,
-            entracnedYears: entracnedYears,
-            fullName: params.fullname,
-            studentID: params.student_id,
-            successMessage: req.flash('successMessage'),
-            errorMessage: req.flash('errorMessage'),
+        dataUser.find({ department: { $ne: null } }).count().exec(function(err, count) {
+          dataDepartment.find({}, function(err, departments) {
+            res.render('account/student', {
+              datas: datas,
+              departments: departments,
+              departmentSearch: params.department,
+              entrancedYearSearch: params.entranced_year,
+              entracnedYears: entracnedYears,
+              fullName: params.fullname,
+              studentID: params.student_id,
+              page: page,
+              pages: count / perPage,
+              successMessage: req.flash('successMessage'),
+              errorMessage: req.flash('errorMessage'),
+            });
           });
         });
       });
@@ -322,9 +355,9 @@ router.get('/exports', function(req, res, next) {
 
     json2csv({data: datas, fields: ['username', 'reset_password']}, function(err, csv) {
       if (err) console.log(err);
-      fs.writeFile('public/exports/file.csv', csv, function(err) {
+      fs.writeFile('public/exports/students.csv', csv, function(err) {
         if (err) throw err;
-        res.redirect('/exports/file.csv');
+        res.redirect('/exports/students.csv');
       });
     });
   });
