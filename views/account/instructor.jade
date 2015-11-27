@@ -64,6 +64,11 @@ block content
 												input(type="hidden" name="_method" value="delete")
 												button(type='submit' onclick="return confirm('Are you sure?');").btn.btn-danger Delete
 												
+			if (pages > 1)
+				.pagination
+					ul
+						!=createPagination(pages, page)
+												
 				script.
 					$('input[name="instructor_id"]').each(function(){
 						$(this).val(#{instructorID});

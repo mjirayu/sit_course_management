@@ -4,6 +4,8 @@ var crypto = require('crypto');
 var multer  = require('multer');
 var fs = require('fs');
 var readline = require('readline');
+var url = require('url');
+var qs = require('querystring');
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -35,12 +37,23 @@ var dataPlan = require('./../models/plan');
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
+var pagination = require('./../helpers/pagination');
 
 //========== GET Instrutor ==========
 
 router.get('/', function(req, res, next) {
-  dataUser.find({})
+  var perPage = 10;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var params = qs.parse(url.parse(req.url).query);
+
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, params);
+  };
+
+  dataUser.find({department: null })
     .populate('auth', null, {is_instructor: 1})
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
@@ -55,10 +68,14 @@ router.get('/', function(req, res, next) {
         return item;
       });
 
-      res.render('account/instructor', {
-        datas: datas,
-        successMessage: req.flash('successMessage'),
-        errorMessage: req.flash('errorMessage'),
+      dataUser.find({ department: null }).count().exec(function(err, count) {
+        res.render('account/instructor', {
+          datas: datas,
+          page: page,
+          pages: count / perPage,
+          successMessage: req.flash('successMessage'),
+          errorMessage: req.flash('errorMessage'),
+        });
       });
 
     });
@@ -233,16 +250,27 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 //========== Search Instructor ==========
 
 router.get('/search', function(req, res, next) {
+  var perPage = 10;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var params = qs.parse(url.parse(req.url).query);
+
   var params = req.query;
   var instructor_id = new RegExp(params.instructor_id, 'i');
   var fullname = new RegExp(params.fullname, 'i');
+
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, params);
+  };
 
   dataUser
     .find({
       identity: { $regex: instructor_id },
       fullname: { $regex: fullname },
+      department: null,
     })
     .populate('auth', null, {is_instructor: 1})
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
 
       datas = collection.filter(function(item) {
@@ -253,12 +281,16 @@ router.get('/search', function(req, res, next) {
         return item;
       });
 
-      res.render('account/instructor', {
-        datas: datas,
-        fullName: params.fullname,
-        instructorID: params.instructor_id,
-        successMessage: req.flash('successMessage'),
-        errorMessage: req.flash('errorMessage'),
+      dataUser.find({ department: null }).count().exec(function(err, count) {
+        res.render('account/instructor', {
+          datas: datas,
+          fullName: params.fullname,
+          instructorID: params.instructor_id,
+          page: page,
+          pages: count / perPage,
+          successMessage: req.flash('successMessage'),
+          errorMessage: req.flash('errorMessage'),
+        });
       });
     });
 });

@@ -15,6 +15,7 @@ var userProfileSchema = new Schema({
   department: {
     type: Schema.ObjectId,
     ref: 'Department',
+    default: null,
   },
   email: {
     type: String,
