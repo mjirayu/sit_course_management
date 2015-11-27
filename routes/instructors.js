@@ -252,14 +252,14 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 router.get('/search', function(req, res, next) {
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
-  var params = qs.parse(url.parse(req.url).query);
+  var paramsPage = qs.parse(url.parse(req.url).query);
 
   var params = req.query;
   var instructor_id = new RegExp(params.instructor_id, 'i');
   var fullname = new RegExp(params.fullname, 'i');
 
   res.locals.createPagination = function(pages, page) {
-    return pagination.createPagination(pages, page, params);
+    return pagination.createPagination(pages, page, paramsPage);
   };
 
   dataUser
@@ -281,7 +281,11 @@ router.get('/search', function(req, res, next) {
         return item;
       });
 
-      dataUser.find({ department: null }).count().exec(function(err, count) {
+      dataUser.find({
+        identity: { $regex: instructor_id },
+        fullname: { $regex: fullname },
+        department: null,
+      }).count().exec(function(err, count) {
         res.render('account/instructor', {
           datas: datas,
           fullName: params.fullname,

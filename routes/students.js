@@ -248,7 +248,12 @@ router.get('/search', function(req, res, next) {
       });
 
       dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
-        dataUser.find({ department: { $ne: null } }).count().exec(function(err, count) {
+        dataUser.find({
+          identity: { $regex: student_id },
+          entranced_year: { $regex: entranced_year },
+          fullname: { $regex: fullname },
+          department: { $ne: null },
+        }).count().exec(function(err, count) {
           dataDepartment.find({}, function(err, departments) {
             res.render('account/student', {
               datas: datas,
