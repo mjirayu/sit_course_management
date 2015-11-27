@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var url = require('url');
+var qs = require('querystring');
 
 var auth = require('./../middlewares/auth');
 var dataCourse = require('./../models/course');
@@ -11,20 +13,35 @@ var dataDepartment = require('./../models/department');
 var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
+var pagination = require('./../helpers/pagination');
 
 router.get('/', function(req, res, next) {
+  var perPage = 10;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var params = qs.parse(url.parse(req.url).query);
+
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, params);
+  };
+
   dataCourse.find({})
     .sort('recommended_year')
     .populate('instructor')
     .populate('department')
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
 
-      dataDepartment.find({}, function(err, departments) {
-        res.render('course/index', {
-          datas: collection,
-          departments: departments,
-          successMessage: req.flash('successMessage'),
-          errorMessage: req.flash('errorMessage'),
+      dataCourse.find({}).count().exec(function(err, count) {
+        dataDepartment.find({}, function(err, departments) {
+          res.render('course/index', {
+            datas: collection,
+            departments: departments,
+            page: page,
+            pages: count / perPage,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+          });
         });
       });
     });
@@ -117,11 +134,19 @@ router.post('/delete/:id', function(req, res, next) {
 });
 
 router.get('/search', function(req, res, next) {
+  var perPage = 2;
+  var page = req.param('page') > 0 ? req.param('page') : 0;
+  var paramsPage = qs.parse(url.parse(req.url).query);
+
   var params = req.query;
   var course_id = new RegExp(params.course_id, 'i');
   var course_name = new RegExp(params.course_name, 'i');
   var fullname = new RegExp(params.fullname, 'i');
   var department = new RegExp(params.department, 'i');
+
+  res.locals.createPagination = function(pages, page) {
+    return pagination.createPagination(pages, page, paramsPage);
+  };
 
   dataCourse
     .find({
@@ -130,8 +155,9 @@ router.get('/search', function(req, res, next) {
     })
     .populate('instructor', null, {fullname: { $regex: fullname }})
     .populate('department', null, {abbreviation: { $regex: department }})
+    .skip(perPage * page)
+    .limit(perPage)
     .exec(function(err, collection) {
-      console.log(collection);
 
       if (err) res.send(err);
       datas = collection.filter(function(item) {
@@ -143,16 +169,23 @@ router.get('/search', function(req, res, next) {
         return item;
       });
 
-      dataDepartment.find({}, function(err, departments) {
-        res.render('course/index', {
-          datas: datas,
-          departments: departments,
-          departmentSearch: params.department,
-          courseID: params.course_id,
-          courseName: params.course_name,
-          fullName: params.fullname,
-          successMessage: req.flash('successMessage'),
-          errorMessage: req.flash('errorMessage'),
+      dataCourse.find({
+        course_id: { $regex: course_id },
+        course_name: { $regex: course_name },
+      }).count().exec(function(err, count) {
+        dataDepartment.find({}, function(err, departments) {
+          res.render('course/index', {
+            datas: datas,
+            departments: departments,
+            departmentSearch: params.department,
+            courseID: params.course_id,
+            courseName: params.course_name,
+            fullName: params.fullname,
+            page: page,
+            pages: count / perPage,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+          });
         });
       });
     });
