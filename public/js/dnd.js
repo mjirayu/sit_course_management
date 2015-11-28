@@ -258,15 +258,6 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
         console.log(data);
       });
 
-      // $http.put({
-      //   url: base_url+'api/plan',
-      //   data: {data: data}
-      // }).then(function(response){
-      //   console.log(response);
-      //   window.location.replace("http://localhost:3000/plan");
-      // }, function(response){
-      //   console.log(response);
-      // });
     }
   };
 

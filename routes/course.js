@@ -15,7 +15,11 @@ var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
 var pagination = require('./../helpers/pagination');
 
-router.get('/', function(req, res, next) {
+router.get('/', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var params = qs.parse(url.parse(req.url).query);
@@ -41,13 +45,20 @@ router.get('/', function(req, res, next) {
             pages: count / perPage,
             successMessage: req.flash('successMessage'),
             errorMessage: req.flash('errorMessage'),
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
           });
         });
       });
     });
 });
 
-router.get('/create', function(req, res) {
+router.get('/create', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataCourse.find({}, function(err, collection) {
     dataDepartment.find({}, function(err, departments) {
       dataUserProfile.find({})
@@ -57,13 +68,16 @@ router.get('/create', function(req, res) {
             datas: collection,
             users: users,
             departments: departments,
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
           });
         });
     });
   });
 });
 
-router.post('/create', function(req, res) {
+router.post('/create', auth, function(req, res) {
   dataCourse.create({
     course_name: req.body.course_name,
     course_id: req.body.course_id,
@@ -79,7 +93,11 @@ router.post('/create', function(req, res) {
   res.redirect('/course');
 });
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataCourse.findById(req.params.id, function(err, collection) {
     dataCourse.find({}, function(err, courses) {
       dataDepartment.find({}, function(err, departments) {
@@ -91,6 +109,9 @@ router.get('/edit/:id', function(req, res, next) {
               courses: courses,
               users: users,
               departments: departments,
+              is_admin: req.user.is_admin,
+              is_instructor: req.user.is_instructor,
+              username: req.user.username,
             });
           });
       });
@@ -98,7 +119,7 @@ router.get('/edit/:id', function(req, res, next) {
   });
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
   dataCourse.findById(req.params.id, function(err, collection) {
     collection.update({
       course_name: req.body.course_name,
@@ -121,7 +142,7 @@ router.post('/edit/:id', function(req, res) {
   });
 });
 
-router.post('/delete/:id', function(req, res, next) {
+router.post('/delete/:id', auth, function(req, res, next) {
   dataCourse.findById(req.params.id, function(err, data) {
     data.remove(function(err) {
       if (err) {
@@ -133,8 +154,12 @@ router.post('/delete/:id', function(req, res, next) {
   });
 });
 
-router.get('/search', function(req, res, next) {
-  var perPage = 2;
+router.get('/search', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
+  var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var paramsPage = qs.parse(url.parse(req.url).query);
 
@@ -185,6 +210,9 @@ router.get('/search', function(req, res, next) {
             pages: count / perPage,
             successMessage: req.flash('successMessage'),
             errorMessage: req.flash('errorMessage'),
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
           });
         });
       });

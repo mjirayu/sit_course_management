@@ -41,7 +41,11 @@ var pagination = require('./../helpers/pagination');
 
 //========== GET Student ==========
 
-router.get('/', function(req, res, next) {
+router.get('/', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var params = qs.parse(url.parse(req.url).query);
@@ -69,7 +73,6 @@ router.get('/', function(req, res, next) {
         return item;
       });
 
-
       dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
         dataUser.find({ department: { $ne: null } }).count().exec(function(err, count) {
           dataDepartment.find({}, function(err, departments) {
@@ -81,6 +84,9 @@ router.get('/', function(req, res, next) {
               entracnedYears: entracnedYears,
               successMessage: req.flash('successMessage'),
               errorMessage: req.flash('errorMessage'),
+              is_admin: req.user.is_admin,
+              is_instructor: req.user.is_instructor,
+              username: req.user.username,
             });
           });
         });
@@ -92,7 +98,11 @@ router.get('/', function(req, res, next) {
 
 //========== Edit Student ==========
 
-router.get('/edit/:id', function(req, res) {
+router.get('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataDepartment.find({}, function(err, departments) {
     dataUser.findById(req.params.id)
       .populate('auth')
@@ -100,12 +110,19 @@ router.get('/edit/:id', function(req, res) {
         res.render('account/student-edit', {
           data: collection,
           departments: departments,
+          is_admin: req.user.is_admin,
+          is_instructor: req.user.is_instructor,
+          username: req.user.username,
         });
       });
   });
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
 
   dataUser.findByIdAndUpdate(
@@ -131,7 +148,11 @@ router.post('/edit/:id', function(req, res) {
 
 // ========== Delete Student ==========
 
-router.post('/delete/:id', function(req, res) {
+router.post('/delete/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataUser.findById(req.params.id, function(err, data) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
         authUser.remove(function(err) {
@@ -152,19 +173,30 @@ router.post('/delete/:id', function(req, res) {
 
 //========== Sign Up Students ==========
 
-router.get('/signup', function(req, res) {
+router.get('/signup', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataPlan.find({}, function(err, collection) {
     dataDepartment.find({}, function(err, departments) {
       res.render('account/student-signup', {
         errorMessage: req.flash('errorMessage'),
         plans: collection,
         departments: departments,
+        is_admin: req.user.is_admin,
+        is_instructor: req.user.is_instructor,
+        username: req.user.username,
       });
     });
   });
 });
 
-router.post('/signup', function(req, res) {
+router.post('/signup', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
 
@@ -178,30 +210,30 @@ router.post('/signup', function(req, res) {
         message = validate.getMessage(err);
         req.flash('errorMessage', message);
         res.redirect('/students/signup');
-      }
-
-      dataPlan.findOne({plan_name: req.body.plan_name}, function(err , plan) {
-        dataUser.create({
-          fullname: req.body.fullname,
-          department: req.body.department,
-          email: req.body.email,
-          identity: req.body.identity,
-          entranced_year: req.body.entranced_year,
-          plan: plan.course_list.plan,
-          auth: data._id,
-          last_update: today,
-        }, function(err) {
-          if (err) {
-            data.remove();
-            message = validate.getMessage(err);
-            req.flash('errorMessage', message);
-            res.redirect('/students/signup');
-          }
-
-          req.flash('successMessage', 'Sign Up Successfully');
-          res.redirect('/students');
+      } else {
+        dataPlan.findOne({plan_name: req.body.plan_name}, function(err , plan) {
+          dataUser.create({
+            fullname: req.body.fullname,
+            department: req.body.department,
+            email: req.body.email,
+            identity: req.body.identity,
+            entranced_year: req.body.entranced_year,
+            plan: plan.course_list.plan,
+            auth: data._id,
+            last_update: today,
+          }, function(err) {
+            if (err) {
+              data.remove();
+              message = validate.getMessage(err);
+              req.flash('errorMessage', message);
+              res.redirect('/students/signup');
+            } else {
+              req.flash('successMessage', 'Sign Up Successfully');
+              res.redirect('/students');
+            }
+          });
         });
-      });
+      }
     });
 });
 
@@ -209,7 +241,11 @@ router.post('/signup', function(req, res) {
 
 //========== Search Student ==========
 
-router.get('/search', function(req, res, next) {
+router.get('/search', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var paramsPage = qs.parse(url.parse(req.url).query);
@@ -267,6 +303,9 @@ router.get('/search', function(req, res, next) {
               pages: count / perPage,
               successMessage: req.flash('successMessage'),
               errorMessage: req.flash('errorMessage'),
+              is_admin: req.user.is_admin,
+              is_instructor: req.user.is_instructor,
+              username: req.user.username,
             });
           });
         });
@@ -278,7 +317,11 @@ router.get('/search', function(req, res, next) {
 
 //========== Import CSV ==========
 
-router.post('/csv', upload.single('csv'), function(req, res, next) {
+router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
   var isColumn = true;
@@ -348,7 +391,11 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 
 //========== Export CSV ==========
 
-router.get('/exports', function(req, res, next) {
+router.get('/exports', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataAuthUser.find({is_student: 1}, 'username reset_password', function(err, collection) {
     datas = collection.filter(function(item) {
       if (item.reset_password == '') return false;
@@ -372,11 +419,19 @@ router.get('/exports', function(req, res, next) {
 
 //========== Approve Plan ==========
 
-router.get('/plan/:id', function(req, res) {
+router.get('/plan/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   res.render('account/approve', req.user);
 });
 
-router.get('/edit/plan_status/:id', function(req, res) {
+router.get('/edit/plan_status/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataUser.findById(req.params.id)
     .populate('auth')
     .exec(function(err, collection) {
@@ -384,7 +439,11 @@ router.get('/edit/plan_status/:id', function(req, res) {
     });
 });
 
-router.post('/edit/plan_status/:id', function(req, res) {
+router.post('/edit/plan_status/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   console.log(req.body);
   dataUser.findByIdAndUpdate(
@@ -411,7 +470,11 @@ router.post('/edit/plan_status/:id', function(req, res) {
 
 //========== DND ==========
 
-router.post('/update', function(req, res) {
+router.post('/update', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   console.log(req.body.data);
   console.log(req.user._id);

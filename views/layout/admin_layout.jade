@@ -43,8 +43,12 @@ body(ng-app="app")
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.navbar-brand(href='/admin')
-          | Admin
+        if is_admin == 1
+          a.navbar-brand(href='/')
+            | Admin
+        if is_instructor == 1
+          a.navbar-brand(href='/')
+            | Instructor
       // Top Menu Items
       ul.nav.navbar-right.top-nav
         li.dropdown
@@ -60,36 +64,42 @@ body(ng-app="app")
       // Sidebar Menu Items - These collapse to the responsive navigation menu on small screens
       .collapse.navbar-collapse.navbar-ex1-collapse
         ul.nav.navbar-nav.side-nav
-          li
-            a(href='/admin')
-              i.fa.fa-fw.fa-dashboard
-              |  Dashboard
-          li
-            a(href='javascript:;', data-toggle='collapse', data-target='#user')
-              i.fa.fa-fw.fa-user
-              | User
-              i.fa.fa-fw.fa-caret-down
-            ul#user.collapse
-              li
-                a(href='/students') Student
-              li
-                a(href='/instructors') Instructor
-          li
-            a(href='/course')
-              i.fa.fa-fw.fa-file
-              |  Course
-          li
-            a(href='/department')
-              i.fa.fa-fw.fa-location-arrow
-              |  Department
-          li
-            a(href='/plan')
-              i.fa.fa-fw.fa-folder-open
-              |  Plan
-          li
-            a(href='/years')
-              i.fa.fa-fw.fa-calendar
-              |  Years
+          if is_admin == 1
+            li
+              a(href='/')
+                i.fa.fa-fw.fa-dashboard
+                |  Dashboard
+            li
+              a(href='javascript:;', data-toggle='collapse', data-target='#user')
+                i.fa.fa-fw.fa-user
+                | User
+                i.fa.fa-fw.fa-caret-down
+              ul#user.collapse
+                li
+                  a(href='/students') Student
+                li
+                  a(href='/instructors') Instructor
+            li
+              a(href='/course')
+                i.fa.fa-fw.fa-file
+                |  Course
+            li
+              a(href='/department')
+                i.fa.fa-fw.fa-location-arrow
+                |  Department
+            li
+              a(href='/plan')
+                i.fa.fa-fw.fa-folder-open
+                |  Plan
+            li
+              a(href='/years')
+                i.fa.fa-fw.fa-calendar
+                |  Years
+          if is_instructor == 1
+            li
+              a(href='/instructors/approve_plan')
+                i.fa.fa-fw.fa-calendar
+                |  Approve
               
     block content
     #studentModal.modal.fade(tabindex="-1", role="dialog", aria-labelledby="studentLabel")

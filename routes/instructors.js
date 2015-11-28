@@ -41,7 +41,11 @@ var pagination = require('./../helpers/pagination');
 
 //========== GET Instrutor ==========
 
-router.get('/', function(req, res, next) {
+router.get('/', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var params = qs.parse(url.parse(req.url).query);
@@ -75,6 +79,9 @@ router.get('/', function(req, res, next) {
           pages: count / perPage,
           successMessage: req.flash('successMessage'),
           errorMessage: req.flash('errorMessage'),
+          is_admin: req.user.is_admin,
+          is_instructor: req.user.is_instructor,
+          username: req.user.username,
         });
       });
 
@@ -85,15 +92,28 @@ router.get('/', function(req, res, next) {
 
 // ========== Edit Instructor ==========
 
-router.get('/edit/:id', function(req, res) {
+router.get('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataUser.findById(req.params.id)
     .populate('auth')
     .exec(function(err, collection) {
-      res.render('account/instructor-edit', {data: collection});
+      res.render('account/instructor-edit', {
+        data: collection,
+        is_admin: req.user.is_admin,
+        is_instructor: req.user.is_instructor,
+        username: req.user.username,
+      });
     });
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   dataUser.findByIdAndUpdate(
     req.params.id,
@@ -118,7 +138,11 @@ router.post('/edit/:id', function(req, res) {
 
 // ========== Delete Instructor ==========
 
-router.post('/delete/:id', function(req, res) {
+router.post('/delete/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataUser.findById(req.params.id, function(err, data) {
       dataAuthUser.findById(data.auth, function(err, authUser) {
         authUser.remove(function(err) {
@@ -139,11 +163,24 @@ router.post('/delete/:id', function(req, res) {
 
 // ========== Signup Instructor ==========
 
-router.get('/signup', function(req, res) {
-  res.render('account/instructor-signup', {errorMessage: req.flash('errorMessage')});
+router.get('/signup', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
+  res.render('account/instructor-signup', {
+    errorMessage: req.flash('errorMessage'),
+    is_admin: req.user.is_admin,
+    is_instructor: req.user.is_instructor,
+    username: req.user.username,
+  });
 });
 
-router.post('/signup', function(req, res) {
+router.post('/signup', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   var salt = authtentication.createSalt();
 
@@ -152,6 +189,7 @@ router.post('/signup', function(req, res) {
         username: req.body.username,
         salt: salt,
         password: authtentication.hashPwd(salt, req.body.password),
+        reset_password: '',
         is_instructor: 1,
         is_student: 0,
       }, function(err, data) {
@@ -159,25 +197,25 @@ router.post('/signup', function(req, res) {
           message = validate.getMessage(err);
           req.flash('errorMessage', message);
           res.redirect('/instructors/signup');
+        } else {
+          dataUser.create({
+            fullname: req.body.fullname,
+            email: req.body.email,
+            identity: req.body.identity,
+            auth: data._id,
+            last_update: today,
+          }, function(err) {
+            if (err) {
+              data.remove();
+              message = validate.getMessage(err);
+              req.flash('errorMessage', message);
+              res.redirect('/instructors/signup');
+            } else {
+              req.flash('successMessage', 'Sign Up Successfully');
+              res.redirect('/instructors');
+            }
+          });
         }
-
-        dataUser.create({
-          fullname: req.body.fullname,
-          email: req.body.email,
-          identity: req.body.identity,
-          auth: data._id,
-          last_update: today,
-        }, function(err) {
-          if (err) {
-            data.remove();
-            message = validate.getMessage(err);
-            req.flash('errorMessage', message);
-            res.redirect('/instructors/signup');
-          }
-
-          req.flash('successMessage', 'Sign Up Successfully');
-          res.redirect('/instructors');
-        });
       });
   }
 });
@@ -186,7 +224,11 @@ router.post('/signup', function(req, res) {
 
 // ========== CSV Instructor ==========
 
-router.post('/csv', upload.single('csv'), function(req, res, next) {
+router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var today = dateFunction.getDate();
   var isColumn = true;
 
@@ -249,7 +291,11 @@ router.post('/csv', upload.single('csv'), function(req, res, next) {
 
 //========== Search Instructor ==========
 
-router.get('/search', function(req, res, next) {
+router.get('/search', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   var perPage = 10;
   var page = req.param('page') > 0 ? req.param('page') : 0;
   var paramsPage = qs.parse(url.parse(req.url).query);
@@ -294,6 +340,9 @@ router.get('/search', function(req, res, next) {
           pages: count / perPage,
           successMessage: req.flash('successMessage'),
           errorMessage: req.flash('errorMessage'),
+          is_admin: req.user.is_admin,
+          is_instructor: req.user.is_instructor,
+          username: req.user.username,
         });
       });
     });
@@ -303,12 +352,19 @@ router.get('/search', function(req, res, next) {
 
 // ========== Approve Plan ==========
 
-router.get('/approve_plan', function(req, res) {
+router.get('/approve_plan', auth, function(req, res) {
+  if (req.user.is_instructor != 1) {
+    res.redirect('/');
+  }
+
   dataUser.find({status: 'Pending'}, function(err, collection) {
     res.render('account/instructor-approve', {
       datas: collection,
       successMessage: req.flash('successMessage'),
       errorMessage: req.flash('errorMessage'),
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      username: req.user.username,
     });
   });
 });

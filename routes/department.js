@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+// Middlewares
+var auth = require('./../middlewares/auth');
+
 // Models
 var dataDepartment = require('./../models/department');
 
@@ -9,25 +12,39 @@ var dateFunction = require('./../helpers/date');
 var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
 
-router.get('/', function(req, res, next) {
+router.get('/', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataDepartment.find({}, function(err, collection) {
     res.render('department/index', {
       datas: collection,
       successMessage: req.flash('successMessage'),
       errorMessage: req.flash('errorMessage'),
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      username: req.user.username,
     });
   });
 });
 
-router.get('/create', function(req, res, next) {
+router.get('/create', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataDepartment.find({}, function(err, collection) {
     res.render('department/create', {
       datas: collection,
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      username: req.user.username,
     });
   });
 });
 
-router.post('/create', function(req, res, next) {
+router.post('/create', auth, function(req, res, next) {
   dataDepartment.create({
     name: req.body.name,
     abbreviation: req.body.abbreviation,
@@ -35,15 +52,22 @@ router.post('/create', function(req, res, next) {
   res.redirect('/department');
 });
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   dataDepartment.findById(req.params.id, function(err, collection) {
     res.render('department/edit', {
       data: collection,
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      username: req.user.username,
     });
   });
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
   dataDepartment.findById(req.params.id, function(err, collection) {
     collection.update({
       name: req.body.name,
@@ -58,7 +82,7 @@ router.post('/edit/:id', function(req, res) {
   });
 });
 
-router.post('/delete/:id', function(req, res, next) {
+router.post('/delete/:id', auth, function(req, res, next) {
   dataDepartment.findById(req.params.id, function(err, data) {
     data.remove(function(err) {
       if (err) {

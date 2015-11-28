@@ -16,12 +16,18 @@ var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
 
 router.get('/', auth, function(req, res) {
-  console.log(req.user);
   if (req.user.reset_password != '') {
     res.render('account/reset_password');
 	}
-  //res.send(req.user._id);
-  res.render('./dnd/dnd', req.user);
+
+  if (req.user.is_student == 1) {
+    res.render('./dnd/dnd', req.user);
+  }
+
+  if (req.user.is_admin == 1 || req.user.is_instructor == 1) {
+    res.render('admin/admin', req.user);
+  }
+
 });
 
 router.get('/logout', function(req, res) {

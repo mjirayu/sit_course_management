@@ -2,21 +2,42 @@ var express = require('express');
 var router = express.Router();
 var yearSemesterData = require('./../models/year_semester');
 
+// Middlewares
+var auth = require('./../middlewares/auth');
+
+// Heplers
 var validate = require('./../helpers/validate');
 
-router.get('/', function(req, res) {
+router.get('/', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   yearSemesterData.find({}, function(err, collection) {
     if (err)
       res.send(err);
-    res.render('years/years', {datas: collection});
+    res.render('years/years', {
+      datas: collection,
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      username: req.user.username,
+    });
   });
 });
 
-router.get('/add', function(req, res) {
-  res.render('years/year-add');
+router.get('/add', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
+  res.render('years/year-add', req.user);
 });
 
-router.get('/current', function(req, res) {
+router.get('/current', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   yearSemesterData.findOne({status:'active'})
     .sort('-year')
     .exec(function(err, collection) {
@@ -26,7 +47,11 @@ router.get('/current', function(req, res) {
     });
 });
 
-router.post('/', function(req, res) {
+router.post('/', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   data = {};
   data.year = req.body.Year;
   data.startSemesterOne = req.body.startsemester1;
@@ -34,13 +59,17 @@ router.post('/', function(req, res) {
   data.startSemesterTwo = req.body.startsemester2;
   data.endSemesterTwo = req.body.endsemester2;
   data.courselist = null;
-  console.log(data);
+
   yearSemesterData.create(data, function(err, collection) {
     res.redirect('/years');
   });
 });
 
-router.get('/edit/:id', function(req, res) {
+router.get('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   yearSemesterData.findById(req.params.id, function(err, collection) {
     if (err)
       res.send(err);
@@ -57,12 +86,19 @@ router.get('/edit/:id', function(req, res) {
     data.startSemesterTwo = (temp.getMonth() + 1) + '/' + temp.getDate() + '/' + temp.getFullYear();
     temp = new Date(collection.endSemesterTwo);
     data.endSemesterTwo = (temp.getMonth() + 1) + '/' + temp.getDate() + '/' + temp.getFullYear();
+    data.is_admin =  req.user.is_admin,
+    data.is_instructor = req.user.is_instructor,
+    data.username = req.user.username,
     res.render('years/edit', data);
   });
 
 });
 
-router.post('/edit/:id', function(req, res) {
+router.post('/edit/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   yearSemesterData.findByIdAndUpdate(
     req.params.id,
       {
@@ -86,7 +122,11 @@ router.post('/edit/:id', function(req, res) {
     );
 });
 
-router.post('/delete/:id', function(req, res) {
+router.post('/delete/:id', auth, function(req, res) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
   yearSemesterData.findById(req.params.id).remove().exec();
   res.redirect('/years');
 });
