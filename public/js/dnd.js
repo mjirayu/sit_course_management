@@ -10,7 +10,8 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   $scope.entranced_year = 2555;
   $scope.plandata = {};
   $http.get(base_url + 'api/course').success(function(response) {
-    $scope.courselist = response; console.log($scope.courselist);
+    $scope.courselist = response;
+    console.log($scope.courselist);
   });
 
   $scope.save = function() {
@@ -47,7 +48,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       data = {course_id: data.course_id, action :'regis'};
       $http({
         method: 'POST',
-        url: base_url+'api/user/plan',
+        url: base_url + 'api/user/plan',
         data: data,
         headers: {'Content-Type': 'application/x-www-form-urlencoded'}
       }).success(function(response) {
@@ -195,7 +196,8 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   $scope.$watch('plandata', function(model) {
     $scope.modelAsJson = angular.toJson(model, true);
   }, true);
-}).controller('planControllerEdit', function($scope,$http) {
+
+}).controller('planControllerEdit', function($scope, $http) {
 
   $scope.courselist = {};
   $http.get(base_url + 'api/course').success(function(response) {
@@ -266,12 +268,12 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   }, true);
 }).controller("planControllerApprove", function($scope,$http) {
 
-  $http.get(window.location.origin+"/api"+window.location.pathname).success(function(response) {
+  $http.get(window.location.origin + "/api" + window.location.pathname).success(function(response) {
     console.log(response);
     $scope.plandata = response; console.log($scope.plandata);
     $("input[name='plan_name']").val(response.fullname);
 
-    $('#Departmentinfo').text(response.department);
+    $('#Departmentinfo').text(response.department.abbreviation);
 
     if($scope.plandata.plan){
       $scope.plandata.plan.map(function(item){
@@ -293,18 +295,18 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   $scope.approve = function(){
 
     console.log($scope.plandata);
-    $http.post(window.location.origin+"/students/edit/plan_status/"+$scope.plandata._id, {status: 'Approve'}).success(function(response) {
+    $http.post(window.location.origin + "/students/edit/plan_status/" + $scope.plandata._id, {status: 'Approve'}).success(function(response) {
       console.log(response);
-      window.location.replace(base_url+"instructors/approve_plan");
+      window.location.replace(base_url + "instructors/approve_plan");
     });
 
   };
 
   $scope.reject = function(){
     console.log($scope.plandata);
-    $http.post(window.location.origin+"/students/edit/plan_status/"+$scope.plandata._id, {status: 'Reject'}).success(function(response) {
+    $http.post(window.location.origin + "/students/edit/plan_status/" + $scope.plandata._id, {status: 'Reject'}).success(function(response) {
       console.log(response);
-      window.location.replace(base_url+"instructors/approve_plan");
+      window.location.replace(base_url + "instructors/approve_plan");
     });
 
   };
