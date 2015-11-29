@@ -275,25 +275,28 @@ router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
         }, function(err, authUser) {
           if (err) {
             message = validate.getMessage(err);
-            req.flash('errorMessage', message);
-            res.redirect('/instructors');
+            res.send(message);
           } else {
-            dataUser.create({
-              fullname: data[0],
-              email: data[1],
-              identity: data[2],
-              auth: authUser._id,
-              last_update: today,
-            }, function(err) {
-              if (err) {
-                authUser.remove();
-                message = validate.getMessage(err);
-                req.flash('errorMessage', message);
+            dataDepartment.findOne({abbreviation: data[4]}, function(err, department) {
+              dataUser.create({
+                fullname: data[0],
+                email: data[1],
+                identity: data[2],
+                department: department._id,
+                position: data[5],
+                auth: authUser._id,
+                last_update: today,
+              }, function(err) {
+                if (err) {
+                  authUser.remove();
+                  message = validate.getMessage(err);
+                  req.flash('errorMessage', message);
+                  res.redirect('/instructors');
+                }
+              }).then(function() {
+                req.flash('successMessage', 'Import CSV Successfully');
                 res.redirect('/instructors');
-              }
-            }).then(function() {
-              req.flash('successMessage', 'Import CSV Successfully');
-              res.redirect('/instructors');
+              });
             });
           }
         });
@@ -334,7 +337,7 @@ router.get('/search', auth, function(req, res, next) {
       fullname: { $regex: fullname },
       position: { $regex: position},
       department: params.department,
-      position: { $ne: null},
+      position: { $regex: position},
     })
     .populate('auth', null, {is_instructor: 1})
     .populate('department')
@@ -356,7 +359,7 @@ router.get('/search', auth, function(req, res, next) {
         identity: { $regex: instructor_id },
         fullname: { $regex: fullname },
         department: params.department,
-        position: { $ne: null},
+        position: { $regex: position},
       })
       .populate('auth')
       .populate('department')

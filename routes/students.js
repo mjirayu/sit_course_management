@@ -371,7 +371,6 @@ router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
           } else {
             dataDepartment.findOne({abbreviation: data[1]}, function(err, department) {
               dataPlan.findOne({plan_name: data[5]}, function(err , plan) {
-                console.log(department._id);
                 dataUser.create({
                   fullname: data[0],
                   department: department._id,
