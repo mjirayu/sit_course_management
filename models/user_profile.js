@@ -38,6 +38,10 @@ var userProfileSchema = new Schema({
     type: String,
     default: 'Approve',
   },
+  position: {
+    type: String,
+    default: null,
+  },
   last_update: {
     type: String,
     required: 'last_update is required!',
