@@ -54,11 +54,12 @@ router.get('/', auth, function(req, res, next) {
     return pagination.createPagination(pages, page, params);
   };
 
-  dataUser.find({ department: { $ne: null } })
+  dataUser.find({ position: null })
     .populate('auth', null, {is_student: 1})
     .populate('department')
     .skip(perPage * page)
     .limit(perPage)
+    .sort('identity')
     .exec(function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
@@ -74,7 +75,7 @@ router.get('/', auth, function(req, res, next) {
       });
 
       dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
-        dataUser.find({ department: { $ne: null } }).count().exec(function(err, count) {
+        dataUser.find({ position: null }).count().exec(function(err, count) {
           dataDepartment.find({}, function(err, departments) {
             res.render('account/student', {
               datas: datas,
@@ -252,7 +253,6 @@ router.get('/search', auth, function(req, res, next) {
 
   var params = req.query;
   var student_id = new RegExp(params.student_id, 'i');
-  var department = new RegExp(params.department, 'i');
   var entranced_year = new RegExp(params.entranced_year, 'i');
   var fullname = new RegExp(params.fullname, 'i');
 
@@ -265,15 +265,17 @@ router.get('/search', auth, function(req, res, next) {
       identity: { $regex: student_id },
       entranced_year: { $regex: entranced_year },
       fullname: { $regex: fullname },
-      department: { $ne: null },
+      department: params.department,
+      position: null,
     })
-    .populate('department', null, {abbreviation: { $regex: department }})
     .populate('auth', null, {is_student: 1})
+    .populate('department')
     .skip(perPage * page)
     .limit(perPage)
+    .sort('identity')
     .exec(function(err, collection) {
-
       if (err) res.send(err);
+
       datas = collection.filter(function(item) {
         if (item.department == null) return false;
         if (item.auth == null) return false;
@@ -288,8 +290,23 @@ router.get('/search', auth, function(req, res, next) {
           identity: { $regex: student_id },
           entranced_year: { $regex: entranced_year },
           fullname: { $regex: fullname },
-          department: { $ne: null },
-        }).count().exec(function(err, count) {
+          department: params.department,
+          position: null,
+        })
+        .populate('auth', null, {is_student: 1})
+        .populate('department')
+        .exec(function(err, collection) {
+          if (err) res.send(err);
+
+          count = collection.filter(function(item) {
+            if (item.department == null) return false;
+            if (item.auth == null) return false;
+            return true;
+          })
+          .map(function(item) {
+            return item;
+          }).length;
+
           dataDepartment.find({}, function(err, departments) {
             res.render('account/student', {
               datas: datas,
@@ -420,7 +437,7 @@ router.get('/exports', auth, function(req, res, next) {
 //========== Approve Plan ==========
 
 router.get('/plan/:id', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
+  if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
 
@@ -428,24 +445,24 @@ router.get('/plan/:id', auth, function(req, res) {
 });
 
 router.get('/edit/plan_status/:id', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
+  if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
 
   dataUser.findById(req.params.id)
     .populate('auth')
+    .populate('department')
     .exec(function(err, collection) {
       res.render('account/student-edit-status', {data: collection});
     });
 });
 
 router.post('/edit/plan_status/:id', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
+  if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
 
   var today = dateFunction.getDate();
-  console.log(req.body);
   dataUser.findByIdAndUpdate(
     req.params.id,
     {
