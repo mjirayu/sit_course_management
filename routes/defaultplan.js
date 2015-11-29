@@ -29,7 +29,7 @@ router.get('/:id', auth, function(req, res, next) {
   if (req.user.is_admin != 1) {
     res.redirect('/');
   }
-  
+
   dataPlan.findById(req.params.id)
     .populate('department')
     .exec(function(err, data) {

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var objectId = require('mongoose').Types.ObjectId;
+
 var auth = require('./../middlewares/auth');
 var dataPlan = require('./../models/plan');
 var dataUser = require('./../models/user_profile');
@@ -109,15 +110,18 @@ router.put('/defaultplan/:id', function(req, res, next) {
 	}
 });
 
-router.post('/plan/delete/:id',function(req, res, next) {
+router.post('/plan/delete/:id', function(req, res, next) {
   dataPlan.findById(req.params.id).remove().exec();
   res.redirect('/plan');
 });
 
 router.get('/students/plan/:id', function(req, res) {
-  dataUser.findById(req.params.id, function(err, data) {
-    res.json(data);
-  });
+  dataUser
+    .findById(req.params.id)
+    .populate('department')
+    .exec(function(err, data) {
+      res.json(data);
+    });
 });
 
 module.exports = router;

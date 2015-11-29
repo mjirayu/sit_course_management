@@ -18,13 +18,9 @@ var validate = require('./../helpers/validate');
 router.get('/', auth, function(req, res) {
   if (req.user.reset_password != '') {
     res.render('account/reset_password');
-	}
-
-  if (req.user.is_student == 1) {
-    res.render('./dnd/dnd', req.user);
-  }
-
-  if (req.user.is_admin == 1 || req.user.is_instructor == 1) {
+	} else if (req.user.is_student == 1) {
+    res.render('dnd/dnd', req.user);
+  } else if (req.user.is_admin == 1 || req.user.is_instructor == 1) {
     res.render('admin/admin', req.user);
   }
 

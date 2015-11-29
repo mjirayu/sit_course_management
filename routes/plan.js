@@ -6,10 +6,6 @@ var dataPlan = require('./../models/plan');
 var dataCourse = require('./../models/course');
 
 router.get('/', auth, function(req, res, next) {
-  if (req.user.is_admin != 1) {
-    res.redirect('/');
-  }
-
   dataPlan.find({})
 		.populate('department')
 		.exec(function(err, collection) {
@@ -23,10 +19,6 @@ router.get('/', auth, function(req, res, next) {
 });
 
 router.get('/:id', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
-    res.redirect('/');
-  }
-  
   res.render('./dnd/dnd', req.user);
 });
 
