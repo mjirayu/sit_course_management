@@ -21,22 +21,30 @@ block content
                 input(type="hidden" name="_method" value="put")
                 div.form-group
                   label Fullname
-                  input(type="text", name="firstname", value="#{data.fullname}").form-control
+                  input(type="text", name="fullname", value="#{data.fullname}").form-control
                 div.form-group
                   label Department
                   select(name="department").form-control
-                    option(value="Computer Science") Computer Science
-                    option(value="Information Technology") Information Technology
+                    each department in departments
+                      option(value="#{department._id}") #{department.name}
+                div.form-group
+                  label Position
+                  select(name="position").form-control
+                    option(value='Advisor') Advisor
+                    option(value='Program Chairperson') Program Chairperson
                 div.form-group  
                   button(type="submit").btn.btn-info Update
                   a(href="/instructors").btn.btn-primary Back
                   
       script(type='text/javascript').
         $('select[name="department"] option').each(function(){
-          if ($(this).val() == '#{data.department}'){
+          if ($(this).val() == '#{data.department._id}'){
             $(this).attr('selected', 'selected');
           } 
         }); 
-        today = new Date();
-        year = today.getFullYear();   
-        $('#entranced_year').val(year);
+
+        $('select[name="position"] option').each(function(){
+          if ($(this).val() == '#{data.position}'){
+            $(this).attr('selected', 'selected');
+          } 
+        }); 

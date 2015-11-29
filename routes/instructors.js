@@ -32,6 +32,7 @@ var auth = require('./../middlewares/auth');
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataPlan = require('./../models/plan');
+var dataDepartment = require('./../models/department');
 
 // ========== Helpers ==========
 var dateFunction = require('./../helpers/date');
@@ -54,10 +55,12 @@ router.get('/', auth, function(req, res, next) {
     return pagination.createPagination(pages, page, params);
   };
 
-  dataUser.find({department: null })
+  dataUser.find({position: { $ne: null } })
     .populate('auth', null, {is_instructor: 1})
+    .populate('department')
     .skip(perPage * page)
     .limit(perPage)
+    .sort('identity')
     .exec(function(err, collection) {
       if (err) {
         message = validate.getMessage(err);
@@ -72,16 +75,19 @@ router.get('/', auth, function(req, res, next) {
         return item;
       });
 
-      dataUser.find({ department: null }).count().exec(function(err, count) {
-        res.render('account/instructor', {
-          datas: datas,
-          page: page,
-          pages: count / perPage,
-          successMessage: req.flash('successMessage'),
-          errorMessage: req.flash('errorMessage'),
-          is_admin: req.user.is_admin,
-          is_instructor: req.user.is_instructor,
-          username: req.user.username,
+      dataUser.find({ position: { $ne: null } }).count().exec(function(err, count) {
+        dataDepartment.find({}, function(err, departments) {
+          res.render('account/instructor', {
+            datas: datas,
+            page: page,
+            pages: count / perPage,
+            departments: departments,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
+          });
         });
       });
 
@@ -99,12 +105,16 @@ router.get('/edit/:id', auth, function(req, res) {
 
   dataUser.findById(req.params.id)
     .populate('auth')
+    .populate('department')
     .exec(function(err, collection) {
-      res.render('account/instructor-edit', {
-        data: collection,
-        is_admin: req.user.is_admin,
-        is_instructor: req.user.is_instructor,
-        username: req.user.username,
+      dataDepartment.find({}, function(err, departments) {
+        res.render('account/instructor-edit', {
+          data: collection,
+          is_admin: req.user.is_admin,
+          is_instructor: req.user.is_instructor,
+          username: req.user.username,
+          departments: departments,
+        });
       });
     });
 });
@@ -121,6 +131,7 @@ router.post('/edit/:id', auth, function(req, res) {
       $set: {
         "fullname": req.body.fullname,
         "department": req.body.department,
+        "position": req.body.position,
         "last_update": today,
       },
     },
@@ -168,11 +179,14 @@ router.get('/signup', auth, function(req, res) {
     res.redirect('/');
   }
 
-  res.render('account/instructor-signup', {
-    errorMessage: req.flash('errorMessage'),
-    is_admin: req.user.is_admin,
-    is_instructor: req.user.is_instructor,
-    username: req.user.username,
+  dataDepartment.find({}, function(err, departments) {
+    res.render('account/instructor-signup', {
+      errorMessage: req.flash('errorMessage'),
+      is_admin: req.user.is_admin,
+      is_instructor: req.user.is_instructor,
+      departments: departments,
+      username: req.user.username,
+    });
   });
 });
 
@@ -202,6 +216,8 @@ router.post('/signup', auth, function(req, res) {
             fullname: req.body.fullname,
             email: req.body.email,
             identity: req.body.identity,
+            department: req.body.department,
+            position: req.body.position,
             auth: data._id,
             last_update: today,
           }, function(err) {
@@ -229,6 +245,7 @@ router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
     res.redirect('/');
   }
 
+  var salt = authtentication.createSalt();
   var today = dateFunction.getDate();
   var isColumn = true;
 
@@ -251,6 +268,8 @@ router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
         dataAuthUser.create({
           username: data[3],
           password: '1234',
+          salt: salt,
+          reset_password: authtentication.generate_reset_password(),
           is_instructor: 1,
           is_student: 0,
         }, function(err, authUser) {
@@ -303,6 +322,7 @@ router.get('/search', auth, function(req, res, next) {
   var params = req.query;
   var instructor_id = new RegExp(params.instructor_id, 'i');
   var fullname = new RegExp(params.fullname, 'i');
+  var position = new RegExp(params.position, 'i');
 
   res.locals.createPagination = function(pages, page) {
     return pagination.createPagination(pages, page, paramsPage);
@@ -312,15 +332,20 @@ router.get('/search', auth, function(req, res, next) {
     .find({
       identity: { $regex: instructor_id },
       fullname: { $regex: fullname },
-      department: null,
+      position: { $regex: position},
+      department: params.department,
+      position: { $ne: null},
     })
     .populate('auth', null, {is_instructor: 1})
+    .populate('department')
     .skip(perPage * page)
     .limit(perPage)
+    .sort('identity')
     .exec(function(err, collection) {
 
       datas = collection.filter(function(item) {
         if (item.auth == null) return false;
+        if (item.department == null) return false;
         return true;
       })
       .map(function(item) {
@@ -330,19 +355,39 @@ router.get('/search', auth, function(req, res, next) {
       dataUser.find({
         identity: { $regex: instructor_id },
         fullname: { $regex: fullname },
-        department: null,
-      }).count().exec(function(err, count) {
-        res.render('account/instructor', {
-          datas: datas,
-          fullName: params.fullname,
-          instructorID: params.instructor_id,
-          page: page,
-          pages: count / perPage,
-          successMessage: req.flash('successMessage'),
-          errorMessage: req.flash('errorMessage'),
-          is_admin: req.user.is_admin,
-          is_instructor: req.user.is_instructor,
-          username: req.user.username,
+        department: params.department,
+        position: { $ne: null},
+      })
+      .populate('auth')
+      .populate('department')
+      .exec(function(err, collection) {
+        if (err) res.send(err);
+
+        count = collection.filter(function(item) {
+          if (item.department == null) return false;
+          if (item.auth == null) return false;
+          return true;
+        })
+        .map(function(item) {
+          return item;
+        }).length;
+
+        dataDepartment.find({}, function(err, departments) {
+          res.render('account/instructor', {
+            datas: datas,
+            fullName: params.fullname,
+            instructorID: params.instructor_id,
+            position: params.position,
+            departmentSearch: params.department,
+            page: page,
+            pages: count / perPage,
+            departments: departments,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
+          });
         });
       });
     });
@@ -357,15 +402,16 @@ router.get('/approve_plan', auth, function(req, res) {
     res.redirect('/');
   }
 
-  dataUser.find({status: 'Pending'}, function(err, collection) {
-    res.render('account/instructor-approve', {
-      datas: collection,
-      successMessage: req.flash('successMessage'),
-      errorMessage: req.flash('errorMessage'),
-      is_admin: req.user.is_admin,
-      is_instructor: req.user.is_instructor,
-      username: req.user.username,
-    });
+  dataUser.find({status: 'Pending'})
+    .exec(function(err, collection) {
+      res.render('account/instructor-approve', {
+        datas: collection,
+        successMessage: req.flash('successMessage'),
+        errorMessage: req.flash('errorMessage'),
+        is_admin: req.user.is_admin,
+        is_instructor: req.user.is_instructor,
+        username: req.user.username,
+      });
   });
 });
 

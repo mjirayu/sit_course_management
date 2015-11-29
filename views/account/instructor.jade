@@ -38,6 +38,17 @@ block content
 								div.form-group.search-group
 									label Full Name
 									input(type="text", name="fullname").form-control
+								div.form-group.search-group
+									label Department
+									select(name="department").form-control
+										each department in departments
+											option(value="#{department._id}") #{department.name}
+								div.form-group.search-group
+									label Position
+									select(name="position").form-control
+										option(value="") Choose Position
+										option(value='Advisor') Advisor
+										option(value='Program Chairperson') Program Chairperson
 								div.form-group.search-button-group.pull-left
 									button(type="submit" style="margin-right: 1em").btn.btn-primary Search
 									a(href="/instructors").btn.btn-danger Clear
@@ -50,12 +61,16 @@ block content
 								thead
 									th Instructor ID
 									th Full Name
+									th Department
+									th Position
 									th Last Update
 								tbody
 								each data in datas
 									tr
 										td.list-data=data.identity
 										td.list-data=data.fullname
+										td.list-data=data.department.name
+										td.list-data=data.position
 										td.list-data=data.last_update
 										td
 											a(href='/instructors/edit/' + data._id).btn.btn-info Edit  
@@ -69,11 +84,23 @@ block content
 					ul
 						!=createPagination(pages, page)
 												
-				script.
-					$('input[name="instructor_id"]').each(function(){
-						$(this).val(#{instructorID});
-					});
+			script.
+				$('input[name="instructor_id"]').each(function(){
+					$(this).val(#{instructorID});
+				});
 
-					$('input[name="fullname"]').each(function(){
-						$(this).val('#{fullName}');
-					});
+				$('input[name="fullname"]').each(function(){
+					$(this).val('#{fullName}');
+				});
+
+				$('select[name="position"] option').each(function(){
+					if ($(this).val() == '#{position}'){
+						$(this).attr('selected', 'selected');
+					} 
+				});
+				
+				$('select[name="department"] option').each(function(){
+					if ($(this).val() == '#{departmentSearch}'){
+						$(this).attr('selected', 'selected');
+					} 
+				});
