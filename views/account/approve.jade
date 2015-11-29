@@ -33,8 +33,6 @@ block content
                           div.col-md-8
                             #Departmentinfo IT
                               
-                            
-                      
                     .row(ng-repeat='row in plandata.plan')
                       .title
                         | {{'Year ' + row.year + ' Semester ' + row.semester}}
@@ -62,19 +60,11 @@ block content
                           li.radius
                             span {{item.course_id +" "+item.course_name}}
                             
-                    
               //- .row
               //-   .col-md-12
               //-     .block.radius
               //-       pre.code.
               //-         {{modelAsJson}}   
-
-
-
-
-
-
-                  
 
     script(src='/js/flat-ui.min.js')
     script(src='/js/application.js')
