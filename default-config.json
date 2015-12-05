@@ -1,0 +1,6 @@
+{
+	"sit_modify" : {
+		"host" : "localhost",
+		"db"   : "sit_modify"
+	}
+}
