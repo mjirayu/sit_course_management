@@ -167,7 +167,6 @@ router.get('/search', auth, function(req, res, next) {
   var course_id = new RegExp(params.course_id, 'i');
   var course_name = new RegExp(params.course_name, 'i');
   var fullname = new RegExp(params.fullname, 'i');
-  var department = new RegExp(params.department, 'i');
 
   res.locals.createPagination = function(pages, page) {
     return pagination.createPagination(pages, page, paramsPage);
@@ -177,9 +176,10 @@ router.get('/search', auth, function(req, res, next) {
     .find({
       course_id: { $regex: course_id },
       course_name: { $regex: course_name },
+      department: params.department,
     })
     .populate('instructor', null, {fullname: { $regex: fullname }})
-    .populate('department', null, {abbreviation: { $regex: department }})
+    .populate('department')
     .skip(perPage * page)
     .limit(perPage)
     .exec(function(err, collection) {
@@ -197,6 +197,7 @@ router.get('/search', auth, function(req, res, next) {
       dataCourse.find({
         course_id: { $regex: course_id },
         course_name: { $regex: course_name },
+        department: params.department,
       }).count().exec(function(err, count) {
         dataDepartment.find({}, function(err, departments) {
           res.render('course/index', {

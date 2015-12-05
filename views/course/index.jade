@@ -43,9 +43,8 @@ block content
                 div.form-group.search-group
                   label Department
                   select(name="department").form-control
-                    option(value="") Choose Department
                     each department in departments
-                      option(value="#{department.abbreviation}") #{department.name}
+                      option(value="#{department._id}") #{department.name}
                 div.form-group.search-button-group.pull-left
                   button(type="submit" style="margin-right: 1em").btn.btn-primary Search
                   a(href="/course").btn.btn-danger Clear
@@ -85,21 +84,21 @@ block content
           ul
             !=createPagination(pages, page)
                         
-        script.
-          $('select[name="department"] option').each(function(){
-            if ($(this).val() == '#{departmentSearch}'){
-              $(this).attr('selected', 'selected');
-            } 
-          });
+      script.
+        $('select[name="department"] option').each(function(){
+          if ($(this).val() == '#{departmentSearch}'){
+            $(this).attr('selected', 'selected');
+          } 
+        });
 
-          $('input[name="course_id"]').each(function(){
-            $(this).val('#{courseID}');
-          });
+        $('input[name="course_id"]').each(function(){
+          $(this).val('#{courseID}');
+        });
 
-          $('input[name="course_name"]').each(function(){
-            $(this).val('#{courseName}');
-          });
-          
-          $('input[name="fullname"]').each(function(){
-            $(this).val('#{fullName}');
-          });
+        $('input[name="course_name"]').each(function(){
+          $(this).val('#{courseName}');
+        });
+        
+        $('input[name="fullname"]').each(function(){
+          $(this).val('#{fullName}');
+        });
