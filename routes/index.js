@@ -9,6 +9,7 @@ var passport = require('./../middlewares/passport');
 var dataPlan = require('./../models/plan');
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
+var dataDepartment = require('./../models/department');
 
 // Helpers
 var dateFunction = require('./../helpers/date');
@@ -20,8 +21,20 @@ router.get('/', auth, function(req, res) {
     res.render('account/reset_password');
 	} else if (req.user.is_student == 1) {
     res.render('dnd/dnd', req.user);
-  } else if (req.user.is_admin == 1 || req.user.is_instructor == 1) {
-    res.render('admin/admin', req.user);
+  } else if (req.user.is_admin == 1 ) {
+    dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
+      dataDepartment.find({}, function(err, collection) {
+        res.render('admin/admin', {
+          username: req.user.username,
+          is_admin: req.user.is_admin,
+          is_instructor: req.user.is_instructor,
+          departments: collection,
+          entracnedYears: entracnedYears,
+        });
+      });
+    });
+  } else if (req.user.is_instructor == 1) {
+    res.redirect('/instructors/approve_plan');
   }
 
 });
