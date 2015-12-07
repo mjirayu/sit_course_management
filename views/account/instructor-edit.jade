@@ -32,6 +32,9 @@ block content
                   select(name="position").form-control
                     option(value='Advisor') Advisor
                     option(value='Program Chairperson') Program Chairperson
+                div.form-group
+                  label Year
+                  input(type="text", name="entranced_year", value="#{data.entranced_year}").form-control
                 div.form-group  
                   button(type="submit").btn.btn-info Update
                   a(href="/instructors").btn.btn-primary Back

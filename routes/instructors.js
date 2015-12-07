@@ -132,6 +132,7 @@ router.post('/edit/:id', auth, function(req, res) {
         "fullname": req.body.fullname,
         "department": req.body.department,
         "position": req.body.position,
+        "entranced_year": req.body.entranced_year,
         "last_update": today,
       },
     },
@@ -218,6 +219,7 @@ router.post('/signup', auth, function(req, res) {
             identity: req.body.identity,
             department: req.body.department,
             position: req.body.position,
+            entranced_year: req.body.entranced_year,
             auth: data._id,
             last_update: today,
           }, function(err) {
@@ -405,18 +407,30 @@ router.get('/approve_plan', auth, function(req, res) {
     res.redirect('/');
   }
 
-  dataUser.find({status: 'Pending'})
-    .exec(function(err, collection) {
-      res.render('account/instructor-approve', {
-        datas: collection,
-        successMessage: req.flash('successMessage'),
-        errorMessage: req.flash('errorMessage'),
-        is_admin: req.user.is_admin,
-        is_instructor: req.user.is_instructor,
-        username: req.user.username,
+  dataUser
+    .findOne({
+      auth: req.user._id,
+    })
+    .exec(function(err, data){
+      dataUser.find({
+        status: 'Pending',
+        entranced_year: data.entranced_year,
+        department: data.department,
+      })
+        .populate('department')
+        .exec(function(err, collection) {
+          res.render('account/instructor-approve', {
+            datas: collection,
+            successMessage: req.flash('successMessage'),
+            errorMessage: req.flash('errorMessage'),
+            is_admin: req.user.is_admin,
+            is_instructor: req.user.is_instructor,
+            username: req.user.username,
+          });
       });
-  });
+    });
 });
+
 
 // ========== End Approve Plan ==========
 

@@ -63,7 +63,7 @@ block content
 									th Full Name
 									th Department
 									th Position
-									th Last Update
+									th Year
 								tbody
 								each data in datas
 									tr
@@ -71,7 +71,7 @@ block content
 										td.list-data=data.fullname
 										td.list-data=data.department.name
 										td.list-data=data.position
-										td.list-data=data.last_update
+										td.list-data=data.entranced_year
 										td
 											a(href='/instructors/edit/' + data._id).btn.btn-info Edit  
 										td
