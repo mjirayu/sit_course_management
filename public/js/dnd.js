@@ -146,21 +146,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
 
   };
 
-  $http.get(base_url+'years/current').success(function(response) {
-    $scope.current_year = response;
-    console.log(response);
 
-    if ((new Date()).getTime() <= new Date(response.endSemesterOne).getTime()) {
-      console.log('Semester = ' + 1);
-      $scope.semester = 1;
-    }else{
-      console.log('Semester = ' + 2);
-      $scope.semester = response.year - $scope.entranced_year;
-    }
-
-    $scope.year = response.year - $scope.entranced_year;
-    console.log(' year ' + $scope.year);
-  });
 
   $scope.allowType = 'it';
 
@@ -202,7 +188,22 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     console.log('old');
       console.log(old);
   });
+  
+  $http.get(base_url+'years/current').success(function(response) {
+    $scope.current_year = response;
+    console.log(response);
 
+    if ((new Date()).getTime() <= new Date(response.endSemesterOne).getTime()) {
+      console.log('Semester = ' + 1);
+      $scope.semester = 1;
+    }else{
+      console.log('Semester = ' + 2);
+      $scope.semester = response.year - $scope.entranced_year;
+    }
+
+    $scope.year = response.year - $scope.plandata.entranced_year;
+    console.log(' year ' + $scope.year);
+  });
 
 
   $scope.alertData = function(data){
