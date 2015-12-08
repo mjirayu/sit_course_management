@@ -36,7 +36,7 @@ router.get('/add', auth, function(req, res) {
 router.get('/current', auth, function(req, res) {
 
 
-    yearSemesterData.findOne({status:'Active'})
+    yearSemesterData.findOne({status:'active'})
       .sort('-year')
       .exec(function(err, collection) {
         if (err){
