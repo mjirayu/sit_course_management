@@ -35,7 +35,7 @@ block content
                           label.col-md-3.control-label Department
                           div.col-md-8  
                             //div #{departments}
-                            select.form-control.select.select-default.mrs.mbm(data-toggle='select',name="department",ng-model="department",ng-change="test(department)",ng-init= ,ng-options="department.abbreviation as department.abbreviation for department in departments")
+                            select.form-control.select.select-default.mrs.mbm(data-toggle='select',name="department",ng-model="department",ng-change="test(department)",ng-options="department.abbreviation as department.abbreviation for department in departments")
                             
                               //option(ng-repeat="department in departments" value="{{department.abbreviation}}") {{department.abbreviation}}
                               //- each department in departments
