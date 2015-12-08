@@ -46,6 +46,7 @@ block content
                         | {{'Year ' + row.year + ' Semester ' + row.semester}}
                       ul(dnd-list='row.course',dnd-allowed-types="34",dnd-disable-if="false")
                         .dnd-row
+                          
                           div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1)', dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year <= year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 2 && !(row.year < year.year || (row.year <= year && row.semester <= semester))) }")
                             li.radius
                               span {{item.course_id +" "+item.course_name}}
@@ -64,6 +65,12 @@ block content
                     
                     ul(dnd-list='courselist')
                       .dnd-row
+                        //- div.coursebox(ng-init="dummy = '{course_name:"dummy",course_id:"ddfasd"}'",ng-model="dummy", dnd-moved='dummy', dnd-effect-allowed='copy', dnd-draggable='item')
+                        //-   li.radius
+                        //-     span {{item.course_id +" "+item.course_name}}
+                        div.coursebox(ng-repeat='item in dummy', dnd-moved='dummy.splice($index, 1)', dnd-effect-allowed='copy', dnd-draggable='item')
+                          li.radius
+                            span {{item.course_id +" "+item.course_name}}
                         div.coursebox(ng-repeat='item in courselist', dnd-moved='courselist.splice($index, 1)', dnd-effect-allowed='move', dnd-draggable='item')
                           li.radius
                             span {{item.course_id +" "+item.course_name}}
