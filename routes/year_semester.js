@@ -34,23 +34,26 @@ router.get('/add', auth, function(req, res) {
 });
 
 router.get('/current', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
-    res.redirect('/');
-  }
 
-  yearSemesterData.findOne({status:'active'})
-    .sort('-year')
-    .exec(function(err, collection) {
-      if (err)
-        res.send(err);
-      res.send(collection);
-    });
+
+    yearSemesterData.findOne({status:'Active'})
+      .sort('-year')
+      .exec(function(err, collection) {
+        if (err){
+          res.send(err);
+        }else{
+          res.send(collection);
+        }
+
+
+      });
+
+
+
 });
 
 router.post('/', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
-    res.redirect('/');
-  }
+
 
   data = {};
   data.year = req.body.Year;

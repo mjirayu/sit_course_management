@@ -7,9 +7,16 @@ var dataPlan = require('./../models/plan');
 var dataUser = require('./../models/user_profile');
 var dataCourse = require('./../models/course');
 var datayearsemester = require('./../models/year_semester');
+var dataDepartment = require('./../models/department');
 
 router.get('/', auth, function(req, res, next) {
   res.redirect('/');
+});
+
+router.get('/department', auth, function(req, res, next) {
+  dataDepartment.find({}, function(err, collection) {
+    res.json(collection);
+  });
 });
 
 router.get('/user/:id', auth, function(req, res, next) {
@@ -28,7 +35,7 @@ router.post('/user/plan', auth, function(req, res) {
   };
 
   datayearsemester.findOne({status:'active'})
-    .sort('-year').update({}, { $push: {'courselist': data} })
+    .sort('year').update({}, { $push: {'courselist': data} })
     .exec(function(err, collection) {
     if (err) res.send(err);
     res.send(collection);
@@ -55,7 +62,9 @@ router.get('/defaultplan/:id', function(req, res, next) {
 });
 
 router.get('/course', function(req, res) {
-  dataCourse.find({}, function(err, collection) {
+  dataCourse.find({})
+  .populate('department')
+  .exec(function(err, collection) {
     res.json(collection);
   });
 });
