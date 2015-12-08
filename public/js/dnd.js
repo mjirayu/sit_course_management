@@ -188,7 +188,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     console.log('old');
       console.log(old);
   });
-  
+
   $http.get(base_url+'years/current').success(function(response) {
     $scope.current_year = response;
     console.log(response);
@@ -259,6 +259,27 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     });
     console.log($scope.department);
   };
+  $scope.dummy = [
+    {
+    course_name: "Dummy",
+    course_id: "CSC000",
+    credit: "3",
+
+    department: {
+    name: "Computer science",
+    abbreviation: "CS",
+    __v: 0
+    },
+    description: "Dummy course",
+    type: "elective",
+    __v: 0,
+    corequisite: [
+    "None"
+    ],
+    prerequisite: [
+    "None"
+    ]
+    }];
   $scope.courselist = {};
   $http.get(base_url+ 'api/course').success(function(response) {
     $scope.courselist = response;
