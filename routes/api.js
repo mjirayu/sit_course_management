@@ -85,6 +85,7 @@ router.post('/plan/:id', function(req, res, next) {
 });
 
 router.post('/plan', function(req, res, next) {
+  
   dataPlan.create(req.body.data, function(err, collection) {
     if (err)
 			res.send(err);
