@@ -1,4 +1,4 @@
-var base_url = "http://55.55.55.55:3000/";
+var base_url = "http://localhost:3000/";
 var year = {
   year:4,
   semester:1,
@@ -7,38 +7,104 @@ var year = {
 var selectElement = {};
 
 angular.module('app', ['dndLists']).controller('dndController', function($scope, $http) {
-  $scope.entranced_year = 2555;
+  $scope.entranced_year = 2556;
   $scope.plandata = {};
+  var old = {};
+
+  $scope.dragend = function(){
+    $scope.dragitem = -1;
+  };
+  $scope.drop = function(event, index, external, type){
+    console.log(index);
+    console.log(external);
+  };
+  $scope.dragoverCallback = function(course,event) {
+    console.log(course);
+    console.log(event);
+    //$scope.dragitem = 4;
+    //console.log($scope.plandata.plan);
+    if($scope.plandata.plan instanceof Array){
+      $scope.plandata.plan.map(function(items,index){
+        if(items.course instanceof Array){
+          //console.log(item);
+          items.course.map(function(item, index){
+
+            if(course.prerequisite instanceof Array){
+              for(c in course.prerequisite){
+                console.log(course.prerequisite[c]);
+                console.log(item.course_id);
+                console.log(item.index);
+                if(course.prerequisite[c] == item.course_id){
+                  $scope.dragitem = items.index;
+                }
+              }
+              if(course.prerequisite == item.course_id){
+                $scope.dragitem = items.index;
+              }
+            }else{
+              if(course.prerequisite == item.course_id){
+                $scope.dragitem = item.index;
+              }
+            }
+
+          });
+        }
+        return items;
+      });
+    }
+
+    return true;
+  };
+
+  $scope.condition = function(item){
+
+  };
+  $scope.dragitem = -1;
+
+
+
   $http.get(base_url + 'api/course').success(function(response) {
-    $scope.courselist = response;
+    if(response instanceof Array){
+      $scope.courselist = response.filter(function(item, index){
+        if(item.type == "elective"){
+          return true;
+        }else{
+          return false;
+        }
+      });
+    }
+
     console.log($scope.courselist);
   });
 
   $scope.save = function() {
+    if($('button[name="save"]').data('save') == 'can'){
+      if ($scope.plandata) {
+        console.log('true');
+        $http({
+          method: 'POST',
+          url: base_url + 'students/update',
+          data: {data: $scope.plandata.plan},
+        }).then(function(response) {
+          console.log(response);
+          alert('success');
+        },
 
-    if ($scope.plandata) {
-      console.log('true');
-      $http({
-        method: 'POST',
-        url: base_url + 'students/update',
-        data: {data: $scope.plandata.plan},
-      }).then(function(response) {
-        console.log(response);
-        alert('success');
-      },
-
-      function(response) {
-        console.log(response);
-      });
-    } else {
-      console.log('else');
+        function(response) {
+          console.log(response);
+        });
+      } else {
+        console.log('else');
+      }
     }
+
   };
 
   $scope.register = function() {
     data_select = $('input[name="elective"]:checked').val();
     if (data_select) {
       data = JSON.parse(data_select);
+      console.log(data);
       $scope.plandata.plan[selectElement.items].course[selectElement.item].name = data.course_name;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].course_id = data.course_id;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].description = data.description;
@@ -100,10 +166,44 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
 
   $http.get(base_url + 'api/user/' + $('#userinfo input[name="id"]').val()).success(function(response) {
     console.log('User data ' + base_url + 'api/user/' + $('#userinfo input[name="id"]').val());
+    count = 0;
+    // if(response.plan instanceof Array){
+    //   response.plan.map(function(item,index){
+    //     if(item.course instanceof Array){
+    //       item.course.map(function(item, index){
+    //         item.index = count;
+    //         count++;
+    //         return item;
+    //       });
+    //     }else{
+    //       return item;
+    //     }
+    //   });
+    // }
+    if(response.plan instanceof Array){
+      response.plan.map(function(item,index){
+        item.index = count;
+        count++;
+        return item;
+      });
+    }
 
     $scope.plandata = response;
+
+
+    old = response.plan.map(function(item, index){
+      data = {};
+      data.course =  item.course.map(function(item, index){
+        return {'_id': item._id,'course_id': item.course_id};
+      });
+      return data;
+    });
     console.log(response);
+    console.log('old');
+      console.log(old);
   });
+
+
 
   $scope.alertData = function(data){
     alert(data);
@@ -112,15 +212,65 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   // Generate initial model
   // Model to JSON for demo purpose
   $scope.$watch('plandata', function(model) {
+    var data = $scope.plandata;
+    if(data.plan instanceof Array){
+      data = data.plan.map(function(item, index){
+        data = {};
+        data.course =  item.course.map(function(item, index){
+          return {'_id': item._id,'course_id': item.course_id};
+        });
+        return data;
+      });
+    }
+
+    console.log(JSON.stringify(data));
+    console.log(JSON.stringify(old));
+    console.log(JSON.stringify(data) == JSON.stringify(old));
     $scope.modelAsJson = angular.toJson(model, true);
+
+
+    if(JSON.stringify(data) == JSON.stringify(old)){
+      //#929292 #2ecc71
+      $('button[name="save"]').css({'background':'#929292'});
+      $('button[name="save"]').data('save','can not');
+    }else{
+      $('button[name="save"]').css({'background':'#2ecc71'});
+      $('button[name="save"]').data('save','can');
+    }
   }, true);
 
 }).controller('planController', function($scope,$http) {
+  $scope.test = function(department){
+    $http.get(base_url+ 'api/course').success(function(response) {
+      if(response instanceof Array){
+        $scope.courselist = response.filter(function(item, index){
+          if(item.department.abbreviation == department){
+            return true;
+          }else{
+            return false;
+          }
+        });
+      }
 
+      console.log(department);
+
+
+    });
+    console.log($scope.department);
+  };
   $scope.courselist = {};
   $http.get(base_url+ 'api/course').success(function(response) {
     $scope.courselist = response;
     console.log($scope.courselist);
+
+
+  });
+
+  $http.get(base_url+ 'api/department').success(function(response) {
+    $scope.departments = response;
+    console.log($scope.departments);
+
+
   });
 
   $scope.plandata = {

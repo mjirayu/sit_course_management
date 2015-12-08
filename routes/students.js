@@ -487,31 +487,32 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
 //========== DND ==========
 
 router.post('/update', auth, function(req, res) {
-  if (req.user.is_admin != 1) {
-    res.redirect('/');
-  }
+  
+    var today = dateFunction.getDate();
+    console.log(req.body.data);
+    console.log(req.user._id);
 
-  var today = dateFunction.getDate();
-  console.log(req.body.data);
-  console.log(req.user._id);
-
-  dataUser.findOneAndUpdate(
-    {auth:req.user._id},
-    {
-      $set: {
-        'status': 'Pending',
-        'plan': req.body.data,
+    dataUser.findOneAndUpdate(
+      {auth:req.user._id},
+      {
+        $set: {
+          'status': 'Pending',
+          'plan': req.body.data,
+        },
       },
-    },
-    function(err, collection) {
-      if (err) {
-        message = validate.getMessage(err);
-        res.send(message);
-      } else {
-        res.send(collection);
+      function(err, collection) {
+        if (err) {
+          console.log(err);
+          message = validate.getMessage(err);
+          res.send(message);
+        } else {
+          res.send(collection);
+        }
       }
-    }
-  );
+    );
+
+
+
 });
 
 //========== End DND ==========

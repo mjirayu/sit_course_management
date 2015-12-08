@@ -22,7 +22,7 @@ var yearSemesterSchema = new Schema({
     },
     course_id: {
       type: Schema.ObjectId,
-      ref: 'courses'
+      ref: 'course'
     },
     message: String
     ,
