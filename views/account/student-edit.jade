@@ -27,6 +27,9 @@ block content
                   select(name="department").form-control
                     each department in departments
                       option(value="#{department._id}") #{department.name}
+                div.form-group
+                  label Entranced Year
+                  input(type="text", name="entranced_year", value="#{data.entranced_year}").form-control
                 div.form-group  
                   button(type="submit").btn.btn-info Update
                   a(href="/students").btn.btn-primary Back
@@ -37,6 +40,7 @@ block content
             $(this).attr('selected', 'selected');
           } 
         }); 
+        
         today = new Date();
         year = today.getFullYear();   
         $('#entranced_year').val(year);

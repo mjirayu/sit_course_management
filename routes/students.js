@@ -132,6 +132,7 @@ router.post('/edit/:id', auth, function(req, res) {
       $set: {
         'fullname': req.body.fullname,
         'department': req.body.department,
+        'entranced_year': req.body.entranced_year,
         'last_update': today,
       },
     },
