@@ -34,27 +34,18 @@ router.get('/add', auth, function(req, res) {
 });
 
 router.get('/current', auth, function(req, res) {
-
-
-    yearSemesterData.findOne({status:'active'})
-      .sort('-year')
-      .exec(function(err, collection) {
-        if (err){
-          res.send(err);
-        }else{
-          res.send(collection);
-        }
-
-
-      });
-
-
-
+  yearSemesterData.findOne({status:'Active'})
+    .sort('-year')
+    .exec(function(err, collection) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(collection);
+      }
+    });
 });
 
 router.post('/', auth, function(req, res) {
-
-
   data = {};
   data.year = req.body.Year;
   data.startSemesterOne = req.body.startsemester1;

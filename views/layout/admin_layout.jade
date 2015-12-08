@@ -30,8 +30,7 @@ html(lang='en')
     script(src='/js/vendor/angular.min.js')
     script(src='/js/vendor/angular-drag-and-drop-lists.min.js')
     script(src='/js/dnd.js')
-  body
-  html
+    script(src='/js/Chart.min.js')
 body(ng-app="app")
   #wrapper
     // Navigation
@@ -47,7 +46,7 @@ body(ng-app="app")
           a.navbar-brand(href='/')
             | Admin
         if is_instructor == 1
-          a.navbar-brand(href='/')
+          a.navbar-brand(href='/instructors/approve_plan')
             | Instructor
       // Top Menu Items
       ul.nav.navbar-right.top-nav
@@ -129,5 +128,3 @@ body(ng-app="app")
                 button.btn.btn-default(type="button", data-dismiss="modal") Close
                 button.btn.btn-primary(type="submit") Submit
     
-    // Include all compiled plugins (below), or include individual files as needed
-    // script(src='/js/flat-ui.min.js')

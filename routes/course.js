@@ -89,8 +89,13 @@ router.post('/create', auth, function(req, res) {
     recommended_year: req.body.recommended_year,
     description: req.body.description,
     type: req.body.type,
+  }, function(err) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.redirect('/course');
+    }
   });
-  res.redirect('/course');
 });
 
 router.get('/edit/:id', auth, function(req, res, next) {
