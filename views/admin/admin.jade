@@ -7,9 +7,135 @@ block content
         .col-lg-12
           h1.page-header
             | Statistics
+                
           ol.breadcrumb
             li.active
               i.fa.fa-dashboard
               |  Statistics
+              
       .row
         .col-lg-12
+          .panel.panel-default
+            .panel-body
+              form(name="signup-form", method="get" action='')
+                div.form-group
+                  label Entranced Year
+                  select(name="entranced_year").form-control
+                    each entracnedYear in entracnedYears
+                      option(value="#{entracnedYear}") #{entracnedYear}
+                div.form-group
+                  label Years
+                  select(name="departments").form-control
+                    each department in departments
+                      option(value="#{department._id}") #{department.name}
+                div.form-group
+                  button(type="submit").btn.btn-primary.pull-right Submit
+      
+      .row
+        .col-lg-12
+                  
+      .row
+        .col-lg-12
+          .panel.panel-default
+            .panel-body
+              h1.pull-left Years
+              div(style="width:50px; height:50px; background-color:rgba(255, 171, 171, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(100, 171, 171, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(55, 171, 70, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(200, 50, 171, 0.6);").pull-right
+              canvas#myChart(width='1200', height='500')  
+          .panel.panel-default
+            .panel-body
+              h1.pull-left Elective Course
+              div(style="width:50px; height:50px; background-color:rgba(255, 171, 171, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(100, 171, 171, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(55, 171, 70, 0.6);").pull-right
+              div(style="width:50px; height:50px; background-color:rgba(200, 50, 171, 0.6);").pull-right
+              canvas#myChart2(width='1200', height='500')
+          
+  script.
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var data = {
+      labels: ["2012", "2013", "2014", "2015"],
+      datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19]
+        }
+      ]
+    };
+    var options = {
+    }
+    var myBarChart = new Chart(ctx).Bar(data, options);
+    
+    var ctx2 = document.getElementById("myChart2").getContext("2d");
+    var data = {
+      labels: ["CSC419", "CSC101", "C102", "C103", "C104", "C105", "C106"],
+      datasets: [
+        {
+            label: "My First dataset",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [65, 59, 80, 81, 56, 55, 40]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+            label: "My Second dataset",
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,0.8)",
+            highlightFill: "rgba(151,187,205,0.75)",
+            highlightStroke: "rgba(151,187,205,1)",
+            data: [28, 48, 40, 19, 86, 27, 90]
+        }
+      ]
+    };
+    var options = {
+    }
+    var myBarChart2 = new Chart(ctx2).Bar(data, options);
+    
+        

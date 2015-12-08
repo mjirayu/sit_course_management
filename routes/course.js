@@ -29,7 +29,7 @@ router.get('/', auth, function(req, res, next) {
   };
 
   dataCourse.find({})
-    .sort('recommended_year')
+    .sort('course_id')
     .populate('instructor')
     .populate('department')
     .skip(perPage * page)
