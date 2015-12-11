@@ -1,4 +1,4 @@
-var base_url = "http://localhost:3000/";
+var base_url = "http://55.55.55.55:3000/";
 var year = {
   year:4,
   semester:1,

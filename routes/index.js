@@ -10,6 +10,7 @@ var dataPlan = require('./../models/plan');
 var dataAuthUser = require('./../models/auth_user');
 var dataUser = require('./../models/user_profile');
 var dataDepartment = require('./../models/department');
+var yearSemesterData = require('./../models/year_semester');
 
 // Helpers
 var dateFunction = require('./../helpers/date');
@@ -17,22 +18,203 @@ var authtentication = require('./../helpers/auth');
 var validate = require('./../helpers/validate');
 
 router.get('/', auth, function(req, res) {
+
   if (req.user.reset_password != '') {
     res.render('account/reset_password');
 	} else if (req.user.is_student == 1) {
     res.render('dnd/dnd', req.user);
   } else if (req.user.is_admin == 1 ) {
-    dataUser.find().distinct('entranced_year', function(error, entracnedYears) {
-      dataDepartment.find({}, function(err, collection) {
-        res.render('admin/admin', {
-          username: req.user.username,
-          is_admin: req.user.is_admin,
-          is_instructor: req.user.is_instructor,
-          departments: collection,
-          entracnedYears: entracnedYears,
-        });
+
+    dataUser.find({entranced_year: {$ne: ''}, position: null}).distinct('entranced_year', function(error, entracnedYears) {
+      dataDepartment.find({}, function(err, departments) {
+        yearSemesterData.findOne({status:'Active'})
+          .exec(function(err, year) {
+            thisYear = year.year;
+            dataUser
+              .find({
+                entranced_year: { $gte: thisYear-3, $lte: thisYear },
+                position: null,
+                department: '566685b1479398470ed2a100',
+              })
+              .exec(function(err, collection) {
+                data = [
+                  {
+                    1: {
+                      count:0,
+                      courselist:[]
+                    },
+                    2: {
+                      count:0,
+                      courselist:[]
+                    },
+                    3: {
+                      count:0,
+                      courselist:[]
+                    },
+                    4: {
+                      count:0,
+                      courselist:[]
+                    },
+                  },
+                  {
+                    1: {
+                      count:0,
+                      courselist:[]
+                    },
+                    2: {
+                      count:0,
+                      courselist:[]
+                    },
+                    3: {
+                      count:0,
+                      courselist:[]
+                    },
+                    4: {
+                      count:0,
+                      courselist:[]
+                    },
+                  },
+                  {
+                    1: {
+                      count:0,
+                      courselist:[]
+                    },
+                    2: {
+                      count:0,
+                      courselist:[]
+                    },
+                    3: {
+                      count:0,
+                      courselist:[]
+                    },
+                    4: {
+                      count:0,
+                      courselist:[]
+                    },
+                  },
+                  {
+                    1: {
+                      count:0,
+                      courselist:[]
+                    },
+                    2: {
+                      count:0,
+                      courselist:[]
+                    },
+                    3: {
+                      count:0,
+                      courselist:[]
+                    },
+                    4: {
+                      count:0,
+                      courselist:[]
+                    },
+                  },
+                ];
+
+                data_course = {
+                  1: {
+                    elective_list: [],
+                  },
+                  2: {
+                    elective_list: [],
+                  },
+                  3: {
+                    elective_list: [],
+                  },
+                  4: {
+                    elective_list: [],
+                  },
+                }
+
+                collection.map(function(item, index) {
+                  item.plan.map(function(plan, index) {
+                    plan.course.map(function(course, index) {
+                      if (course.type == 'elective') {
+                        for(i = 0; i < 4; i++){
+                          current = (thisYear + i) - item.entranced_year;
+                          if (current >= 0 && current <= 3 && plan.year == (current+1)) {
+                             data[i][current+1].count++;
+                             data[i][current+1].courselist.push(course);
+                          }
+                        }
+
+                        current = thisYear - item.entranced_year;
+                        if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+                          if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
+                            data_course[current+1].elective_list.push({
+                              'count': 1,
+                              'course_id': course.course_id,
+                            })
+                          } else {
+                            data_course[current+1].elective_list.forEach(function(item) {
+                              if(item['course_id'] == course.course_id) {
+                                item.count++;
+                              }
+                            });
+                          }
+                        }
+                      }
+                    });
+                  });
+                });
+
+                list_course = [];
+                for (obj in data_course) {
+                  data_course[obj].elective_list.map(function(course, index) {
+                    if (!(list_course.indexOf(course.course_id) >= 0)) {
+                      list_course.push(course.course_id);
+                    }
+                  })
+                }
+
+                list_count_course_by_year = {};
+                for (obj in data_course) {
+                  list_course.map(function(course_id, index) {
+                    data_course[obj].elective_list.map(function(course, index) {
+                      if (course.course_id == course_id) {
+                        list_count_course_by_year[course.course_id] = {count: []};
+                        if (obj == 1) {
+                          list_count_course_by_year[course.course_id].count.push({
+                            1: course.count
+                          });
+                        } else if (obj == 2) {
+                          list_count_course_by_year[course.course_id].count.push({
+                            2: course.count
+                          });
+                        } else if (obj == 3) {
+                          list_count_course_by_year[course.course_id].count.push({
+                            3: course.count
+                          });
+                        } else if (obj == 4) {
+                          list_count_course_by_year[course.course_id].count.push({
+                            4: course.count
+                          });
+                        }
+                      }
+                    })
+                  });
+                }
+
+                console.log(list_count_course_by_year.count)
+
+                res.render('admin/admin', {
+                  username: req.user.username,
+                  is_admin: req.user.is_admin,
+                  is_instructor: req.user.is_instructor,
+                  departments: departments,
+                  entracnedYears: entracnedYears,
+                  thisYear: thisYear,
+                  departmentSearch: '566685b1479398470ed2a100',
+                  data: data,
+                  list_course: list_course,
+                  list_count_course_by_year: list_count_course_by_year,
+                });
+              });
+          });
       });
     });
+
   } else if (req.user.is_instructor == 1) {
     res.redirect('/instructors/approve_plan');
   }
@@ -85,6 +267,334 @@ router.post('/reset_password', auth, function(req, res) {
     res.redirect('/');
   }
 
+});
+
+router.get('/statistics/search', function(req, res) {
+  var params = req.query;
+
+  dataUser.find({entranced_year: {$ne: ''}}).distinct('entranced_year', function(err, entracnedYears) {
+    dataDepartment.find({}, function(err, departments) {
+      yearSemesterData.findOne({status:'Active'})
+        .exec(function(err, year) {
+          thisYear = Number(params.entranced_year);
+          dataUser
+            .find({
+              entranced_year: { $gte: thisYear-3, $lte: thisYear },
+              position: null,
+              department: params.department,
+            })
+            .exec(function(err, collection) {
+              data = [
+                {
+                  1: {
+                    count:0,
+                    courselist:[]
+                  },
+                  2: {
+                    count:0,
+                    courselist:[]
+                  },
+                  3: {
+                    count:0,
+                    courselist:[]
+                  },
+                  4: {
+                    count:0,
+                    courselist:[]
+                  },
+                },
+                {
+                  1: {
+                    count:0,
+                    courselist:[]
+                  },
+                  2: {
+                    count:0,
+                    courselist:[]
+                  },
+                  3: {
+                    count:0,
+                    courselist:[]
+                  },
+                  4: {
+                    count:0,
+                    courselist:[]
+                  },
+                },
+                {
+                  1: {
+                    count:0,
+                    courselist:[]
+                  },
+                  2: {
+                    count:0,
+                    courselist:[]
+                  },
+                  3: {
+                    count:0,
+                    courselist:[]
+                  },
+                  4: {
+                    count:0,
+                    courselist:[]
+                  },
+                },
+                {
+                  1: {
+                    count:0,
+                    courselist:[]
+                  },
+                  2: {
+                    count:0,
+                    courselist:[]
+                  },
+                  3: {
+                    count:0,
+                    courselist:[]
+                  },
+                  4: {
+                    count:0,
+                    courselist:[]
+                  },
+                },
+              ];
+
+              data_course = {
+                1: {
+                  elective_list: [],
+                },
+                2: {
+                  elective_list: [],
+                },
+                3: {
+                  elective_list: [],
+                },
+                4: {
+                  elective_list: [],
+                },
+              }
+
+              collection.map(function(item, index) {
+                item.plan.map(function(plan, index) {
+                  plan.course.map(function(course, index) {
+                    if (course.type == 'elective') {
+                      for(i = 0; i < 4; i++) {
+                        current = (thisYear + i) - item.entranced_year;
+                        if (current >= 0 && current <= 3 && plan.year == (current+1)) {
+                           data[i][current+1].count++;
+                           data[i][current+1].courselist.push(course);
+                        }
+                      }
+
+                      current = thisYear - item.entranced_year;
+                      if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+                        if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
+                          data_course[current+1].elective_list.push({
+                            'count': 1,
+                            'course_id': course.course_id,
+                          })
+                        } else {
+                          data_course[current+1].elective_list.forEach(function(item) {
+                            if(item['course_id'] == course.course_id) {
+                              item.count++;
+                            }
+                          });
+                        }
+                      }
+                    }
+                  });
+                });
+              });
+
+              res.render('admin/admin', {
+                username: req.user.username,
+                is_admin: req.user.is_admin,
+                is_instructor: req.user.is_instructor,
+                departments: departments,
+                entracnedYears: entracnedYears,
+                departmentSearch: params.department,
+                thisYear: thisYear,
+                data: data,
+              });
+            });
+        });
+    });
+  });
+
+});
+
+router.get('/test_data', function(req, res) {
+
+  var today = new Date();
+  var thisYear = Number(today.getFullYear());
+
+  dataUser
+    .find({
+      entranced_year: { $gte: thisYear-3, $lte: thisYear },
+      position: null,
+    })
+    .exec(function(err, collection) {
+
+      data = [
+        {
+          1: {
+            count: 0,
+            courselist:[]
+          },
+          2: {
+            count:0,
+            courselist:[]
+          },
+          3: {
+            count:0,
+            courselist:[]
+          },
+          4: {
+            count:0,
+            courselist:[]
+          },
+        },
+        {
+          1: {
+            count:0,
+            courselist:[]
+          },
+          2: {
+            count:0,
+            courselist:[]
+          },
+          3: {
+            count:0,
+            courselist:[]
+          },
+          4: {
+            count:0,
+            courselist:[]
+          },
+        },
+        {
+          1: {
+            count:0,
+            courselist:[]
+          },
+          2: {
+            count:0,
+            courselist:[]
+          },
+          3: {
+            count:0,
+            courselist:[]
+          },
+          4: {
+            count:0,
+            courselist:[]
+          },
+        },
+        {
+          1: {
+            count:0,
+            courselist:[]
+          },
+          2: {
+            count:0,
+            courselist:[]
+          },
+          3: {
+            count:0,
+            courselist:[]
+          },
+          4: {
+            count:0,
+            courselist:[]
+          },
+        }
+      ];
+
+      data_course = {
+        1: {
+          elective_list: [],
+        },
+        2: {
+          elective_list: [],
+        },
+        3: {
+          elective_list: [],
+        },
+        4: {
+          elective_list: [],
+        },
+      }
+
+      collection.map(function(item, index) {
+        item.plan.map(function(plan, index) {
+          plan.course.map(function(course, index) {
+            if (course.type == 'elective') {
+              for(i = 0; i < 4; i++) {
+                current = (thisYear+i) - item.entranced_year;
+                if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+                   data[i][current+1].count++;
+                   data[i][current+1].courselist.push(course);
+                }
+              }
+              current = thisYear - item.entranced_year;
+              if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+                if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
+                  data_course[current+1].elective_list.push({
+                    'count': 1,
+                    'course_id': course.course_id,
+                  })
+                } else {
+                  data_course[current+1].elective_list.forEach(function(item) {
+                    if(item['course_id'] == course.course_id) {
+                      item.count++;
+                    }
+                  });
+                }
+              }
+            }
+          });
+        });
+      });
+
+      list_course = [];
+      for (obj in data_course) {
+        data_course[obj].elective_list.map(function(course, index) {
+          if (!(list_course.indexOf(course.course_id) >= 0)) {
+            list_course.push(course.course_id);
+          }
+        })
+      }
+
+      list_count_course_by_year = {};
+      for (obj in data_course) {
+        list_course.map(function(course_id, index) {
+          data_course[obj].elective_list.map(function(course, index) {
+            if (course.course_id == course_id) {
+              list_count_course_by_year[course.course_id] = {
+                count: {
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                }
+              }
+
+              if (obj == 1) {
+                list_count_course_by_year[course.course_id].count[obj] = course.count;
+              } else if (obj == 2) {
+                list_count_course_by_year[course.course_id].count[obj] = course.count;
+              } else if (obj == 3) {
+                list_count_course_by_year[course.course_id].count[obj] = course.count;
+              } else if (obj == 4) {
+                list_count_course_by_year[course.course_id].count[obj] = course.count;
+              }
+            }
+          })
+        });
+      }
+
+      res.send(list_count_course_by_year);
+    });
 });
 
 module.exports = router;
