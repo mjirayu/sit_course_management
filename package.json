@@ -21,6 +21,7 @@
     "json2csv": "^3.0.1",
     "method-override": "^2.3.5",
     "mocha": "^2.3.3",
+    "mongodb": "^2.1.0",
     "mongodb-migrate": "^1.2.3",
     "mongoose": "^4.1.12",
     "mongoose-unique-validator": "^0.6.0",
