@@ -436,27 +436,47 @@ router.get('/approve_plan', auth, function(req, res) {
     res.redirect('/');
   }
 
+  console.log(req.user);
+
   dataUser
     .findOne({
       auth: req.user._id,
     })
-    .exec(function(err, data){
-      dataUser.find({
-        status: 'Pending',
-        entranced_year: data.entranced_year,
-        department: data.department,
-      })
-        .populate('department')
-        .exec(function(err, collection) {
-          res.render('account/instructor-approve', {
-            datas: collection,
-            successMessage: req.flash('successMessage'),
-            errorMessage: req.flash('errorMessage'),
-            is_admin: req.user.is_admin,
-            is_instructor: req.user.is_instructor,
-            username: req.user.username,
-          });
-      });
+    .exec(function(err, data) {
+      if (data.position == 'Advisor') {
+        dataUser.find({
+          status: 'Pending1',
+          entranced_year: data.entranced_year,
+          department: data.department,
+        })
+          .populate('department')
+          .exec(function(err, collection) {
+            res.render('account/instructor-approve', {
+              datas: collection,
+              successMessage: req.flash('successMessage'),
+              errorMessage: req.flash('errorMessage'),
+              is_admin: req.user.is_admin,
+              is_instructor: req.user.is_instructor,
+              username: req.user.username,
+            });
+        });
+      } else if (data.position == 'Program Chairperson') {
+        dataUser.find({
+          status: 'Pending2',
+          department: data.department,
+        })
+          .populate('department')
+          .exec(function(err, collection) {
+            res.render('account/instructor-approve', {
+              datas: collection,
+              successMessage: req.flash('successMessage'),
+              errorMessage: req.flash('errorMessage'),
+              is_admin: req.user.is_admin,
+              is_instructor: req.user.is_instructor,
+              username: req.user.username,
+            });
+        });
+      }
     });
 });
 

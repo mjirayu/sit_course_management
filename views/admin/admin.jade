@@ -124,11 +124,11 @@ block content
     }
     var myBarChart = new Chart(ctx).Bar(data, options);
     
-    var labels = '#{list_course}'.split(',');
+    var list_courses = '#{list_course}'.split(',');
     
     $.get("http://55.55.55.55:3000/test_data", function( response ) {
       
-      var graphdata = {1:[],2:[],3:[],4:[]};
+      var graphdata = {1: [], 2: [], 3: [], 4: []};
       for(item in response){
         graphdata[1].push(response[item].count[1]);
         graphdata[2].push(response[item].count[2]);
@@ -136,11 +136,9 @@ block content
         graphdata[4].push(response[item].count[4]);
       }
       
-      console.log(labels);
-      console.log(graphdata[1]);
       var ctx2 = document.getElementById("myChart2").getContext("2d");
       var data = {
-        labels: labels,
+        labels: list_courses,
         datasets: [
           {
               label: "Freshman",

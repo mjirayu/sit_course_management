@@ -424,7 +424,6 @@ router.get('/statistics/search', function(req, res) {
 });
 
 router.get('/test_data', function(req, res) {
-
   var today = new Date();
   var thisYear = Number(today.getFullYear());
 
@@ -529,6 +528,7 @@ router.get('/test_data', function(req, res) {
         item.plan.map(function(plan, index) {
           plan.course.map(function(course, index) {
             if (course.type == 'elective') {
+              
               for(i = 0; i < 4; i++) {
                 current = (thisYear+i) - item.entranced_year;
                 if( current >= 0 && current <= 3 && plan.year == (current+1)) {
@@ -536,6 +536,7 @@ router.get('/test_data', function(req, res) {
                    data[i][current+1].courselist.push(course);
                 }
               }
+
               current = thisYear - item.entranced_year;
               if( current >= 0 && current <= 3 && plan.year == (current+1)) {
                 if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
@@ -551,6 +552,7 @@ router.get('/test_data', function(req, res) {
                   });
                 }
               }
+
             }
           });
         });
