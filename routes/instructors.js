@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var crypto = require('crypto');
 var multer  = require('multer');
+var json2csv = require('json2csv');
 var fs = require('fs');
 var readline = require('readline');
 var url = require('url');
@@ -399,6 +400,34 @@ router.get('/search', auth, function(req, res, next) {
 });
 
 //========== End Search Instructor ==========
+
+//========== Export CSV ==========
+
+router.get('/exports', auth, function(req, res, next) {
+  if (req.user.is_admin != 1) {
+    res.redirect('/');
+  }
+
+  dataAuthUser.find({is_instructor: 1}, 'username reset_password', function(err, collection) {
+    datas = collection.filter(function(item) {
+      if (item.reset_password == '') return false;
+      return true;
+    })
+    .map(function(item) {
+      return item;
+    });
+
+    json2csv({data: datas, fields: ['username', 'reset_password']}, function(err, csv) {
+      if (err) console.log(err);
+      fs.writeFile('public/exports/instructors.csv', csv, function(err) {
+        if (err) throw err;
+        res.redirect('/exports/instructors.csv');
+      });
+    });
+  });
+});
+
+//========== End Export CSV ==========
 
 // ========== Approve Plan ==========
 

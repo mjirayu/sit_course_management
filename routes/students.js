@@ -488,7 +488,7 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
 //========== DND ==========
 
 router.post('/update', auth, function(req, res) {
-  
+
     var today = dateFunction.getDate();
     console.log(req.body.data);
     console.log(req.user._id);
