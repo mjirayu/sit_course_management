@@ -12,6 +12,8 @@ block content
         ul.nav.navbar-nav
           li.active
             a(href='#fakelink') Contact
+          li.active
+            a(href='logout') Logout
     // /navbar
     // Main contain
   .container(ng-controller="dndController")
@@ -33,24 +35,30 @@ block content
               | {{'Year ' + row.year + ' Semester ' + row.semester}} 
             ul(dnd-list='row.course',dnd-allowed-types="34",dnd-disable-if="false")
               .dnd-row
-                div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1) ',dnd-dragend='dragend()' ,dnd-dragstart='dragoverCallback(item,event)' , dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year <= year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 'elective' && !(row.year < year || (row.year <= year && row.semester <= semester))) }")
+                div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1) ',dnd-dragend='dragend()' ,dnd-dragstart='dragoverCallback(item,event)' , dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year == year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 'elective' && !(row.year < year || (row.year <= year && row.semester <= semester))) }")
                   li.radius
-                    span {{item.course_id +" "+item.name}}
+                    span {{item.course_id +" "+item.course_name}}{{year}}{{row.year}}{{semester}}{{row.semester}}
                   li.radius(ng-show="item.type == 'elective' && !(row.year < year || (row.year <= year && row.semester <= semester))")
                     a(type='button', data-toggle='modal', data-target='#myModal' ng-click='testfun($parent.$index,$index)' )
-                      | ลงทะเบียน {{year}}
+                      | แก้ไข
       .col-md-4
         .block.radius
           button.btn.btn-success.btn-block.btn-lg(ng-click="save()" name="save")
             h4 Save
+        .block.radius
+          h4.text-center {{plandata.status}}
         .block.radius
           h3.underline
             span Message
           p
             | พูดบางอย่างถึงอาจารย์เกี่ยวกับแผนการเรียนของคุณ
           form
-            input(type="text",placeholder="ข้อความ")
-            button.btn.btn-primary(type="submit") ส่ง
+            input(type="text",name="message" ,placeholder="ข้อความ")
+            button.btn.btn-primary(ng-click="message()", type="submit") ส่ง
+          div.message
+            .row(ng-repeat="row in plandata.message")
+              div(ng-class="{'mind-message': row.id == plandata._id}") {{row.text}}
+            
     .row
       .col-md-12
         .block.radius

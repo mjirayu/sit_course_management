@@ -12,6 +12,8 @@ var userProfileSchema = new Schema({
     unique: 'This name is already exist!',
     required: 'fullname is requried!',
   },
+  message: Array
+  ,
   department: {
     type: Schema.ObjectId,
     ref: 'Department',
