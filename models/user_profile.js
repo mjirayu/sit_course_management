@@ -28,7 +28,10 @@ var userProfileSchema = new Schema({
     type: String,
     unique: 'This ID is already exist!',
   },
-  entranced_year: String,
+  entranced_year: {
+    type: String,
+    default: "",
+  },
   plan: Array,
   auth: {
     type: Schema.ObjectId,
