@@ -49,16 +49,20 @@ block content
                   .block.radius
                     a.btn.btn-success.btn-block.btn-lg(ng-click="approve()")
                       h4 Approve
-                    a.btn.btn-danger.btn-block.btn-lg(ng-click="reject()")
+                    button.btn.btn-danger.btn-block.btn-lg(type="button", data-toggle="modal" data-target="#myReject")
                       h4 Reject
-                  .block.radius
-                    h3.underline
-                      span Course
-                    ul(dnd-list='courselist')
-                      .dnd-row
-                        div.coursebox(ng-repeat='item in courselist', dnd-moved='courselist.splice($index, 1)', dnd-effect-allowed='move', dnd-draggable='item')
-                          li.radius
-                            span {{item.course_id +" "+item.course_name}}
+                
+                    #myReject.modal.fade(role='dialog')
+                      .modal-dialog
+                        // Modal content
+                        .modal-content
+                          .modal-header
+                            button.close(type='button', data-dismiss='modal') ×
+                            h4.modal-title Message to Student
+                          .modal-body
+                            textarea.form-control(rows='10')
+                          .modal-footer
+                            button.btn.btn-primary(type='button', data-dismiss='modal') Submit
+                            button.btn.btn-default(type='button', data-dismiss='modal') Close
                             
-    script(src='/js/flat-ui.min.js')
     script(src='/js/application.js')
