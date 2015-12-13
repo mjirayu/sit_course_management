@@ -458,29 +458,54 @@ router.get('/edit/plan_status/:id', auth, function(req, res) {
 });
 
 router.post('/edit/plan_status/:id', auth, function(req, res) {
+  //Approve Reject
+  var status = "Pending1"
   if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
+  if(req.user._id){
+    dataUser.findOne({'auth': req.user._id},function(err,data){
+      if(err){
+        res.send(err);
+      }else{
+        if(data.position == "Advisor"){
+          if(req.body.status == "Approve"){
+            status = "Pending2"
+          }else{
+            status = "Reject"
+          }
 
-  var today = dateFunction.getDate();
-  dataUser.findByIdAndUpdate(
-    req.params.id,
-    {
-      $set: {
-        "status": req.body.status,
-        "last_update": today,
-      },
-    },
-    function(err, collection) {
-      if (err) {
-        message = validate.getMessage(err);
-        res.send(message);
-      } else {
-        req.flash('successMessage', 'Change Status Successfully');
-        res.redirect('/instructors/approve_plan');
+        }else if(data.position == "Program Chairperson"){
+          if(req.body.status == "Approve"){
+            status = "Approve"
+          }else{
+            status = "Reject"
+          }
+
+        }
+        var today = dateFunction.getDate();
+        dataUser.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: {
+              "status": status,
+              "last_update": today,
+            },
+          },
+          function(err, collection) {
+            if (err) {
+              message = validate.getMessage(err);
+              res.send(message);
+            } else {
+              req.flash('successMessage', 'Change Status Successfully');
+              res.redirect('/instructors/approve_plan');
+            }
+          }
+        );
       }
-    }
-  );
+    });
+  }
+
 });
 
 //========== End Approve Plan ==========
@@ -488,7 +513,7 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
 //========== DND ==========
 
 router.post('/update', auth, function(req, res) {
-  
+
     var today = dateFunction.getDate();
     console.log(req.body.data);
     console.log(req.user._id);

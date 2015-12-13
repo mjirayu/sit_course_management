@@ -1,4 +1,4 @@
-var base_url = "http://55.55.55.55:3000/";
+var base_url = "http://localhost:3000/";
 var year = {
   year:4,
   semester:1,
@@ -76,7 +76,26 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
 
     console.log($scope.courselist);
   });
+  $scope.message = function(){
+    var text = $('input[name="message"]').val();
+    $.ajax({
+      type:"POST",
+      url:base_url + 'api/message/' +$scope.plandata._id,
+      data: {'message':$('input[name="message"]').val(),'id': $scope.plandata._id}
+    }).done(function(data) {
+      console.log(data);
+      $('.message').prepend("<div class='row'><div class='mind-message'>"+text+"<div></div>")
 
+
+    }).fail(function(data) {
+      console.log("fail");
+      console.log(data);
+    });
+
+    // $.post(base_url+'api/message/'+$scope.plandata._id,{'message':$('input[name="message"]').val()}, function(data){
+    //   console.log(data);
+    // });
+  };
   $scope.save = function() {
     if($('button[name="save"]').data('save') == 'can'){
       if ($scope.plandata) {
@@ -105,12 +124,13 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     if (data_select) {
       data = JSON.parse(data_select);
       console.log(data);
+      $scope.plandata.plan[selectElement.items].course[selectElement.item]._id = data._id;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].name = data.course_name;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].course_id = data.course_id;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].description = data.description;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].department = data.department;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].credit = data.credit;
-      $scope.plandata.plan[selectElement.items].course[selectElement.item].type = 3;
+      $scope.plandata.plan[selectElement.items].course[selectElement.item].type = data.type;
       data = {course_id: data.course_id, action :'regis'};
       $http({
         method: 'POST',
@@ -201,7 +221,9 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       $scope.semester = response.year - $scope.entranced_year;
     }
 
-    $scope.year = response.year - $scope.plandata.entranced_year;
+    $scope.year = (response.year - $scope.plandata.entranced_year)+1;
+    console.log(response);
+    console.log($scope.plandata.entranced_year);
     console.log(' year ' + $scope.year);
   });
 
@@ -282,7 +304,18 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     }];
   $scope.courselist = {};
   $http.get(base_url+ 'api/course').success(function(response) {
-    $scope.courselist = response;
+    if(response instanceof Array){
+
+    }
+    $scope.courselist = response.filter(function(item, index){
+      console.log(item.type);
+      if(item.type == "main"){
+        return true;
+      }else{
+        return false;
+      }
+    });
+
     console.log($scope.courselist);
 
 

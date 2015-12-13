@@ -34,7 +34,7 @@ router.post('/user/plan', auth, function(req, res) {
     action: req.body.action,
   };
 
-  datayearsemester.findOne({status:'active'})
+  datayearsemester.findOne({status:'Active'})
     .sort('year').update({}, { $push: {'courselist': data} })
     .exec(function(err, collection) {
     if (err) res.send(err);
@@ -93,7 +93,16 @@ router.post('/plan', function(req, res, next) {
     }
   });
 });
-
+router.post('/message/:id',function(req, res){
+  dataUser.findByIdAndUpdate(req.params.id,{$push: {'message':{'id': req.body.id,'text':req.body.message}}}, function(err, collection){
+    if (err) {
+      console.log("ERRRRRRRRRRRRRRRRRRRRRR");
+      res.send(err);
+    } else {
+      res.send(collection);
+    }
+  });
+});
 router.put('/defaultplan/:id', function(req, res, next) {
   console.log(req.params.id);
   console.log(req.body);

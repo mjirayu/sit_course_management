@@ -221,3 +221,16 @@ h2.title span,h3.title span{
 .nodrop .dnd-row{
 	background: #F35858;
 }
+
+/*Message section*/
+.message .row > div{
+	background: #F2F2F2;
+	margin: 10px;
+	padding: 10px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.message .row > .mind-message{
+	background: #A4E693;
+}
