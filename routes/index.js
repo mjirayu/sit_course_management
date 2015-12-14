@@ -29,7 +29,13 @@ router.get('/', auth, function(req, res) {
       dataDepartment.find({}, function(err, departments) {
         yearSemesterData.findOne({status:'Active'})
           .exec(function(err, year) {
-            thisYear = year.year;
+            if (year == null) {
+              var today = new Date();
+              thisYear = Number(today.getFullYear());
+            } else {
+              thisYear = year.year;
+            }
+
             dataUser
               .find({
                 entranced_year: { $gte: thisYear-3, $lte: thisYear },
@@ -528,7 +534,7 @@ router.get('/test_data', function(req, res) {
         item.plan.map(function(plan, index) {
           plan.course.map(function(course, index) {
             if (course.type == 'elective') {
-              
+
               for(i = 0; i < 4; i++) {
                 current = (thisYear+i) - item.entranced_year;
                 if( current >= 0 && current <= 3 && plan.year == (current+1)) {
