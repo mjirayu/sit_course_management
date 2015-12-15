@@ -156,6 +156,36 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   };
 
   $scope.testfun = function(index1, index2) {
+    console.log("testFun");
+    var electivelist = [];
+    if($scope.plandata.plan instanceof Array){
+      electivelist = $scope.plandata.plan.filter(function(item, index){
+        item.course.filter(function(item, index){
+          if(item.type == "elective"){
+            electivelist.push(item.course_id);
+          }
+          return true;
+        });
+        return true;
+      });
+    }
+
+    $scope.courselist = $scope.courselist.filter(function(item, index){
+      if(item.course_id == "CSC000"){
+        return true;
+      }else{
+        for(elective in electivelist){
+          if(electivelist[elective] == item.course_id){
+            return false;
+          }else{
+            return true;
+          }
+        }
+      }
+
+    });
+
+
     selectElement = {
       items: index1,
       item: index2,
