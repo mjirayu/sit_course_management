@@ -159,10 +159,10 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
     console.log("testFun");
     var electivelist = [];
     if($scope.plandata.plan instanceof Array){
-      electivelist = $scope.plandata.plan.filter(function(item, index){
-        item.course.filter(function(item, index){
-          if(item.type == "elective"){
-            electivelist.push(item.course_id);
+      $scope.plandata.plan.filter(function(item, index){
+        item.course.filter(function(data, index){
+          if(data.type == "elective"){
+            electivelist.push(data.course_id);
           }
           return true;
         });
@@ -184,6 +184,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       }
 
     });
+    console.log(electivelist);
     console.log($scope.courselist);
 
 
