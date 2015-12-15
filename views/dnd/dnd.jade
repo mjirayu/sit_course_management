@@ -37,7 +37,7 @@ block content
               .dnd-row
                 div.coursebox(ng-repeat='item in row.course', dnd-moved='row.course.splice($index, 1) ',dnd-dragend='dragend()' ,dnd-dragstart='dragoverCallback(item,event)' , dnd-effect-allowed='move', dnd-disable-if='row.year < year || (row.year == year && row.semester <= semester)', dnd-draggable='item', ng-class="{'disable': row.year < year || (row.year <= year && row.semester <= semester),'enable': 1==1,'elective':(item.type == 'elective' && !(row.year < year || (row.year <= year && row.semester <= semester))) }")
                   li.radius
-                    span {{item.course_id +" "+item.course_name}}{{year}}{{row.year}}{{semester}}{{row.semester}}
+                    span {{item.course_id +" "+item.course_name}}
                   li.radius(ng-show="item.type == 'elective' && !(row.year < year || (row.year <= year && row.semester <= semester))")
                     a(type='button', data-toggle='modal', data-target='#myModal' ng-click='testfun($parent.$index,$index)' )
                       | แก้ไข
