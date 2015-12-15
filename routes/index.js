@@ -212,7 +212,7 @@ router.get('/', auth, function(req, res) {
                     departments: departments,
                     entracnedYears: entracnedYears,
                     thisYear: thisYear,
-                    departmentSearch: '566685b1479398470ed2a100',
+                    departmentSearch: departmentData._id,
                     data: data,
                     list_course: list_course,
                     list_count_course_by_year: list_count_course_by_year,
@@ -546,7 +546,7 @@ router.get('/test_data', function(req, res) {
               }
 
               current = thisYear - item.entranced_year;
-              if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+              if( current >= 0 && current <= 3) {
                 if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
                   data_course[current+1].elective_list.push({
                     'count': 1,
@@ -580,23 +580,25 @@ router.get('/test_data', function(req, res) {
         list_course.map(function(course_id, index) {
           data_course[obj].elective_list.map(function(course, index) {
             if (course.course_id == course_id) {
-              list_count_course_by_year[course.course_id] = {
-                count: {
-                    1: 0,
-                    2: 0,
-                    3: 0,
-                    4: 0,
+              if (!list_count_course_by_year.hasOwnProperty(course_id)) {
+                list_count_course_by_year[course.course_id] = {
+                  count: {
+                      1: 0,
+                      2: 0,
+                      3: 0,
+                      4: 0,
+                  }
                 }
               }
 
               if (obj == 1) {
-                list_count_course_by_year[course.course_id].count[obj] = course.count;
+                list_count_course_by_year[course.course_id].count[obj]++;
               } else if (obj == 2) {
-                list_count_course_by_year[course.course_id].count[obj] = course.count;
+                list_count_course_by_year[course.course_id].count[obj]++;
               } else if (obj == 3) {
-                list_count_course_by_year[course.course_id].count[obj] = course.count;
+                list_count_course_by_year[course.course_id].count[obj]++;
               } else if (obj == 4) {
-                list_count_course_by_year[course.course_id].count[obj] = course.count;
+                list_count_course_by_year[course.course_id].count[obj]++;
               }
             }
           })
