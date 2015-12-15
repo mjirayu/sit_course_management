@@ -385,81 +385,6 @@ router.get('/test_data', function(req, res) {
     })
     .exec(function(err, collection) {
 
-      data = [
-        {
-          1: {
-            count: 0,
-            courselist:[]
-          },
-          2: {
-            count:0,
-            courselist:[]
-          },
-          3: {
-            count:0,
-            courselist:[]
-          },
-          4: {
-            count:0,
-            courselist:[]
-          },
-        },
-        {
-          1: {
-            count:0,
-            courselist:[]
-          },
-          2: {
-            count:0,
-            courselist:[]
-          },
-          3: {
-            count:0,
-            courselist:[]
-          },
-          4: {
-            count:0,
-            courselist:[]
-          },
-        },
-        {
-          1: {
-            count:0,
-            courselist:[]
-          },
-          2: {
-            count:0,
-            courselist:[]
-          },
-          3: {
-            count:0,
-            courselist:[]
-          },
-          4: {
-            count:0,
-            courselist:[]
-          },
-        },
-        {
-          1: {
-            count:0,
-            courselist:[]
-          },
-          2: {
-            count:0,
-            courselist:[]
-          },
-          3: {
-            count:0,
-            courselist:[]
-          },
-          4: {
-            count:0,
-            courselist:[]
-          },
-        }
-      ];
-
       data_course = {
         1: {
           elective_list: [],
@@ -479,17 +404,8 @@ router.get('/test_data', function(req, res) {
         item.plan.map(function(plan, index) {
           plan.course.map(function(course, index) {
             if (course.type == 'elective') {
-
-              for(i = 0; i < 4; i++) {
-                current = (thisYear+i) - item.entranced_year;
-                if( current >= 0 && current <= 3 && plan.year == (current+1)) {
-                   data[i][current+1].count++;
-                   data[i][current+1].courselist.push(course);
-                }
-              }
-
               current = thisYear - item.entranced_year;
-              if( current >= 0 && current <= 3) {
+              if( current >= 0 && current <= 3 && plan.year == (current+1)) {
                 if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
                   data_course[current+1].elective_list.push({
                     'count': 1,
