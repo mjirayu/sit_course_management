@@ -124,9 +124,7 @@ block content
     }
     var myBarChart = new Chart(ctx).Bar(data, options);
     
-    var list_courses = '#{list_course}'.split(',');
-    
-    $.get("http://55.55.55.55:3000/test_data", function( response ) {
+    $.get("http://188.166.238.65:3000/test_data", function( response ) {
       
       var graphdata = {1: [], 2: [], 3: [], 4: []};
       for(item in response){
@@ -138,7 +136,7 @@ block content
       
       var ctx2 = document.getElementById("myChart2").getContext("2d");
       var data = {
-        labels: list_courses,
+        labels: Object.keys(response),
         datasets: [
           {
               label: "Freshman",
