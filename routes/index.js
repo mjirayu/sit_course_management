@@ -119,19 +119,10 @@ router.get('/', auth, function(req, res) {
                     },
                   ];
 
-                  data_course = {
-                    1: {
-                      elective_list: [],
-                    },
-                    2: {
-                      elective_list: [],
-                    },
-                    3: {
-                      elective_list: [],
-                    },
-                    4: {
-                      elective_list: [],
-                    },
+                  entracnedYears = entracnedYears.map(Number);
+                  max = Math.max.apply(null, entracnedYears);
+                  for (i = 1; i < 4; i++) {
+                    entracnedYears.push(max+i);
                   }
 
                   collection.map(function(item, index) {
@@ -155,7 +146,7 @@ router.get('/', auth, function(req, res) {
                     is_admin: req.user.is_admin,
                     is_instructor: req.user.is_instructor,
                     departments: departments,
-                    entracnedYears: entracnedYears,
+                    entracnedYears: entracnedYears.sort(),
                     thisYear: thisYear,
                     departmentSearch: departmentData._id,
                     data: data,
@@ -310,19 +301,10 @@ router.get('/statistics/search', function(req, res) {
                 },
               ];
 
-              data_course = {
-                1: {
-                  elective_list: [],
-                },
-                2: {
-                  elective_list: [],
-                },
-                3: {
-                  elective_list: [],
-                },
-                4: {
-                  elective_list: [],
-                },
+              entracnedYears = entracnedYears.map(Number);
+              max = Math.max.apply(null, entracnedYears);
+              for (i = 1; i < 4; i++) {
+                entracnedYears.push(max+i);
               }
 
               collection.map(function(item, index) {
@@ -336,22 +318,6 @@ router.get('/statistics/search', function(req, res) {
                            data[i][current+1].courselist.push(course);
                         }
                       }
-
-                      current = thisYear - item.entranced_year;
-                      if( current >= 0 && current <= 3 && plan.year == (current+1)) {
-                        if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
-                          data_course[current+1].elective_list.push({
-                            'count': 1,
-                            'course_id': course.course_id,
-                          })
-                        } else {
-                          data_course[current+1].elective_list.forEach(function(item) {
-                            if(item['course_id'] == course.course_id) {
-                              item.count++;
-                            }
-                          });
-                        }
-                      }
                     }
                   });
                 });
@@ -362,7 +328,7 @@ router.get('/statistics/search', function(req, res) {
                 is_admin: req.user.is_admin,
                 is_instructor: req.user.is_instructor,
                 departments: departments,
-                entracnedYears: entracnedYears,
+                entracnedYears: entracnedYears.sort(),
                 departmentSearch: params.department,
                 thisYear: thisYear,
                 data: data,
@@ -375,12 +341,15 @@ router.get('/statistics/search', function(req, res) {
 });
 
 router.get('/test_data', function(req, res) {
+  var params = req.query;
+
   var today = new Date();
-  var thisYear = Number(today.getFullYear());
+  var thisYear = Number(params.entranced_year);
 
   dataUser
     .find({
       entranced_year: { $gte: thisYear-3, $lte: thisYear },
+      department: params.department,
       position: null,
     })
     .exec(function(err, collection) {
@@ -405,7 +374,7 @@ router.get('/test_data', function(req, res) {
           plan.course.map(function(course, index) {
             if (course.type == 'elective') {
               current = thisYear - item.entranced_year;
-              if( current >= 0 && current <= 3 && plan.year == (current+1)) {
+              if(current >= 0 && current <= 3 && plan.year == (current+1)) {
                 if (!(data_course[current+1].elective_list.indexOf(course.course_id) >= 0) && course.course_id != 'CSC000') {
                   data_course[current+1].elective_list.push({
                     'count': 1,
@@ -419,7 +388,6 @@ router.get('/test_data', function(req, res) {
                   });
                 }
               }
-
             }
           });
         });

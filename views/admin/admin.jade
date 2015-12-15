@@ -19,7 +19,7 @@ block content
             .panel-body
               form(name="signup-form", method="get" action='/statistics/search/')
                 div.form-group
-                  label Entranced Year
+                  label Year
                   select(name="entranced_year").form-control
                     each entracnedYear in entracnedYears
                       option(value="#{entracnedYear}") #{entracnedYear}
@@ -124,7 +124,7 @@ block content
     }
     var myBarChart = new Chart(ctx).Bar(data, options);
     
-    $.get("http://188.166.238.65:3000/test_data", function( response ) {
+    $.get("http://188.166.238.65:3000/test_data?department=" + '#{departmentSearch}' + '&entranced_year=' + '#{thisYear}', function( response ) {
       
       var graphdata = {1: [], 2: [], 3: [], 4: []};
       for(item in response){
