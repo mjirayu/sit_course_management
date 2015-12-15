@@ -1,4 +1,4 @@
-var base_url = "http://localhost:3000/";
+var base_url = "http://188.166.238.65:3000/";
 var year = {
   year:4,
   semester:1,
@@ -184,6 +184,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       }
 
     });
+    console.log($scope.courselist);
 
 
     selectElement = {
