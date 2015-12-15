@@ -37,6 +37,10 @@ router.get('/', auth, function(req, res) {
             }
 
             dataDepartment.findOne({abbreviation: 'CS'}, function(err, departmentData) {
+              if (departmentData == null) {
+                res.redirect('/department');
+              }
+
               dataUser
                 .find({
                   entranced_year: { $gte: thisYear-3, $lte: thisYear },
