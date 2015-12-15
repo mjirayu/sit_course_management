@@ -522,7 +522,7 @@ router.post('/update', auth, function(req, res) {
       {auth:req.user._id},
       {
         $set: {
-          'status': 'Pending',
+          'status': 'Pending1',
           'plan': req.body.data,
         },
       },

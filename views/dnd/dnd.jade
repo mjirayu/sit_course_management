@@ -44,7 +44,7 @@ block content
           button.btn.btn-success.btn-block.btn-lg(ng-click="save()" name="save")
             h4 Save
         .block.radius
-          h4.text-center {{plandata.status}}
+          h4.text-center {{plandata.status == "Approve" ? "Approve" : "Pending"}}
         .block.radius
           h3.underline
             span Message

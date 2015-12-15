@@ -125,7 +125,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
       data = JSON.parse(data_select);
       console.log(data);
       $scope.plandata.plan[selectElement.items].course[selectElement.item]._id = data._id;
-      $scope.plandata.plan[selectElement.items].course[selectElement.item].name = data.course_name;
+      $scope.plandata.plan[selectElement.items].course[selectElement.item].course_name = data.course_name;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].course_id = data.course_id;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].description = data.description;
       $scope.plandata.plan[selectElement.items].course[selectElement.item].department = data.department;
