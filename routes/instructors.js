@@ -251,7 +251,7 @@ router.post('/csv', upload.single('csv'), auth, function(req, res, next) {
   var salt = authtentication.createSalt();
   var today = dateFunction.getDate();
   var isColumn = true;
-
+  console.log(req.file.mimetype);
   if (req.file == undefined) {
     req.flash('errorMessage', ['Choose CSV file']);
     res.redirect('/instructors');
