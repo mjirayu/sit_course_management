@@ -1,4 +1,4 @@
-var base_url = "http://188.166.238.65:3000/";
+var base_url = "http://localhost:3000/";
 var year = {
   year:4,
   semester:1,
@@ -156,34 +156,77 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
   };
 
   $scope.testfun = function(index1, index2) {
-    console.log("testFun");
     var electivelist = [];
-    if($scope.plandata.plan instanceof Array){
-      $scope.plandata.plan.filter(function(item, index){
-        item.course.filter(function(data, index){
-          if(data.type == "elective"){
-            electivelist.push(data.course_id);
-          }
+    $http.get(base_url + 'api/course').success(function(response) {
+
+      if($scope.plandata.plan instanceof Array){
+        $scope.plandata.plan.filter(function(item, index){
+          item.course.filter(function(data, index){
+            if(data.type == "elective"){
+              electivelist.push(data.course_id);
+            }
+            return true;
+          });
           return true;
         });
-        return true;
-      });
-    }
-
-    $scope.courselist = $scope.courselist.filter(function(item, index){
-      if(item.course_id == "CSC000"){
-        return true;
-      }else{
-        for(elective in electivelist){
-          if(electivelist[elective] == item.course_id){
-            return false;
-          }else{
-            return true;
-          }
-        }
       }
 
+      if(response instanceof Array){
+        $scope.courselist = response.filter(function(item, index){
+          if(item.type == "elective"){
+            return true;
+          }else{
+            return false;
+          }
+        });
+
+        $scope.courselist = $scope.courselist.filter(function(item, index){
+          var check = true;
+          electivelist.map(function(data, index){
+            console.log(data == item.course_id);
+            if(data == item.course_id){
+              check = false;
+            }
+            return data;
+          });
+          console.log(item);
+          if(check){
+            return true;
+          }else{
+            return false;
+          }
+        });
+
+
+      }
+
+      console.log($scope.courselist);
     });
+    console.log("testFun");
+
+
+
+
+
+
+    // $scope.courselist = $scope.courselist.filter(function(item, index){
+    //   if(item.course_id == "CSC000"){
+    //     return true;
+    //   }else{
+    //     for(elective in electivelist){
+    //       console.log(electivelist[1]);
+    //       console.log(electivelist[elective] == item.course_id);
+    //       console.log(electivelist[elective]);
+    //       console.log(item.course_id);
+    //       if(electivelist[elective] == item.course_id){
+    //         return false;
+    //       }else{
+    //         return true;
+    //       }
+    //     }
+    //   }
+    //
+    // });
     console.log(electivelist);
     console.log($scope.courselist);
 
