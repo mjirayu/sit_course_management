@@ -60,9 +60,9 @@ block content
                             button.close(type='button', data-dismiss='modal') ×
                             h4.modal-title Message to Student
                           .modal-body
-                            textarea.form-control(rows='10')
+                            textarea.form-control(rows='10',name="message-reject")
                           .modal-footer
-                            button.btn.btn-primary(type='button', data-dismiss='modal') Submit
+                            button.btn.btn-primary(type='button', data-dismiss='modal',ng-click="reject()") Submit
                             button.btn.btn-default(type='button', data-dismiss='modal') Close
                             
     script(src='/js/application.js')

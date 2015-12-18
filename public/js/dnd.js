@@ -584,7 +584,7 @@ angular.module('app', ['dndLists']).controller('dndController', function($scope,
 
   $scope.reject = function(){
     console.log($scope.plandata);
-    $http.post(window.location.origin + "/students/edit/plan_status/" + $scope.plandata._id, {status: 'Reject'}).success(function(response) {
+    $http.post(window.location.origin + "/students/edit/plan_status/" + $scope.plandata._id, {status: 'Reject',message: $("textarea[name='message-reject']").val()}).success(function(response) {
       console.log(response);
       window.location.replace(base_url + "instructors/approve_plan");
     });
