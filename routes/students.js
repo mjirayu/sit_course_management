@@ -503,18 +503,12 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
         var today = dateFunction.getDate();
         dataUser.findOne({'_id': req.params.id},function(err,item){
           if(status == "Reject"){
-            console.log("BBBBBBBBBBBBBBBBBBB");
-            console.log(item.back_up);
-            console.log(item);
             plan_data = item.back_up;
             backup = [];
           }else{
             plan_data = item.plan;
             backup = item.back_up;
           }
-          console.log("IDDDDDDDDDDD");
-          console.log(req.params.id);
-          console.log(item);
 
           dataUser.findByIdAndUpdate(
             req.params.id,
