@@ -21,6 +21,19 @@ var storage = multer.diskStorage({
 });
 var url = require('url');
 var qs = require('querystring');
+var nodemailer = require('nodemailer');
+
+//Node Mailer
+var transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    auth: {
+        user: '',
+        pass: ''
+    }
+});
+
+//Node Mailer End
 
 var upload = multer({ storage: storage });
 
@@ -459,30 +472,31 @@ router.get('/edit/plan_status/:id', auth, function(req, res) {
 
 router.post('/edit/plan_status/:id', auth, function(req, res) {
   //Approve Reject
-  var status = "Pending1"
+  var status = "Pending1";
   if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
+
   if(req.user._id){
     dataUser.findOne({'auth': req.user._id},function(err,data){
-      if(err){
+      if(err) {
         res.send(err);
-      }else{
-        if(data.position == "Advisor"){
-          if(req.body.status == "Approve"){
-            status = "Pending2"
-          }else{
+      } else {
+        if (data.position == "Advisor") {
+          if (req.body.status == "Approve") {
+            status = "Pending2";
+          } else {
             status = "Reject"
           }
 
-        }else if(data.position == "Program Chairperson"){
-          if(req.body.status == "Approve"){
-            status = "Approve"
-          }else{
-            status = "Reject"
+        } else if(data.position == "Program Chairperson") {
+          if (req.body.status == "Approve") {
+            status = "Approve";
+          } else {
+            status = "Reject";
           }
-
         }
+
         var today = dateFunction.getDate();
         dataUser.findByIdAndUpdate(
           req.params.id,
@@ -492,11 +506,29 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
               "last_update": today,
             },
           },
-          function(err, collection) {
+          function(err, user) {
             if (err) {
               message = validate.getMessage(err);
               res.send(message);
             } else {
+              if (status == "Approve" || status == "Pending2") {
+
+                var mailOptions = {
+                  from: '',
+                  to: '',
+                  subject: '',
+                  text: ''
+                };
+
+                transporter.sendMail(mailOptions, function(error, info){
+                    if(error){
+                        console.log(error);
+                    }
+                    console.log('Message sent: ' + info.response);
+                });
+
+              }
+
               req.flash('successMessage', 'Change Status Successfully');
               res.redirect('/instructors/approve_plan');
             }
