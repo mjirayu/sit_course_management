@@ -472,38 +472,59 @@ router.get('/edit/plan_status/:id', auth, function(req, res) {
 
 router.post('/edit/plan_status/:id', auth, function(req, res) {
   //Approve Reject
-  var status = "Pending1";
+  var backup;
+  var plan_data;
+  var status = "Pending1"
   if (req.user.is_instructor != 1) {
     res.redirect('/');
   }
 
   if(req.user._id){
     dataUser.findOne({'auth': req.user._id},function(err,data){
-      if(err) {
+
+      if(err){
         res.send(err);
-      } else {
-        if (data.position == "Advisor") {
-          if (req.body.status == "Approve") {
+      }else{
+        if(data.position == "Advisor"){
+          if(req.body.status == "Approve"){
             status = "Pending2";
-          } else {
-            status = "Reject"
+          }else{
+            status = "Reject";
           }
 
-        } else if(data.position == "Program Chairperson") {
-          if (req.body.status == "Approve") {
+        }else if(data.position == "Program Chairperson"){
+          if(req.body.status == "Approve"){
             status = "Approve";
-          } else {
+          }else{
             status = "Reject";
           }
         }
 
         var today = dateFunction.getDate();
-        dataUser.findByIdAndUpdate(
-          req.params.id,
-          {
-            $set: {
-              "status": status,
-              "last_update": today,
+        dataUser.findOne({'_id': req.params.id},function(err,item){
+          if(status == "Reject"){
+            console.log("BBBBBBBBBBBBBBBBBBB");
+            console.log(item.back_up);
+            console.log(item);
+            plan_data = item.back_up;
+            backup = [];
+          }else{
+            plan_data = item.plan;
+            backup = item.back_up;
+          }
+          console.log("IDDDDDDDDDDD");
+          console.log(req.params.id);
+          console.log(item);
+
+          dataUser.findByIdAndUpdate(
+            req.params.id,
+            {
+              $set: {
+                "status": status,
+                "last_update": today,
+                "plan": plan_data,
+                "back_up": backup
+              },
             },
           },
           function(err, user) {
@@ -532,8 +553,9 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
               req.flash('successMessage', 'Change Status Successfully');
               res.redirect('/instructors/approve_plan');
             }
-          }
-        );
+          );
+        });
+
       }
     });
   }
@@ -549,25 +571,33 @@ router.post('/update', auth, function(req, res) {
     var today = dateFunction.getDate();
     console.log(req.body.data);
     console.log(req.user._id);
+    dataUser.findOne(
+      {auth: req.user._id},
+      function(err, data){
+        var backupdata = data.plan;
+        dataUser.findOneAndUpdate(
+          {auth:req.user._id},
+          {
+            $set: {
+              'status': 'Pending1',
+              'plan': req.body.data,
+              'back_up': backupdata
+            },
+          },
+          function(err, collection) {
+            if (err) {
+              console.log(err);
+              message = validate.getMessage(err);
+              res.send(message);
+            } else {
 
-    dataUser.findOneAndUpdate(
-      {auth:req.user._id},
-      {
-        $set: {
-          'status': 'Pending1',
-          'plan': req.body.data,
-        },
-      },
-      function(err, collection) {
-        if (err) {
-          console.log(err);
-          message = validate.getMessage(err);
-          res.send(message);
-        } else {
-          res.send(collection);
-        }
+              res.send(collection);
+            }
+          }
+        );
       }
     );
+
 
 
 

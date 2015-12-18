@@ -33,6 +33,7 @@ var userProfileSchema = new Schema({
     default: "",
   },
   plan: Array,
+  back_up:Array,
   auth: {
     type: Schema.ObjectId,
     ref: 'Auth_User',
