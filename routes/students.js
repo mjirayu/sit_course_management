@@ -479,33 +479,33 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
     res.redirect('/');
   }
 
-  if(req.user._id){
-    dataUser.findOne({'auth': req.user._id},function(err,data){
+  if (req.user._id) {
+    dataUser.findOne({'auth': req.user._id},function(err,data) {
 
-      if(err){
+      if (err) {
         res.send(err);
-      }else{
-        if(data.position == "Advisor"){
-          if(req.body.status == "Approve"){
+      } else {
+        if (data.position == "Advisor") {
+          if (req.body.status == "Approve") {
             status = "Pending2";
-          }else{
+          } else {
             status = "Reject";
           }
 
-        }else if(data.position == "Program Chairperson"){
-          if(req.body.status == "Approve"){
+        } else if (data.position == "Program Chairperson"){
+          if (req.body.status == "Approve") {
             status = "Approve";
-          }else{
+          } else {
             status = "Reject";
           }
         }
 
         var today = dateFunction.getDate();
-        dataUser.findOne({'_id': req.params.id},function(err,item){
+        dataUser.findOne({'_id': req.params.id},function(err,item) {
           if(status == "Reject"){
             plan_data = item.back_up;
             backup = [];
-          }else{
+          } else {
             plan_data = item.plan;
             backup = item.back_up;
           }
@@ -520,40 +520,36 @@ router.post('/edit/plan_status/:id', auth, function(req, res) {
                 "back_up": backup
               },
             },
-          },
-          function(err, user) {
-            if (err) {
-              message = validate.getMessage(err);
-              res.send(message);
-            } else {
-              if (status == "Approve" || status == "Pending2") {
+            function(err, user) {
+              if (err) {
+                message = validate.getMessage(err);
+                res.send(message);
+              } else {
+                if (status == "Approve" || status == "Pending2") {
 
-                var mailOptions = {
-                  from: '',
-                  to: '',
-                  subject: '',
-                  text: ''
-                };
+                  var mailOptions = {
+                    from: '',
+                    to: '',
+                    subject: '',
+                    text: ''
+                  };
 
-                transporter.sendMail(mailOptions, function(error, info){
-                    if(error){
-                        console.log(error);
-                    }
-                    console.log('Message sent: ' + info.response);
-                });
+                  transporter.sendMail(mailOptions, function(error, info){
+                      if(error){
+                          console.log(error);
+                      }
+                      console.log('Message sent: ' + info.response);
+                  });
+                }
 
+                req.flash('successMessage', 'Change Status Successfully');
+                res.redirect('/instructors/approve_plan');
               }
-
-              req.flash('successMessage', 'Change Status Successfully');
-              res.redirect('/instructors/approve_plan');
-            }
-          );
-        });
-
+          });
+      });
       }
     });
   }
-
 });
 
 //========== End Approve Plan ==========
